@@ -4,3 +4,16 @@ Diagrama Unidades:
 Se propone una clase abstracta Unidad para representar las características y comportamientos comunes a los Mechs y Veks. Entre ellas se encuentra la vida, la posición, la capacidad de movimiento y el estado de la unidad. Para representar las distintas mecánicas de ataque de los Mechs, pensamos en usar una interfaz Arma. En un primer momento consideramos que sea una clase abstracta, pero como no hay muchos atributos ni comportamientos concretos que puedan compartir los distintos tipos de armas, decidimos que funcionaría mejor como interfaz. A través de ella cada tipo de arma implemente su comportamiento y los Mechs a su vez deleguen en ella las particularidades de sus ataques.
 También agregamos una clase AtaqueAnunciado, ésta conserva la información del ataque entre el momento de su anuncio (en la fase de los Veks) y el de su resolución. 
 Por otra parte, proponemos una clase clase EstadoUnidad, encargada de administrar los efectos que afectan a una unidad. Estos efectos se representan mediante una interfaz EfectoEstado, cuya implementación contempla, entre otros la contaminación. Consideramos que esta es la forma adecuada de implementación si queremos que el código sea extensible; si se quisiera, en un futuro agregar otros tipos de efectos (como por ejemplo; Congelado) no tendríamos que modificar la estructura principal, sólo agregar el efecto. 
+
+Diagrama Tablero y terrenos:
+El tablero se representa mediante la clase Tablero que contiene las 64 casillas que conforman el espacio de juego
+Se propone una clase abstracta Terreno, de la cual heredan los distintos tipos de terreno: Suelo, Edificio, Montaña, Agua y Ácido.
+La utilización de una clase abstracta permite representar las características compartidas por los terrenos y especializar su comportamiento según las relgas correspondientes de cada uno.
+
+Diagrama de Turnos y sus fases:
+La clase Juego representa la partida/misión completa y administra su estado general, el turno actual y la cantidad de turnos de la misión.
+Por su parte, la clase Turno representa un turno en particular y administra la fase en la que se encuentra. Se propone una clase abstracta FaseTurno, especializada en cuatro clases concretas: FaseVek, FaseJugador, FaseResolución y FaseAparición.
+La separación en fases permite organizar el desarrollo del turno y asignar a cada una de las responsabilidades correspondientes a un momento específico de la partida.
+Los ataques enunciados se generan durante la fase de los Veks, pero no se ejecutan inmediatamente. Es por esto que optamos, por el momento, que la clase Turno conserve una colección de objetos AtaqueAnunciado. 
+Cada Vek es responsable de anunciar su propio ataque. La fase correspondiente (FaseVek) le pide a Turno que lo registre mediante la operación registrarAtaque()
+Posteriormente, durante la fase de resolución, se solicita al turno que coordine la ejecución de los ataques pendientes. De esta manera, las fases no necesitan acceder directamente a la colección de anuncios ni conocer como se administra internamente. Además, cada Ataque anunciado conserva una referencia al Vek que lo generó y la dirección del ataque. Esto permite determinar su posición objetivo al momento de resolverlo, contemplando los posibles desplazamientos que haya sufrido el Vek durante la fase del jugador. 
