@@ -17,3 +17,6 @@ La separación en fases permite organizar el desarrollo del turno y asignar a ca
 Los ataques enunciados se generan durante la fase de los Veks, pero no se ejecutan inmediatamente. Es por esto que optamos, por el momento, que la clase Turno conserve una colección de objetos AtaqueAnunciado. 
 Cada Vek es responsable de anunciar su propio ataque. La fase correspondiente (FaseVek) le pide a Turno que lo registre mediante la operación registrarAtaque()
 Posteriormente, durante la fase de resolución, se solicita al turno que coordine la ejecución de los ataques pendientes. De esta manera, las fases no necesitan acceder directamente a la colección de anuncios ni conocer como se administra internamente. Además, cada Ataque anunciado conserva una referencia al Vek que lo generó y la dirección del ataque. Esto permite determinar su posición objetivo al momento de resolverlo, contemplando los posibles desplazamientos que haya sufrido el Vek durante la fase del jugador. 
+
+Diagarama de secuencia: 
+Se muestra el caso pedido dejando algunas partes como el sistema de colisión todavía por definir. 
