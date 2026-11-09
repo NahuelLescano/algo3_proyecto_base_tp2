@@ -1,0 +1,32 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class TableroTest {
+
+    @Test
+    void tableroTieneOchoFilasYOchoColumnas() {
+
+        Tablero tablero = new Tablero();
+
+        assertEquals(8, tablero.cantidadFilas());
+        assertEquals(8, tablero.cantidadColumnas());
+    }
+
+    @Test
+    void mapaSeCargaConLosTerrenosCorrectos() {
+
+        Tablero tablero = new Tablero();
+
+        tablero.cargarMapa();
+
+        assertEquals(
+            TipoTerreno.MONTAÑA,
+            tablero.obtenerCasilla(0, 0).getTerreno()
+        );
+
+        assertEquals(
+            TipoTerreno.AGUA,
+            tablero.obtenerCasilla(2, 3).getTerreno()
+        );
+    }
+}
