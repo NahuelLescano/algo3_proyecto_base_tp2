@@ -1,0 +1,13 @@
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class TableroTest {
+    @Test
+    void tableroTieneDimensionesCorrectas() {
+    
+        Tablero tablero = new Tablero();
+    
+        assertEquals(8, tablero.getCantidadFilas());
+        assertEquals(8, tablero.getCantidadColumnas());
+    }
+}
