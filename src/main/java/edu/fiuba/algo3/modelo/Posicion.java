@@ -1,8 +1,8 @@
 package edu.fiuba.algo3.modelo;
 
 public class Posicion {
-    private int columna;
-    private int fila;
+    private final int columna;
+    private final int fila;
 
     public Posicion(int fila, int columna){
         this.fila = fila;
