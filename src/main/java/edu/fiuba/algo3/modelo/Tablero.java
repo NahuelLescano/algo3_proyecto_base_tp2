@@ -76,4 +76,14 @@ public class Tablero {
     public List<Casilla> getCasillas() {
         return casillas;
     }
+    
+    public boolean hayUnidad(Posicion posicion) {
+        Casilla casilla = getCasilla(posicion);
+        return casilla != null && casilla.getUnidad() != null;
+    }
+    
+    public boolean bloqueaDisparos(Posicion posicion) {
+        Casilla casilla = getCasilla(posicion);
+        return casilla != null && casilla.getTerreno().bloqueaDisparos();
+    }
 }
