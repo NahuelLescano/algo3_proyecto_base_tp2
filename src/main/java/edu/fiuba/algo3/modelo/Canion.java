@@ -1,7 +1,7 @@
 package edu.fiuba.algo3.modelo;
 
 // La responsabilidad de Canion es encontrar el primer elemento alcanzado por el disparo
-public class Canon implements Arma {
+public class Canion implements Arma {
 
     private static final int DANIO = 1;
 

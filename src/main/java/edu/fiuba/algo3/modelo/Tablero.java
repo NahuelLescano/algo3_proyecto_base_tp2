@@ -26,6 +26,17 @@ public class Tablero {
         }
 
     }
+    
+    public boolean colocarUnidad(Unidad unidad) {
+        Casilla casilla = buscarCasilla(unidad.getPosicion());
+
+        if (casilla == null || casilla.estaOcupada()) {
+            return false;
+        }
+
+        casilla.ocupar(unidad);
+        return true;
+    }
 
 
     private Terreno convertirCaracterATerreno(char caracter) {
