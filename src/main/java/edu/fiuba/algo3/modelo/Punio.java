@@ -1,12 +1,9 @@
 package edu.fiuba.algo3.modelo;
 
-
 public class Punio implements ArmaDireccional {
+
     private static final int DANIO = 2;
 
-    public Punio() {
-    }
-    
     @Override
     public void atacar(Tablero tablero, Posicion origen, Direccion direccion) {
 
