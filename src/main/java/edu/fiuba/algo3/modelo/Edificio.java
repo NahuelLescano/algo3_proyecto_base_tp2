@@ -7,6 +7,7 @@ public class Edificio extends Terreno {
         this.vida = vida;
     }
 
+    @Override
     public void recibirDanio(int danio) {
         this.vida -= danio;
     }

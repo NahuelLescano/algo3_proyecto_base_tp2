@@ -103,4 +103,24 @@ public class Tablero {
 
         return true;
     }
+    
+    public void resolverImpacto(Posicion posicion, Direccion direccion, int danio) {
+
+        Casilla casilla = buscarCasilla(posicion);
+
+        if (casilla == null) {
+            return;
+        }
+
+        if (casilla.estaOcupada()) {
+            Unidad unidad = casilla.getUnidad();
+
+            unidad.recibirDanio(danio);
+            empujarUnidad(unidad, direccion);
+            return;
+        }
+
+        Terreno terreno = casilla.getTerreno();
+        terreno.recibirDanio(danio);
+    }
 }

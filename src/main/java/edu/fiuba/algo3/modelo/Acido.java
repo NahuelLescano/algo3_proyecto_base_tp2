@@ -14,4 +14,8 @@ public class Acido extends Terreno {
     @Override
     public void aplicarEfecto(Unidad unidad) {
     }    
+    
+    @Override
+    public void recibirDanio(int danio) {
+    }
 }

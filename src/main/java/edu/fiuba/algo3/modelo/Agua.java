@@ -14,4 +14,8 @@ public class Agua extends Terreno {
     @Override
     public void aplicarEfecto(Unidad unidad) {
     }    
+    
+    @Override
+    public void recibirDanio(int danio) {
+    }
 }
