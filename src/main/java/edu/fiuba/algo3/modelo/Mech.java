@@ -8,7 +8,7 @@ public abstract class Mech extends Unidad{
         this.arma = arma;
     }
 
-    public void iniciarAtaque(Direccion direccion){
-        arma.atacar(getPosicion(), direccion);
+    public void iniciarAtaque(Tablero tablero, Direccion direccion) {
+        arma.atacar(tablero, getPosicion(), direccion);
     }
 }
