@@ -55,7 +55,7 @@ public class Tablero {
     }
 
 
-    public Casilla getCasilla(Posicion posicion) {
+    private Casilla buscarCasilla(Posicion posicion) {
         for (Casilla casilla : casillas) {
             if (casilla.getPosicion().getFila() == posicion.getFila() && 
                 casilla.getPosicion().getColumna() == posicion.getColumna()) {
@@ -63,7 +63,7 @@ public class Tablero {
             }
         }
         return null;
-}
+    }
 
     public int getFilas() {
         return casillas.stream().mapToInt(c -> c.getPosicion().getFila()).max().orElse(-1) + 1;
@@ -73,17 +73,14 @@ public class Tablero {
         return casillas.stream().mapToInt(c -> c.getPosicion().getColumna()).max().orElse(-1) + 1;
     }
 
-    public List<Casilla> getCasillas() {
-        return casillas;
-    }
     
     public boolean hayUnidad(Posicion posicion) {
-        Casilla casilla = getCasilla(posicion);
-        return casilla != null && casilla.getUnidad() != null;
+        Casilla casilla = buscarCasilla(posicion);
+        return casilla != null && casilla.estaOcupada;
     }
     
     public boolean bloqueaDisparos(Posicion posicion) {
-        Casilla casilla = getCasilla(posicion);
+        Casilla casilla = buscarCasilla(posicion);
         return casilla != null && casilla.getTerreno().bloqueaDisparos();
     }
 }
