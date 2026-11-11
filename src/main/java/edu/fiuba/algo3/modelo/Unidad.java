@@ -9,8 +9,16 @@ public abstract class Unidad {
         this.posicion = posicion;
     }
 
-    public void recibirDanio(int danio){
-        this.vidaActual -= danio;
+    public void recibirDanio(int danio) {
+        if (danio < 0) {
+            throw new IllegalArgumentException("El daño no puede ser negativo");
+        }
+
+        vidaActual -= danio;
+
+        if (vidaActual < 0) {
+            vidaActual = 0;
+        }
     }
 
     public int getVidaActual() {
@@ -23,6 +31,10 @@ public abstract class Unidad {
 
     void setPosicion(Posicion posicion) {
         this.posicion = posicion;
+    }
+    
+    public boolean estaViva() {
+        return vidaActual > 0;
     }
 
 }
