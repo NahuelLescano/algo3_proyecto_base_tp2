@@ -39,24 +39,19 @@ public class TableroTest {
 
 
             Posicion pos1 = new Posicion(0, 0);
-            Casilla casillaSuelo = tablero.getCasilla(pos1);
-            assertTrue(casillaSuelo.getTerreno() instanceof Suelo);
+            assertTrue(tablero.obtenerTerrenoEn(pos1) instanceof Suelo);
 
             Posicion pos2 = new Posicion(0, 1);
-            Casilla casillaMontania = tablero.getCasilla(pos2);
-            assertTrue(casillaMontania.getTerreno() instanceof Montania);
+            assertTrue(tablero.obtenerTerrenoEn(pos2) instanceof Montania);
 
             Posicion pos3 = new Posicion(2, 3);
-            Casilla casillaEdificio = tablero.getCasilla(pos3);
-            assertTrue(casillaEdificio.getTerreno() instanceof Edificio);
+            assertTrue(tablero.obtenerTerrenoEn(pos3) instanceof Edificio);
             
             Posicion pos4 = new Posicion(7, 5);
-            Casilla casillaAcido = tablero.getCasilla(pos4);
-            assertTrue(casillaAcido.getTerreno() instanceof Acido);
-            
+            assertTrue(tablero.obtenerTerrenoEn(pos4) instanceof Acido);
+
             Posicion pos5 = new Posicion(6, 2);
-            Casilla casillaAgua = tablero.getCasilla(pos5);
-            assertTrue(casillaAgua.getTerreno() instanceof Agua);
+            assertTrue(tablero.obtenerTerrenoEn(pos5) instanceof Agua);
             
         }    
 }

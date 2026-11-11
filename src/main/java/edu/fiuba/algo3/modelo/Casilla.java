@@ -16,15 +16,15 @@ public class Casilla {
         this.unidad = unidad;
     }
 
-    void desocupar() {
+    public void desocupar() {
         this.unidad = null;
     }
 
-    Terreno getTerreno() {
+    public Terreno getTerreno() {
         return terreno;
     } 
 
-    Unidad getUnidad() {
+    public Unidad getUnidad() {
         return unidad;
     }
 
@@ -32,11 +32,11 @@ public class Casilla {
         return posicion;
     }
     
-    boolean estaOcupada() {
+    public boolean estaOcupada() {
         return unidad != null;
     }
     
-    void reemplazarTerreno(Terreno nuevoTerreno) {
+    public void reemplazarTerreno(Terreno nuevoTerreno) {
         this.terreno = nuevoTerreno;
     }
 }
