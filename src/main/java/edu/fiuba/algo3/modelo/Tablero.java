@@ -46,19 +46,13 @@ public class Tablero {
     }
 
     public boolean estaDentroDelTablero(Posicion posicion) {
-        for (Casilla casilla : casillas) {
-            if (casilla.getPosicion().equals(posicion)) {
-                return true;
-            }
-        }
-        return false;
+        return buscarCasilla(posicion) != null;
     }
 
 
     private Casilla buscarCasilla(Posicion posicion) {
         for (Casilla casilla : casillas) {
-            if (casilla.getPosicion().getFila() == posicion.getFila() && 
-                casilla.getPosicion().getColumna() == posicion.getColumna()) {
+            if (casilla.getPosicion().equals(posicion)) {
                 return casilla;
             }
         }

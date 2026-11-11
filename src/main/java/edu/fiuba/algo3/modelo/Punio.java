@@ -6,10 +6,9 @@ public class Punio implements Arma {
 
     public Punio() {
     }
-
+    
     @Override
-    public void atacar(Posicion origen, Direccion direccion) {
-
+    public void atacar(Tablero tablero, Posicion origen, Direccion direccion) {
 
     }
 }
