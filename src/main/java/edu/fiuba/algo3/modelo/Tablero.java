@@ -76,11 +76,37 @@ public class Tablero {
     
     public boolean hayUnidad(Posicion posicion) {
         Casilla casilla = buscarCasilla(posicion);
-        return casilla != null && casilla.estaOcupada;
+        return casilla != null && casilla.estaOcupada();
     }
     
     public boolean bloqueaDisparos(Posicion posicion) {
         Casilla casilla = buscarCasilla(posicion);
         return casilla != null && casilla.getTerreno().bloqueaDisparos();
+    }
+    
+    public boolean moverUnidad(Unidad unidad, Posicion destino) {
+        Casilla origen = buscarCasilla(unidad.getPosicion());
+        Casilla llegada = buscarCasilla(destino);
+
+        if (origen == null || llegada == null) {
+            return false;
+        }
+
+        if (origen.getUnidad() != unidad) {
+            return false;
+        }
+
+        if (llegada.estaOcupada() || !llegada.getTerreno().esTransitable()) {
+            return false;
+        }  // El destino debe estar libre y ser transitable
+
+        origen.desocupar();
+        llegada.ocupar(unidad);
+
+        unidad.setPosicion(destino);
+
+        llegada.getTerreno().aplicarEfecto(unidad);   // Se aplica el efecto del terreno de destino
+
+        return true;
     }
 }

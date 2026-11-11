@@ -21,7 +21,7 @@ public abstract class Unidad {
         return posicion;
     }
 
-    public void setPosicion(Posicion posicion) {
+    void setPosicion(Posicion posicion) {
         this.posicion = posicion;
     }
 
