@@ -78,6 +78,15 @@ public class Tablero {
         return casillas.stream().mapToInt(c -> c.getPosicion().getColumna()).max().orElse(-1) + 1;
     }
 
+    public Terreno obtenerTerrenoEn(Posicion posicion) {
+    for (Casilla casilla : casillas) {
+        if (casilla.getPosicion().getFila() == posicion.getFila() && 
+            casilla.getPosicion().getColumna() == posicion.getColumna()) {
+            return casilla.getTerreno();
+        }
+    }
+    return null;
+}
     
     public boolean hayUnidad(Posicion posicion) {
         Casilla casilla = buscarCasilla(posicion);
