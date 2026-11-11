@@ -7,8 +7,12 @@ public class MechDeCombate extends Mech {
     private final ArmaDireccional arma;
 
     public MechDeCombate(Posicion posicion) {
-        super(VIDA_INICIAL, posicion, new Punio());
-        this.arma = new Punio();
+        this(posicion, new Punio());
+    }
+
+    private MechDeCombate(Posicion posicion, ArmaDireccional arma) {
+        super(VIDA_INICIAL, posicion, arma);
+        this.arma = arma;
     }
 
     public void iniciarAtaque(Tablero tablero, Direccion direccion) {

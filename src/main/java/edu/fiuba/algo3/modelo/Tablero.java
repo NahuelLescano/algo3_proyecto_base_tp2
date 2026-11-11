@@ -216,4 +216,28 @@ public class Tablero {
         unidad.recibirDanio(danio);
         retirarUnidadSiMurio(unidad);
     }
+
+    public void daniarEn(Posicion posicion, int danio) {
+        Casilla casilla = buscarCasilla(posicion);
+
+        if (casilla == null) {
+            return;
+        }
+
+        if (casilla.estaOcupada()) {
+            aplicarDanioAUnidad(casilla.getUnidad(), danio);
+        } else {
+            casilla.getTerreno().recibirDanio(danio);
+        }
+    }
+
+    public void empujarUnidadEn(Posicion posicion, Direccion direccion) {
+        Casilla casilla = buscarCasilla(posicion);
+
+        if (casilla == null || !casilla.estaOcupada()) {
+            return;
+        }
+
+        empujarUnidad(casilla.getUnidad(), direccion);
+    }
 }

@@ -3,7 +3,7 @@ package edu.fiuba.algo3.entrega_1;
 import edu.fiuba.algo3.modelo.Tablero;
 import edu.fiuba.algo3.modelo.Posicion;
 import edu.fiuba.algo3.modelo.Luciernaga;
-import edu.fiuba.algo3.modelo.Canon;
+import edu.fiuba.algo3.modelo.Canion;
 import edu.fiuba.algo3.modelo.Direccion;
 
 import org.junit.jupiter.api.Test;

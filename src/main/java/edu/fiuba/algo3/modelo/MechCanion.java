@@ -7,8 +7,12 @@ public class MechCanion extends Mech {
     private final ArmaDireccional arma;
 
     public MechCanion(Posicion posicion) {
-        super(VIDA_INICIAL, posicion);
-        this.arma = new Canon();
+        this(posicion, new Canion());
+    }
+
+    private MechCanion(Posicion posicion, ArmaDireccional arma) {
+        super(VIDA_INICIAL, posicion, arma);
+        this.arma = arma;
     }
 
     public void iniciarAtaque(Tablero tablero, Direccion direccion) {

@@ -1,14 +1,18 @@
 package edu.fiuba.algo3.modelo;
 
-public class MechDeArtilleria extends Mech {
+public class MechArtilleria extends Mech {
 
-    private static final int VIDA_INICIAL = 3;
+    private static final int VIDA_INICIAL = 2;
 
-    private final ArmaDeObjetivo arma;
+    private final Artilleria arma;
 
-    public MechDeArtilleria(Posicion posicion) {
-        super(VIDA_INICIAL, posicion);
-        this.arma = new Artilleria();
+    public MechArtilleria(Posicion posicion) {
+        this(posicion, new Artilleria());
+    }
+
+    private MechArtilleria(Posicion posicion, Artilleria arma) {
+        super(VIDA_INICIAL, posicion, arma);
+        this.arma = arma;
     }
 
     public void iniciarAtaque(Tablero tablero, Posicion objetivo) {

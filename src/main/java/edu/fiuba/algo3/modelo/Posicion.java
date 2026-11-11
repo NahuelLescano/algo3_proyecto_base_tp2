@@ -39,4 +39,11 @@ public class Posicion {
     public int hashCode() {
         return Objects.hash(fila, columna);
     }
+
+    public Posicion desplazar(Direccion direccion) {
+        return new Posicion(
+                fila + direccion.getDesplazamientoEnFila(),
+                columna + direccion.getDesplazamientoEnColumna()
+        );
+    }
 }
