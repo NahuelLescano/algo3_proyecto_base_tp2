@@ -1,6 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
-public interface ArmaDeObjetivo extends Arma {
+public interface ArmaDePosicion extends Arma {
 
     void atacar(Tablero tablero, Posicion origen, Posicion objetivo);
 }
