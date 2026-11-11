@@ -117,7 +117,7 @@ public class Tablero {
         if (casilla.estaOcupada()) {
             Unidad unidad = casilla.getUnidad();
 
-            unidad.recibirDanio(danio);
+            aplicarDanioAUnidad(unidad, danio);
             
             if (!unidad.estaViva()) {
                 retirarUnidadSiMurio(unidad);
@@ -137,6 +137,14 @@ public class Tablero {
         // Si la unidad ya murió, no puedo empujarla
         if (!unidad.estaViva()) {
             retirarUnidadSiMurio(unidad);
+            return;
+        }
+        
+        // Evito empujar una unidad que no está en el tablero
+        
+        Casilla origen = buscarCasilla(unidad.getPosicion());
+
+        if (origen == null || origen.getUnidad() != unidad) {
             return;
         }
 
