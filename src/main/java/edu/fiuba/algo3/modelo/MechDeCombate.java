@@ -7,7 +7,7 @@ public class MechDeCombate extends Mech {
     private final ArmaDireccional arma;
 
     public MechDeCombate(Posicion posicion) {
-        super(VIDA_INICIAL, posicion);
+        super(VIDA_INICIAL, posicion, new Punio());
         this.arma = new Punio();
     }
 

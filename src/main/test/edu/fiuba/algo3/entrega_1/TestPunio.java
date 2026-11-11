@@ -1,11 +1,13 @@
 package edu.fiuba.algo3.entrega_1;
+
+import edu.fiuba.algo3.modelo.Tablero;
 import edu.fiuba.algo3.modelo.Posicion;
-import edu.fiuba.algo3.modelo.MechDeCombate;
 import edu.fiuba.algo3.modelo.Luciernaga;
-import edu.fiuba.algo3.modelo.Direccion;
 import edu.fiuba.algo3.modelo.Punio;
+import edu.fiuba.algo3.modelo.Direccion;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPunio {
@@ -13,20 +15,28 @@ public class TestPunio {
     @Test
     void punioCausaDosDanioYEmpujaUnaCasilla() {
 
-        // Arrange
-        Posicion posicionMech = new Posicion(2, 2);
-        Posicion posicionVek = new Posicion(2, 3);
+        String[] mapa = {
+                "-------",
+                "-------",
+                "-------",
+                "-------",
+                "-------"
+        };
 
-        MechDeCombate mech = new MechDeCombate(posicionMech, new Punio());
-        Luciernaga vek = new Luciernaga(posicionVek);
+        Tablero tablero = new Tablero(mapa);
+        Punio punio = new Punio();
 
-        int vidaInicial = vek.getVidaActual();
+        // Ubico una unidad adyacente al atacante, hacia el este
+        Luciernaga unidad = new Luciernaga(new Posicion(2, 3));
 
-        // Act
-        mech.iniciarAtaque(Direccion.ESTE);
+        assertTrue(tablero.colocarUnidad(unidad));
 
-        // Assert
-        assertEquals(vidaInicial - 2, vek.getVidaActual());
-        assertEquals(new Posicion(2, 4), vek.getPosicion());
+        int vidaInicial = unidad.getVidaActual();
+
+        punio.atacar(tablero, new Posicion(2, 2), Direccion.ESTE);
+
+        assertEquals(vidaInicial - 2, unidad.getVidaActual());
+
+        assertEquals(new Posicion(2, 4), unidad.getPosicion());
     }
 }
