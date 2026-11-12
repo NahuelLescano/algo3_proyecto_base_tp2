@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.AtaqueInvalidoException;
+
 public class Artilleria implements Arma {
     @Override
     public void disparar(Posicion origen, Posicion objetivo, Tablero tablero) {

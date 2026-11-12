@@ -1,0 +1,155 @@
+@startuml diagrama-tablero-implementado
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+title Tablero, casillas y terrenos (implementación actual)
+
+package "edu.fiuba.algo3.modelo.movimiento" {
+
+  class Tablero {
+    - casillas : List<Casilla>
+    + Tablero()
+    + Tablero(filas : int, columnas : int)
+    + obtenerCasilla(pos : Posicion) : Casilla
+    + colocarTerreno(pos : Posicion, t : Terreno) : void
+    + colocarUnidad(pos : Posicion, u : Unidad) : void
+    + obtenerUnidad(pos : Posicion) : Unidad
+    + moverUnidad(origen : Posicion, destino : Posicion) : void
+    + reubicarUnidad(unidad : Unidad, origen : Posicion, destino : Posicion) : void
+    + empujar(origen : Posicion, destino : Posicion) : void
+    + estaDentroDelTablero(pos : Posicion) : boolean
+  }
+
+  class Casilla {
+    - posicion : Posicion
+    - terreno : Terreno
+    - estado : EstadoCasilla
+    + obtenerUnidad() : Unidad
+    + obtenerPosicion() : Posicion
+    + ocupar(unidad : Unidad) : void
+    + alojar(unidad : Unidad) : void
+    + desalojar() : void
+    + moverOcupanteA(destino : Casilla) : void
+    + empujarOcupanteHacia(destino : Casilla, tablero : Tablero) : void
+    + recibirDanio(puntos : int) : void
+    + recibirImpactoEmpuje(origen : Casilla, unidad : Unidad) : void
+    + alojarEmpujada(origen : Casilla, unidad : Unidad) : void
+    + transitablePara(locomocion : Locomocion) : boolean
+    + aplicarEfectoTerreno(unidad : Unidad) : void
+    + distanciaA(otra : Casilla) : int
+  }
+
+  interface EstadoCasilla {
+    + alojar(casilla : Casilla, unidad : Unidad) : void
+    + desalojar(casilla : Casilla) : void
+    + moverHacia(origen : Casilla, destino : Casilla) : void
+    + empujar(casilla : Casilla, direccion : Direccion, tablero : Tablero) : void
+    + recibirDanio(puntos : int) : void
+    + recibirImpactoEmpuje(destino : Casilla, origen : Casilla, unidad : Unidad) : void
+    + empujarHacia(origen : Casilla, destino : Casilla, tablero : Tablero) : void
+    + transitablePara(locomocion : Locomocion, terreno : Terreno) : boolean
+    + detieneProyectil() : boolean
+    + obtenerUnidad() : Unidad
+  }
+
+  class CasillaLibre {
+    + alojar(casilla : Casilla, unidad : Unidad) : void
+    + desalojar(casilla : Casilla) : void
+    + moverHacia(origen : Casilla, destino : Casilla) : void
+    + obtenerUnidad() : Unidad
+  }
+
+  class CasillaOcupada {
+    - ocupante : Unidad
+    + CasillaOcupada(ocupante : Unidad)
+    + alojar(casilla : Casilla, unidad : Unidad) : void
+    + desalojar(casilla : Casilla) : void
+    + moverHacia(origen : Casilla, destino : Casilla) : void
+    + empujarHacia(origen : Casilla, destino : Casilla, tablero : Tablero) : void
+    + obtenerUnidad() : Unidad
+  }
+
+  abstract class Terreno {
+    + {abstract} esTransitable() : boolean
+    + {abstract} transitablePara(l : Locomocion) : boolean
+    + {abstract} aplicarEfecto(u : Unidad) : void
+    + {abstract} recibirDanio(puntos : int, casilla : Casilla) : void
+    + {abstract} validarPuedeAlojar() : void
+    + {abstract} bloqueaDisparos() : boolean
+    + recibirImpactoEmpuje(destino : Casilla, origen : Casilla, unidad : Unidad) : void
+  }
+
+  class Suelo {
+  }
+
+  class Agua {
+    + aplicarEfecto(u : Unidad) : void
+  }
+
+  class Acido {
+    + aplicarEfecto(u : Unidad) : void
+  }
+
+  class Montana {
+    + validarPuedeAlojar() : void
+    + recibirImpactoEmpuje(destino : Casilla, origen : Casilla, unidad : Unidad) : void
+  }
+
+  class Edificio {
+    - redElectrica : RedElectrica
+    - vida : int
+    + Edificio(redElectrica : RedElectrica)
+    + recibirDanio(puntos : int, casilla : Casilla) : void
+    + validarPuedeAlojar() : void
+    + recibirImpactoEmpuje(destino : Casilla, origen : Casilla, unidad : Unidad) : void
+  }
+
+  class RedElectrica {
+    - energia : int
+    + RedElectrica()
+    + RedElectrica(energiaInicial : int)
+    + estaAgotada() : boolean
+    + descontar(puntos : int) : void
+  }
+
+  class Posicion {
+    - fila : int
+    - columna : int
+    + esAdyacenteOrtogonalA(otra : Posicion) : boolean
+    + siguienteEnLineaDesde(origen : Posicion) : Posicion
+    + distanciaManhattan(otra : Posicion) : int
+    + sumar(dir : Direccion) : Posicion
+    + sumar(dF : int, dC : int) : Posicion
+  }
+
+  enum Direccion {
+    NORTE
+    SUR
+    ESTE
+    OESTE
+    + desplazar(pos : Posicion) : Posicion
+  }
+}
+
+Tablero "1" *-- "*" Casilla : contiene
+Casilla --> "1" Posicion
+Casilla --> "1" Terreno
+Casilla --> "1" EstadoCasilla
+
+EstadoCasilla <|.. CasillaLibre
+EstadoCasilla <|.. CasillaOcupada
+CasillaLibre ..> CasillaOcupada : cambia estado al alojar
+CasillaOcupada --> "1" Unidad : ocupante
+
+Terreno <|-- Suelo
+Terreno <|-- Agua
+Terreno <|-- Acido
+Terreno <|-- Montana
+Terreno <|-- Edificio
+Edificio --> "1" RedElectrica
+
+Posicion --> Direccion : usa para desplazarse
+Direccion ..> Posicion : desplaza
+
+@enduml

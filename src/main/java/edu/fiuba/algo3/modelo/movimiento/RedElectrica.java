@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.ValorInvalidoException;
+
 public class RedElectrica {
     private int energia;
 

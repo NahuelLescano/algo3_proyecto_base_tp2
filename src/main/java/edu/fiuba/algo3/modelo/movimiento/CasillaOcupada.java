@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.CasillaBloqueadaException;
+
 public class CasillaOcupada implements EstadoCasilla {
     private final Unidad ocupante;
 
@@ -46,6 +48,11 @@ public class CasillaOcupada implements EstadoCasilla {
     @Override
     public boolean detieneProyectil() {
         return true;
+    }
+
+    @Override
+    public Unidad obtenerUnidad() {
+        return this.ocupante;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.CasillaVaciaException;
 import edu.fiuba.algo3.modelo.excepciones.MovimientoInvalidoException;
 
 public class CasillaLibre implements EstadoCasilla {
@@ -44,6 +45,11 @@ public class CasillaLibre implements EstadoCasilla {
     @Override
     public boolean detieneProyectil() {
         return false;
+    }
+
+    @Override
+    public Unidad obtenerUnidad() {
+        return null;
     }
 
     @Override

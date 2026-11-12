@@ -1,0 +1,153 @@
+@startuml diagrama-unidades-implementado
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+title Unidades, armas y estados (implementación actual)
+
+package "edu.fiuba.algo3.modelo.movimiento" {
+
+  abstract class Unidad {
+    - vida : int
+    - rangoMovimiento : int
+    - locomocion : Locomocion
+    - estadoSalud : EstadoSalud
+    - puedeMoverseEnTurno : boolean
+    + {abstract} reaccionarAguaTerrestre() : void
+    + trasladarseA(origen : Casilla, destino : Casilla) : void
+    + recibirDanio(danioBase : int) : void
+    + recibirEmpujeHacia(origen : Casilla, destino : Casilla, tablero : Tablero) : void
+    + contaminar() : void
+    + estaDestruida() : boolean
+    + reiniciarTurno() : void
+    # habilitarMovimiento() : void
+  }
+
+  abstract class Mech {
+    - arma : Arma
+    - estadoTurno : EstadoTurnoMech
+    + atacar(origen : Posicion, objetivo : Posicion, tablero : Tablero) : void
+    + deshacerMovimiento(tablero : Tablero) : void
+    + puedeAtacar() : boolean
+    + puedeDeshacerMovimiento() : boolean
+  }
+
+  abstract class Vek {
+    + reaccionarAguaTerrestre() : void
+  }
+
+  class MechCombate {
+    + MechCombate()
+  }
+
+  class MechCanion {
+    + MechCanion()
+  }
+
+  class MechArtilleria {
+    + MechArtilleria()
+  }
+
+  class Avispon {
+    + Avispon()
+  }
+
+  class Saltador {
+    + Saltador()
+  }
+
+  class Luciernaga {
+    + Luciernaga()
+  }
+
+  interface Arma {
+    + disparar(origen : Posicion, objetivo : Posicion, tablero : Tablero) : void
+  }
+
+  class Punio {
+    + disparar(origen : Posicion, objetivo : Posicion, tablero : Tablero) : void
+  }
+
+  class Canion {
+    + disparar(origen : Posicion, objetivo : Posicion, tablero : Tablero) : void
+  }
+
+  class Artilleria {
+    + disparar(origen : Posicion, objetivo : Posicion, tablero : Tablero) : void
+  }
+
+  class EstadoTurnoMech {
+    - posicionAnterior : Posicion
+    - posicionActual : Posicion
+    - seMovio : boolean
+    - ataco : boolean
+    - deshizoMovimiento : boolean
+    - ataqueHabilitado : boolean
+    + registrarMovimiento(origen : Posicion, destino : Posicion, ataqueHabilitado : boolean) : void
+    + registrarAtaque() : void
+    + registrarDeshacerMovimiento() : void
+    + puedeDeshacerMovimiento() : boolean
+    + puedeMoverse() : boolean
+    + puedeAtacar() : boolean
+    + inhabilitarAtaque() : void
+    + reiniciar() : void
+  }
+
+  interface Locomocion {
+    + aplicarEfectoAgua(u : Unidad) : void
+    + aplicarEfectoAcido(u : Unidad) : void
+  }
+
+  class LocomocionTerrestre {
+    + aplicarEfectoAgua(u : Unidad) : void
+    + aplicarEfectoAcido(u : Unidad) : void
+  }
+
+  class LocomocionVoladora {
+    + aplicarEfectoAgua(u : Unidad) : void
+    + aplicarEfectoAcido(u : Unidad) : void
+  }
+
+  interface EstadoSalud {
+    + calcularDanioEfectivo(danioBase : int) : int
+    + contaminar() : EstadoSalud
+  }
+
+  class EstadoNormal {
+    + calcularDanioEfectivo(danioBase : int) : int
+    + contaminar() : EstadoSalud
+  }
+
+  class EstadoContaminado {
+    + calcularDanioEfectivo(danioBase : int) : int
+    + contaminar() : EstadoSalud
+  }
+}
+
+Unidad <|-- Mech
+Unidad <|-- Vek
+
+Mech <|-- MechCombate
+Mech <|-- MechCanion
+Mech <|-- MechArtilleria
+Vek <|-- Avispon
+Vek <|-- Saltador
+Vek <|-- Luciernaga
+
+Mech o-- "1" EstadoTurnoMech : estado del turno
+
+Arma <|.. Punio
+Arma <|.. Canion
+Arma <|.. Artilleria
+Mech --> Arma : usa
+
+Unidad --> Locomocion : locomoción
+Locomocion <|.. LocomocionTerrestre
+Locomocion <|.. LocomocionVoladora
+
+Unidad --> EstadoSalud : salud
+EstadoSalud <|.. EstadoNormal
+EstadoSalud <|.. EstadoContaminado
+EstadoNormal ..> EstadoContaminado : contamina
+
+@enduml

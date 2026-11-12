@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.CasillaBloqueadaException;
+
 public class Montana extends Terreno {
 
     @Override
@@ -25,7 +27,7 @@ public class Montana extends Terreno {
 
     @Override
     public void validarPuedeAlojar() {
-        throw new CasillaBloqueadaException("No se puede collocar una unidad sobre una montaña")
+        throw new CasillaBloqueadaException("No se puede collocar una unidad sobre una montaña");
     }
 
     @Override

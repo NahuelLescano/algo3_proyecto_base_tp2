@@ -11,7 +11,15 @@ public class Casilla {
         this.estado   = new CasillaLibre();
     }
 
-    public boolean estaEnPosicion(posicion otra) {
+    public Unidad obtenerUnidad() {
+        return this.estado.obtenerUnidad();
+    }
+
+    public Posicion obtenerPosicion() {
+        return this.posicion;
+    }
+
+    public boolean estaEnPosicion(Posicion otra) {
         return this.posicion.equals(otra);
     }
 
@@ -48,6 +56,10 @@ public class Casilla {
         this.estado.desalojar(this);
     }
 
+    public void moverOcupanteA(Casilla destino) {
+        this.estado.moverHacia(this, destino);
+    }
+
     public void empujarOcupante(Direccion direccion, Tablero tablero) {
         this.estado.empujar(this, direccion, tablero);
     }
@@ -75,11 +87,11 @@ public class Casilla {
     }
 
     public void recibirImpactoEmpuje(Casilla origen, Unidad unidadEmpujada, Direccion direccion, Tablero tablero) {
-        this.terreno.recibirImpactoEmpuje(this, origen, unidadEmpujada, direccion, tablero)
+        this.recibirImpactoEmpuje(origen, unidadEmpujada);
     }
 
-    public void resolverColisionObstaculo(Unidad unidadEmpujada) {
-        this.estado.recibirImpactoEmpuje(this, this, unidadEmpujada, null, null);
+    public void alojarEmpujada(Casilla origen, Unidad unidadEmpujada) {
+        this.estado.recibirImpactoEmpuje(this, origen, unidadEmpujada);
     }
 
     public boolean transitablePara(Locomocion locomocion) {

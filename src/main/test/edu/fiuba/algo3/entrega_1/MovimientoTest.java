@@ -4,6 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import edu.fiuba.algo3.modelo.movimiento.*;
+import edu.fiuba.algo3.modelo.excepciones.AccionYaRealizadaException;
+import edu.fiuba.algo3.modelo.excepciones.CasillaBloqueadaException;
+import edu.fiuba.algo3.modelo.excepciones.MovimientoInvalidoException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +18,7 @@ public class MovimientoTest {
     @BeforeEach
     public void setUp() {
         tablero = new Tablero();
-        mech = new MechCombate(0, 0);
+        mech = new MechCombate();
     }
 
     @Test

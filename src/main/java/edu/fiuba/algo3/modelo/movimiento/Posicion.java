@@ -1,5 +1,9 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.MovimientoInvalidoException;
+
+import java.util.Objects;
+
 public class Posicion {
     private final int fila;
     private final int columna;
@@ -44,5 +48,10 @@ public class Posicion {
         if (!(o instanceof Posicion)) return false;
         Posicion pos = (Posicion)o;
         return this.fila == pos.fila && this.columna == pos.columna;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fila, columna);
     }
 }

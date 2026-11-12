@@ -10,4 +10,5 @@ public interface EstadoCasilla {
     void empujarHacia(Casilla origen, Casilla destino, Tablero tablero);
     boolean transitablePara(Locomocion locomocion, Terreno terreno);
     boolean detieneProyectil();
+    Unidad obtenerUnidad();
 }

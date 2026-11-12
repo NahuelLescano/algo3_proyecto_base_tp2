@@ -9,6 +9,6 @@ public abstract class Terreno {
     public abstract boolean bloqueaDisparos();
 
     public void recibirImpactoEmpuje(Casilla destino, Casilla origen, Unidad unidadEmpujada) {
-        destino.resolverColisionObstaculo(unidadEmpujada);
+        destino.alojarEmpujada(origen, unidadEmpujada);
     }
 }

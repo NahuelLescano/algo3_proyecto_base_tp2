@@ -1,0 +1,86 @@
+@startuml diagrama-turno-mech-implementado
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+title Estado del turno de un Mech: movimiento, ataque y deshacer
+
+package "edu.fiuba.algo3.modelo.movimiento" {
+
+  abstract class Unidad {
+    - puedeMoverseEnTurno : boolean
+    + trasladarseA(origen : Casilla, destino : Casilla) : void
+    + reiniciarTurno() : void
+    + puedeMoverseEnTurno() : boolean
+    # habilitarMovimiento() : void
+  }
+
+  abstract class Mech {
+    - arma : Arma
+    - estadoTurno : EstadoTurnoMech
+    + atacar(origen : Posicion, objetivo : Posicion, tablero : Tablero) : void
+    + deshacerMovimiento(tablero : Tablero) : void
+    + puedeAtacar() : boolean
+    + puedeDeshacerMovimiento() : boolean
+    + trasladarseA(origen : Casilla, destino : Casilla) : void
+  }
+
+  class EstadoTurnoMech {
+    - posicionAnterior : Posicion
+    - posicionActual : Posicion
+    - seMovio : boolean
+    - ataco : boolean
+    - deshizoMovimiento : boolean
+    - ataqueHabilitado : boolean
+    - ataqueHabilitadoAntesDelMovimiento : boolean
+    + registrarMovimiento(origen : Posicion, destino : Posicion, ataqueHabilitado : boolean) : void
+    + registrarAtaque() : void
+    + registrarDeshacerMovimiento() : void
+    + puedeDeshacerMovimiento() : boolean
+    + obtenerPosicionAnterior() : Posicion
+    + obtenerPosicionActual() : Posicion
+    + puedeMoverse() : boolean
+    + puedeAtacar() : boolean
+    + inhabilitarAtaque() : void
+    + reiniciar() : void
+  }
+
+  class Tablero {
+    + reubicarUnidad(unidad : Unidad, origen : Posicion, destino : Posicion) : void
+    + moverUnidad(origen : Posicion, destino : Posicion) : void
+  }
+
+  class Casilla {
+    + obtenerPosicion() : Posicion
+    + moverOcupanteA(destino : Casilla) : void
+  }
+
+  class Posicion {
+  }
+}
+
+Unidad <|-- Mech
+Mech *-- "1" EstadoTurnoMech : delega reglas del turno
+EstadoTurnoMech --> "0..1" Posicion : anterior / actual
+
+Mech ..> Tablero : deshacerMovimiento(tablero)
+Tablero ..> Casilla : reubicar / mover
+Casilla ..> Posicion
+
+note right of Mech
+  atacar(...) valida puedeAtacar()
+  y luego registrarAtaque()
+
+  deshacerMovimiento(tablero) solo
+  si seMovio && !ataco && !deshizoMovimiento
+end note
+
+note bottom of EstadoTurnoMech
+  Después de deshacer:
+  - vuelve a posicionAnterior
+  - seMovio = false
+  - deshizoMovimiento = true
+  - no se puede volver a deshacer en el turno
+end note
+
+@enduml

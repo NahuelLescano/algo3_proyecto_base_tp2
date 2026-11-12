@@ -1,0 +1,59 @@
+@startuml diagrama-excepciones-implementado
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+title Jerarquía de excepciones del modelo
+
+package "edu.fiuba.algo3.modelo.excepciones" {
+
+  abstract class JuegoException {
+    + JuegoException(mensaje : String)
+  }
+
+  class AccionInvalidaException {
+    + AccionInvalidaException(mensaje : String)
+  }
+
+  class AtaqueInvalidoException {
+    + AtaqueInvalidoException(mensaje : String)
+  }
+
+  class MovimientoInvalidoException {
+    + MovimientoInvalidoException(mensaje : String)
+  }
+
+  class AccionYaRealizadaException {
+    + AccionYaRealizadaException(mensaje : String)
+  }
+
+  class CasillaBloqueadaException {
+    + CasillaBloqueadaException(mensaje : String)
+  }
+
+  class CasillaVaciaException {
+    + CasillaVaciaException(mensaje : String)
+  }
+
+  class PosicionFueraDeRangoException {
+    + PosicionFueraDeRangoException(mensaje : String)
+  }
+
+  class ValorInvalidoException {
+    + ValorInvalidoException(mensaje : String)
+  }
+}
+
+RuntimeException <|-- JuegoException
+JuegoException <|-- AccionInvalidaException
+JuegoException <|-- ValorInvalidoException
+
+AccionInvalidaException <|-- AtaqueInvalidoException
+AccionInvalidaException <|-- MovimientoInvalidoException
+AccionInvalidaException <|-- AccionYaRealizadaException
+
+MovimientoInvalidoException <|-- CasillaBloqueadaException
+MovimientoInvalidoException <|-- CasillaVaciaException
+MovimientoInvalidoException <|-- PosicionFueraDeRangoException
+
+@enduml

@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.CasillaBloqueadaException;
+
 public class Edificio extends Terreno {
     private final RedElectrica redElectrica;
     private int vida;
@@ -12,6 +14,11 @@ public class Edificio extends Terreno {
     @Override
     public boolean esTransitable() {
         return false;
+    }
+
+    @Override
+    public boolean bloqueaDisparos() {
+        return true;
     }
 
     @Override

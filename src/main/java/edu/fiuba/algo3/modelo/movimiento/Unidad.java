@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.AccionYaRealizadaException;
+import edu.fiuba.algo3.modelo.excepciones.CasillaBloqueadaException;
 import edu.fiuba.algo3.modelo.excepciones.MovimientoInvalidoException;
 
 public abstract class Unidad {
@@ -24,8 +26,12 @@ public abstract class Unidad {
         tablero.resolverDesplazamientoEmpuje(origen, destino, this);
     }
 
-    public void transladarseA(Casilla origen, Casilla destino) {
-        this.validadMovimiento(origen, destino);
+    public void recibirEmpuje(Casilla origen, Direccion direccion, Tablero tablero) {
+        tablero.resolverDesplazamientoEmpuje(origen, direccion, this);
+    }
+
+    public void trasladarseA(Casilla origen, Casilla destino) {
+        this.validarMovimiento(origen, destino);
         this.puedeMoverseEnTurno = false;
         origen.desalojar();
         destino.alojar(this);
@@ -56,13 +62,21 @@ public abstract class Unidad {
         return this.vida <= 0;
     }
 
+    public boolean puedeMoverseEnTurno() {
+        return this.puedeMoverseEnTurno;
+    }
+
     public void reiniciarTurno() {
         this.puedeMoverseEnTurno = true;
     }
 
-    private void validadMovimiento(Casilla origen, Casilla destino) {
+    protected void habilitarMovimiento() {
+        this.puedeMoverseEnTurno = true;
+    }
+
+    private void validarMovimiento(Casilla origen, Casilla destino) {
         if (!this.puedeMoverseEnTurno) {
-            throw new AccionYaRealizadaException("La unidad ya se movio en este turno")
+            throw new AccionYaRealizadaException("La unidad ya se movio en este turno");
         }
         if (!destino.transitablePara(this.locomocion)) {
             throw new CasillaBloqueadaException("La casilla esta bloqueada");

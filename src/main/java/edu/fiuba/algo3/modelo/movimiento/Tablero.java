@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo.movimiento;
 
+import edu.fiuba.algo3.modelo.excepciones.PosicionFueraDeRangoException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,16 @@ public class Tablero {
     private final List<Casilla> casillas;
 
     public Tablero() {
+        this(8, 8);
+    }
+
+    public Tablero(int filas, int columnas) {
         this.casillas = new ArrayList<>();
+        for (int fila = 0; fila < filas; fila++) {
+            for (int columna = 0; columna < columnas; columna++) {
+                this.casillas.add(new Casilla(new Posicion(fila, columna), new Suelo()));
+            }
+        }
     }
 
     public Casilla obtenerCasilla(Posicion pos) {
@@ -25,10 +36,21 @@ public class Tablero {
         obtenerCasilla(pos).ocupar(u);
     }
 
+    public Unidad obtenerUnidad(Posicion pos) {
+        return obtenerCasilla(pos).obtenerUnidad();
+    }
+
     public void moverUnidad(Posicion origen, Posicion destino) {
         Casilla cOrigen = this.obtenerCasilla(origen);
         Casilla cDestino = this.obtenerCasilla(destino);
         cOrigen.moverOcupanteA(cDestino);
+    }
+
+    public void reubicarUnidad(Unidad unidad, Posicion origen, Posicion destino) {
+        Casilla cOrigen = this.obtenerCasilla(origen);
+        Casilla cDestino = this.obtenerCasilla(destino);
+        cOrigen.desalojar();
+        cDestino.ocupar(unidad);
     }
 
     public void empujar(Posicion origen, Posicion destino) {
