@@ -67,23 +67,18 @@ public class CanionTest {
         Tablero tablero = new Tablero(mapa);
         Canion canon = new Canion();
 
-        // Ubico una unidad detrás de la montaña
         Luciernaga unidad = new Luciernaga(new Posicion(2, 4));
 
         assertTrue(tablero.colocarUnidad(unidad));
 
         int vidaInicial = unidad.getVidaActual();
 
-        // El cañón dispara hacia el este
         canon.atacar(tablero, new Posicion(2, 0), Direccion.ESTE);
 
-        // La montaña bloquea los disparos
         assertTrue(tablero.bloqueaDisparos(new Posicion(2, 2)));
 
-        // La unidad detrás de la montaña no recibe daño
         assertEquals(vidaInicial, unidad.getVidaActual());
 
-        // La unidad permanece en su posición
         assertEquals(new Posicion(2, 4), unidad.getPosicion());
     }
 }
