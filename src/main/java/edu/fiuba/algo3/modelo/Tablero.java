@@ -154,13 +154,11 @@ public class Tablero {
     
     public void empujarUnidad(Unidad unidad, Direccion direccion) {
     
-        // Si la unidad ya murió, no puedo empujarla
         if (!unidad.estaViva()) {
             retirarUnidadSiMurio(unidad);
             return;
         }
         
-        // Evito empujar una unidad que no está en el tablero
         
         Casilla origen = buscarCasilla(unidad.getPosicion());
 
@@ -178,7 +176,6 @@ public class Tablero {
 
         Posicion destino = new Posicion(filaDestino, columnaDestino);
         
-        // Compruebo los límites, si el destino está fuera del tablero no se puede mover la unidad
 
         if (!estaDentroDelTablero(destino)) {
             return;
