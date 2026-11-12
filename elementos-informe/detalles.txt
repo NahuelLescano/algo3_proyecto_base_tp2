@@ -1,0 +1,19 @@
+Detalles de implementación
+
+Daño y empuje:
+
+- Cuando un Mech inicia un ataque, le proporciona a su arma correspondiente el tablero sobre el que tiene que actuar. Las armas (con su ataque) no tendrían que modificar directamente una Casilla ni cambiar por su cuenta la posición de una unidad. Le piden al tablero que realice tales operaciones. 
+El tablero a su vez le manda mensajes a otros objetos con los que tiene una relación directa, respetando el encapsulamiento, por ejemplo en:
+
+public boolean hayUnidad(Posicion posicion) {
+    Casilla casilla = buscarCasilla(posicion);
+    return casilla != null && casilla.estaOcupada();
+}
+
+Casilla se encarga de conocer su ocupación y Tablero usa una operación que le devuelve directamente lo que quería consultar. No necesita conocer la implementación de Casilla. Y si se llegase a cambiar la implementación interna de Casilla, no se necesitará cambiar el Tablero.
+
+- La (futura) interfaz gráfica debería interactuar con el modelo a través de operaciones de alto nivel, como Tablero, en lugar de estar pendiente de las modificaciones de las unidades y casillas, es otra de las razones por la que se decidió que la coordinación de empuje y daño se lleve a cabo en esa clase.
+
+- El arma direccional Cañon debería obtener la posición siguiente a la de Mech, comprobar si esa posición está dentro del tablero, comprobar si hay una unidad o un obstáculo. Y si no hay ninguno, avanzar una casilla más. Luego repite lo mismo hasta encontrar el primer objetivo, un obstáculo o salir del tablero. El punto es que Cañón no tiene que conocer qué tipo de unidad encontró ni cómo se resuelve un impacto. Su responsabilidad es sólo encontrar el primer elemento alcanzado por el disparo. De forma analógica implementamos Puño también.
+
+- Aunque el único tipo de Terreno que recibe daño es Edificio optamos por una implementación polimorfica; hacemos que el método recibirDanio le pertenezca a la clase Terreno y cada uno de sus tipos ejecute su comportamiento correspondiente. Es decir; de esta forma no Tablero no necesita saber si el tipo de Terreno es una montaña, agua o suelo, simplemente hacemos: terreno.recibirDanio(danio). Y cada terreno responde según su propia implementación. Esta implementación también nos facilitará futuras expansiones a los tipos de Terreno (podemos agregar un tipo de terreno llamado Puente que reciba daño también) 
