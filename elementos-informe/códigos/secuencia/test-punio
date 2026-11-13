@@ -1,0 +1,100 @@
+@startuml
+title TestPunio - punioCausaDosDanioYEmpujaUnaCasilla
+
+actor Test
+participant Tablero
+participant Punio
+participant "casillaObjetivo : Casilla\n(2,3)" as CasillaObjetivo
+participant "casillaDestino : Casilla\n(2,4)" as CasillaDestino
+participant "terreno : Suelo" as Suelo
+participant "unidad : Luciernaga" as Unidad
+
+== Arrange ==
+
+Test -> Tablero : new Tablero(mapa)
+Test -> Punio : new Punio()
+Test -> Unidad : new Luciernaga(Posicion(2,3))
+
+Test -> Tablero : colocarUnidad(unidad)
+activate Tablero
+
+Tablero -> Unidad : getPosicion()
+Unidad --> Tablero : Posicion(2,3)
+
+Tablero -> CasillaObjetivo : estaOcupada()
+CasillaObjetivo --> Tablero : false
+
+Tablero -> CasillaObjetivo : ocupar(unidad)
+Tablero --> Test : true
+
+deactivate Tablero
+
+Test -> Unidad : getVidaActual()
+Unidad --> Test : vidaInicial
+
+== Act ==
+
+Test -> Punio : atacar(tablero, Posicion(2,2), ESTE)
+activate Punio
+note right of Punio
+  objetivo = origen + ESTE
+  = Posicion(2,3)
+end note
+Punio -> Tablero : estaDentroDelTablero(Posicion(2,3))
+Tablero --> Punio : true
+
+Punio -> Tablero : resolverImpacto(Posicion(2,3), ESTE, 2)
+activate Tablero
+
+Tablero -> CasillaObjetivo : estaOcupada()
+CasillaObjetivo --> Tablero : true
+
+Tablero -> CasillaObjetivo : getUnidad()
+CasillaObjetivo --> Tablero : unidad
+
+Tablero -> Unidad : recibirDanio(2)
+
+note right of Tablero
+  Si la unidad sobrevive,
+  se procede con el empuje.
+  Si muere, se retira del tablero.
+end note
+
+Tablero -> Tablero : empujarUnidad(unidad, ESTE)
+
+note right of Tablero
+  Calcula el destino:
+  (2,3) + ESTE = (2,4)
+end note
+
+Tablero -> CasillaDestino : estaOcupada()
+CasillaDestino --> Tablero : false
+
+Tablero -> CasillaDestino : getTerreno()
+CasillaDestino --> Tablero : terreno
+
+Tablero -> Suelo : esTransitable()
+Suelo --> Tablero : true
+
+Tablero -> Tablero : moverUnidad(unidad, Posicion(2,4))
+activate Tablero
+
+Tablero -> CasillaObjetivo : desocupar()
+Tablero -> CasillaDestino : ocupar(unidad)
+Tablero -> Unidad : setPosicion(Posicion(2,4))
+Tablero -> Suelo : aplicarEfecto(unidad)
+
+deactivate Tablero
+
+deactivate Tablero
+deactivate Punio
+
+== Assert ==
+
+Test -> Unidad : getVidaActual()
+Unidad --> Test : vidaInicial - 2
+
+Test -> Unidad : getPosicion()
+Unidad --> Test : Posicion(2,4)
+
+@enduml
