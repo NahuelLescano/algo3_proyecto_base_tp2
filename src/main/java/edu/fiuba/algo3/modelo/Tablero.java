@@ -1,4 +1,4 @@
-Joaquin Eduardo Spallanzanipackage edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
