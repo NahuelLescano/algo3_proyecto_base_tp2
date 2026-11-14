@@ -27,17 +27,23 @@ public class Tablero {
 
     }
     
-    public boolean colocarUnidad(Unidad unidad) {
-        Casilla casilla = buscarCasilla(unidad.getPosicion());
-
-        if (casilla == null || casilla.estaOcupada()) {
-            return false;
-        }
-
-        casilla.ocupar(unidad);
-        return true;
+    public int getFilas() {
+        return casillas.stream().mapToInt(c -> c.getPosicion().getFila()).max().orElse(-1) + 1;
     }
 
+    public int getColumnas() {
+        return casillas.stream().mapToInt(c -> c.getPosicion().getColumna()).max().orElse(-1) + 1;
+    }
+    
+    public Terreno obtenerTerrenoEn(Posicion posicion) {
+        Casilla casilla = buscarCasilla(posicion);
+
+        if (casilla == null) {
+            return null;
+        }
+
+        return casilla.getTerreno();
+    } // Se utiliza en TestTablero
 
     private Terreno convertirCaracterATerreno(char caracter) {
         switch (caracter) {
@@ -55,38 +61,30 @@ public class Tablero {
                 throw new IllegalArgumentException("Caracter de terreno inválido: " + caracter);
         }
     }
+    
+    public boolean colocarUnidad(Unidad unidad) {
+        Casilla casilla = buscarCasilla(unidad.getPosicion());
+
+        if (casilla == null || casilla.estaOcupada()) {
+            return false;
+        }
+
+        casilla.ocupar(unidad);
+        return true;
+    }
 
     public boolean estaDentroDelTablero(Posicion posicion) {
         return buscarCasilla(posicion) != null;
     }
 
-
     private Casilla buscarCasilla(Posicion posicion) {
         for (Casilla casilla : casillas) {
-            if (casilla.getPosicion().equals(posicion)) {
+            if (casilla.estaEnPosicion(posicion)) {
                 return casilla;
             }
         }
         return null;
     }
-
-    public int getFilas() {
-        return casillas.stream().mapToInt(c -> c.getPosicion().getFila()).max().orElse(-1) + 1;
-    }
-
-    public int getColumnas() {
-        return casillas.stream().mapToInt(c -> c.getPosicion().getColumna()).max().orElse(-1) + 1;
-    }
-
-    public Terreno obtenerTerrenoEn(Posicion posicion) {
-    for (Casilla casilla : casillas) {
-        if (casilla.getPosicion().getFila() == posicion.getFila() && 
-            casilla.getPosicion().getColumna() == posicion.getColumna()) {
-            return casilla.getTerreno();
-        }
-    }
-    return null;
-}
     
     public boolean hayUnidad(Posicion posicion) {
         Casilla casilla = buscarCasilla(posicion);
@@ -123,30 +121,21 @@ public class Tablero {
 
         return true;
     }
+
     
     public void resolverImpacto(Posicion posicion, Direccion direccion, int danio) {
-
         Casilla casilla = buscarCasilla(posicion);
 
         if (casilla == null) {
             return;
         }
 
-        if (casilla.estaOcupada()) {
-            Unidad unidad = casilla.getUnidad();
+        Unidad sobreviviente = casilla.recibirImpacto(danio);
 
-            casilla.recibirDanio(danio);
-            
-            if (!unidad.estaViva()) {
-                return;
-            }
-            
-            empujarUnidad(unidad, direccion);
-            return;
+        if (sobreviviente != null) {
+            empujarUnidad(sobreviviente, direccion);
         }
-
-        casilla.recibirDanio(danio);
-    }
+    }  // resolverImpacto encuentra la casilla alcanzada, aplica el daño, determina si una unidad sobrevivió y si corresponde la empuja hacia una dirección
     
     public void empujarUnidad(Unidad unidad, Direccion direccion) {
     
@@ -230,5 +219,4 @@ public class Tablero {
 
         return seMovio;
     } 
-
 }

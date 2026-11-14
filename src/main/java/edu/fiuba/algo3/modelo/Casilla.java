@@ -72,4 +72,24 @@ public class Casilla {
     public boolean puedeRecibirUnidad(Unidad unidad) {
         return !estaOcupada() && terreno.esTransitable();
     }
+    
+    public Unidad recibirImpacto(int danio) {
+        if (unidad == null) {
+            terreno.recibirDanio(danio);
+            return null;
+        }
+
+        unidad.recibirDanio(danio);
+
+        if (!unidad.estaViva()) {
+            desocupar();
+            return null;
+        }
+
+        return unidad;
+    }
+    
+    public boolean estaEnPosicion(Posicion posicion) {
+        return this.posicion.equals(posicion);
+    }
 }
