@@ -12,3 +12,6 @@ buildNumber.properties
 *.iml
 *.~undo-tree~
 bin/
+.classpath
+.project
+.settings/
