@@ -1,0 +1,66 @@
+@startuml tablero-casillas
+title Into the Breach - Tablero, casillas y posiciones
+
+class Tablero {
+  + Tablero(mapa : String[])
+  + colocarUnidad(unidad : Unidad) : boolean
+  + moverUnidad(unidad : Unidad, destino : Posicion) : boolean
+  + desplazarUnidad(unidad : Unidad, destino : Posicion) : boolean
+  + estaDentroDelTablero(posicion : Posicion) : boolean
+  + getFilas() : int
+  + getColumnas() : int
+  + obtenerTerrenoEn(posicion : Posicion) : Terreno
+  + hayUnidad(posicion : Posicion) : boolean
+  + bloqueaDisparos(posicion : Posicion) : boolean
+  + resolverImpacto(posicion : Posicion, direccion : Direccion, danio : int)
+  + empujarUnidad(unidad : Unidad, direccion : Direccion)
+  + empujarUnidadEn(posicion : Posicion, direccion : Direccion)
+  + daniarEn(posicion : Posicion, danio : int)
+  - convertirCaracterATerreno(caracter : char) : Terreno
+  - buscarCasilla(posicion : Posicion) : Casilla
+  - retirarUnidadSiMurio(unidad : Unidad)
+  - aplicarDanioAUnidad(unidad : Unidad, danio : int)
+}
+
+class Casilla {
+  + Casilla(terreno : Terreno, posicion : Posicion)
+  + ocupar(unidad : Unidad)
+  + desocupar()
+  + getTerreno() : Terreno
+  + getUnidad() : Unidad
+  + getPosicion() : Posicion
+  + estaOcupada() : boolean
+  + reemplazarTerreno(nuevoTerreno : Terreno)
+}
+
+class Posicion {
+  - columna : int
+  - fila : int
+  + Posicion(fila : int, columna : int)
+  + getFila() : int
+  + getColumna() : int
+  + equals(objeto : Object) : boolean
+  + hashCode() : int
+  + desplazar(direccion : Direccion) : Posicion
+}
+
+enum Direccion {
+  NORTE
+  SUR
+  ESTE
+  OESTE
+}
+
+class Unidad <<referencia>>
+class Terreno <<referencia>>
+
+Tablero "1" *-- "0..*" Casilla : contiene
+Tablero ..> Posicion : usa
+Tablero ..> Direccion : usa
+Tablero ..> Unidad : usa
+Tablero ..> Terreno : usa
+Casilla --> "1" Posicion : posicion
+Casilla --> "1" Terreno : terreno
+Casilla --> "0..1" Unidad : unidad
+Posicion ..> Direccion : usa
+@enduml

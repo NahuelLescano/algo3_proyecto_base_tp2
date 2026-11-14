@@ -1,14 +1,15 @@
 package edu.fiuba.algo3.entrega_1;
 
-import edu.fiuba.algo3.modelo.Tablero;
-import edu.fiuba.algo3.modelo.Posicion;
-import edu.fiuba.algo3.modelo.Luciernaga;
-import edu.fiuba.algo3.modelo.Canion;
-import edu.fiuba.algo3.modelo.Direccion;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import edu.fiuba.algo3.modelo.arma.Canion;
+import edu.fiuba.algo3.modelo.tablero.Direccion;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.Luciernaga;
 
 public class CanionTest {
 
@@ -16,11 +17,11 @@ public class CanionTest {
     void canionImpactaPrimeraUnidadYNoAlcanzaALaSegunda() {
 
         String[] mapa = {
-            "-------",
-            "-------",
-            "-------",
-            "-------",
-            "-------"
+                "-------",
+                "-------",
+                "-------",
+                "-------",
+                "-------"
         };
 
         Tablero tablero = new Tablero(mapa);
@@ -52,16 +53,15 @@ public class CanionTest {
         assertEquals(new Posicion(2, 5), segundaUnidad.getPosicion());
     }
 
-
     @Test
     void canionSeDetieneAlEncontrarUnaMontania() {
 
         String[] mapa = {
-            "-------",
-            "-------",
-            "--M----",
-            "-------",
-            "-------"
+                "-------",
+                "-------",
+                "--M----",
+                "-------",
+                "-------"
         };
 
         Tablero tablero = new Tablero(mapa);
