@@ -1,0 +1,57 @@
+@startuml terrenos
+title Into the Breach - Terrenos
+
+abstract class Terreno {
+  {abstract} + esTransitable() : boolean
+  {abstract} + bloqueaDisparos() : boolean
+  {abstract} + aplicarEfecto(unidad : Unidad)
+  {abstract} + recibirDanio(danio : int)
+}
+
+class Suelo {
+  + esTransitable() : boolean
+  + bloqueaDisparos() : boolean
+  + aplicarEfecto(unidad : Unidad)
+  + recibirDanio(danio : int)
+}
+
+class Agua {
+  + esTransitable() : boolean
+  + bloqueaDisparos() : boolean
+  + aplicarEfecto(unidad : Unidad)
+  + recibirDanio(danio : int)
+}
+
+class Acido {
+  + esTransitable() : boolean
+  + bloqueaDisparos() : boolean
+  + aplicarEfecto(unidad : Unidad)
+  + recibirDanio(danio : int)
+}
+
+class Montania {
+  + esTransitable() : boolean
+  + bloqueaDisparos() : boolean
+  + aplicarEfecto(unidad : Unidad)
+  + recibirDanio(danio : int)
+}
+
+class Edificio {
+  - vida : int
+  + Edificio(vida : int)
+  + recibirDanio(danio : int)
+  + estaDestruido() : boolean
+  + esTransitable() : boolean
+  + bloqueaDisparos() : boolean
+  + aplicarEfecto(unidad : Unidad)
+}
+
+class Unidad <<referencia>>
+
+Terreno <|-- Suelo
+Terreno <|-- Agua
+Terreno <|-- Acido
+Terreno <|-- Montania
+Terreno <|-- Edificio
+Terreno ..> Unidad : aplica efecto
+@enduml

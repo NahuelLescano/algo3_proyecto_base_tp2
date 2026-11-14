@@ -1,0 +1,51 @@
+@startuml armas
+title Into the Breach - Armas
+
+interface Arma {
+}
+
+interface ArmaDireccional {
+  + atacar(tablero : Tablero, origen : Posicion, direccion : Direccion)
+}
+
+interface ArmaDePosicion {
+  + atacar(tablero : Tablero, origen : Posicion, objetivo : Posicion)
+}
+
+class Punio {
+  - {static} DANIO : int = 2
+  + atacar(tablero : Tablero, origen : Posicion, direccion : Direccion)
+}
+
+class Canion {
+  - {static} DANIO : int = 1
+  + atacar(tablero : Tablero, origen : Posicion, direccion : Direccion)
+}
+
+class Artilleria {
+  - {static} DANIO : int = 1
+  - {static} DISTANCIA_MINIMA : int = 2
+  + atacar(tablero : Tablero, origen : Posicion, objetivo : Posicion)
+  - esObjetivoValido(origen : Posicion, objetivo : Posicion) : boolean
+}
+
+class Tablero <<referencia>>
+class Posicion <<referencia>>
+class Direccion <<referencia>>
+
+Arma <|-- ArmaDireccional
+Arma <|-- ArmaDePosicion
+ArmaDireccional <|.. Punio
+ArmaDireccional <|.. Canion
+ArmaDePosicion <|.. Artilleria
+
+Punio ..> Tablero : usa
+Punio ..> Posicion : usa
+Punio ..> Direccion : usa
+Canion ..> Tablero : usa
+Canion ..> Posicion : usa
+Canion ..> Direccion : usa
+Artilleria ..> Tablero : usa
+Artilleria ..> Posicion : usa
+Artilleria ..> Direccion : usa
+@enduml
