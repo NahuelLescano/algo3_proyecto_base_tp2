@@ -1,0 +1,81 @@
+@startuml unidades
+title Into the Breach - Unidades
+
+abstract class Unidad {
+  - vidaActual : int
+  + Unidad(vida : int, posicion : Posicion)
+  + recibirDanio(danio : int)
+  + getVidaActual() : int
+  + getPosicion() : Posicion
+  ~ setPosicion(posicion : Posicion)
+  + estaViva() : boolean
+}
+
+abstract class Mech {
+  - yaSeMovio : boolean
+  + Mech(vida : int, posicion : Posicion, arma : Arma)
+  + yaSeMovio() : boolean
+  ~ marcarComoMovido()
+  + iniciarTurno()
+}
+
+abstract class Vek {
+  + Vek(vida : int, posicion : Posicion)
+}
+
+class MechDeCombate {
+  - {static} VIDA_INICIAL : int = 3
+  + MechDeCombate(posicion : Posicion)
+  - MechDeCombate(posicion : Posicion, arma : ArmaDireccional)
+  + iniciarAtaque(tablero : Tablero, direccion : Direccion)
+}
+
+class MechCanion {
+  - {static} VIDA_INICIAL : int = 3
+  + MechCanion(posicion : Posicion)
+  - MechCanion(posicion : Posicion, arma : ArmaDireccional)
+  + iniciarAtaque(tablero : Tablero, direccion : Direccion)
+}
+
+class MechArtilleria {
+  - {static} VIDA_INICIAL : int = 2
+  + MechArtilleria(posicion : Posicion)
+  - MechArtilleria(posicion : Posicion, arma : Artilleria)
+  + iniciarAtaque(tablero : Tablero, objetivo : Posicion)
+}
+
+class Luciernaga {
+  + Luciernaga(posicion : Posicion)
+}
+
+class Posicion <<referencia>>
+class Arma <<referencia>>
+class ArmaDireccional <<referencia>>
+class Artilleria <<referencia>>
+class Direccion <<referencia>>
+class Tablero <<referencia>>
+class Punio <<referencia>>
+class Canion <<referencia>>
+
+Unidad <|-- Mech
+Unidad <|-- Vek
+Mech <|-- MechDeCombate
+Mech <|-- MechCanion
+Mech <|-- MechArtilleria
+Vek <|-- Luciernaga
+
+Unidad --> "1" Posicion : posicion
+Mech --> "1" Arma : arma
+MechDeCombate --> "1" ArmaDireccional : arma
+MechCanion --> "1" ArmaDireccional : arma
+MechArtilleria --> "1" Artilleria : arma
+
+MechDeCombate ..> Punio : crea
+MechCanion ..> Canion : crea
+MechArtilleria ..> Artilleria : crea
+MechDeCombate ..> Tablero : usa
+MechCanion ..> Tablero : usa
+MechArtilleria ..> Tablero : usa
+MechDeCombate ..> Direccion : usa
+MechCanion ..> Direccion : usa
+@enduml
