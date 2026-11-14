@@ -20,4 +20,14 @@ public abstract class Mech extends Unidad {
     public void iniciarTurno() {
         yaSeMovio = false;
     }
+    
+    @Override
+    public boolean puedeMoverse() {
+        return !yaSeMovio;
+    }
+
+    @Override
+    public void registrarMovimiento() {
+        marcarComoMovido();
+    }
 }

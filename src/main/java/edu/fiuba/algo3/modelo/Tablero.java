@@ -95,7 +95,7 @@ public class Tablero {
     
     public boolean bloqueaDisparos(Posicion posicion) {
         Casilla casilla = buscarCasilla(posicion);
-        return casilla != null && casilla.getTerreno().bloqueaDisparos();
+        return casilla != null && casilla.bloqueaDisparos();
     }
     
     public boolean desplazarUnidad(Unidad unidad, Posicion destino) {
@@ -110,9 +110,9 @@ public class Tablero {
             return false;
         }
 
-        if (llegada.estaOcupada() || !llegada.getTerreno().esTransitable()) {
+        if (!llegada.puedeRecibirUnidad(unidad)) {
             return false;
-        }  // El destino debe estar libre y ser transitable
+        }
 
         origen.desocupar();
         llegada.ocupar(unidad);
@@ -145,8 +145,7 @@ public class Tablero {
             return;
         }
 
-        Terreno terreno = casilla.getTerreno();
-        terreno.recibirDanio(danio);
+        casilla.recibirDanio(danio);
     }
     
     public void empujarUnidad(Unidad unidad, Direccion direccion) {
@@ -218,16 +217,18 @@ public class Tablero {
     }
 
     public boolean moverUnidad(Unidad unidad, Posicion destino) {
-        if (unidad instanceof Mech && ((Mech) unidad).yaSeMovio()) {
+
+        if (!unidad.puedeMoverse()) {
             return false;
         }
 
         boolean seMovio = desplazarUnidad(unidad, destino);
 
-        if (seMovio && unidad instanceof Mech) {
-            ((Mech) unidad).marcarComoMovido();
+        if (seMovio) {
+            unidad.registrarMovimiento();
         }
 
         return seMovio;
-    }
+    } 
+
 }

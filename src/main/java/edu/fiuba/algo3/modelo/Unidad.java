@@ -36,5 +36,12 @@ public abstract class Unidad {
     public boolean estaViva() {
         return vidaActual > 0;
     }
+    
+    public boolean puedeMoverse() {
+        return true;
+    }
+
+    public void registrarMovimiento() {
+    }
 
 }

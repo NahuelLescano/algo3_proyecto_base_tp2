@@ -64,4 +64,12 @@ public class Casilla {
             desocupar();
         }
     }
+    
+    public boolean bloqueaDisparos() {
+        return terreno.bloqueaDisparos();
+    }
+    
+    public boolean puedeRecibirUnidad(Unidad unidad) {
+        return !estaOcupada() && terreno.esTransitable();
+    }
 }
