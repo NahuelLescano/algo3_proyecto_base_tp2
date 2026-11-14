@@ -39,4 +39,29 @@ public class Casilla {
     public void reemplazarTerreno(Terreno nuevoTerreno) {
         this.terreno = nuevoTerreno;
     }
+    
+    public void recibirDanio(int danio) {
+        if (unidad == null) {
+            terreno.recibirDanio(danio);
+            return;
+        }
+
+        unidad.recibirDanio(danio);
+
+        if (!unidad.estaViva()) {
+            desocupar();
+        }
+    }
+    
+    public void aplicarEfectoDelTerreno() {
+        if (unidad == null) {
+            return;
+        }
+
+        terreno.aplicarEfecto(unidad);
+
+        if (!unidad.estaViva()) {
+            desocupar();
+        }
+    }
 }

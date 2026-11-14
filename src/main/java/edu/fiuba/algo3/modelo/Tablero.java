@@ -119,9 +119,7 @@ public class Tablero {
 
         unidad.setPosicion(destino);
 
-        llegada.getTerreno().aplicarEfecto(unidad);   // Se aplica el efecto del terreno de destino
-        
-        retirarUnidadSiMurio(unidad);
+        llegada.aplicarEfectoDelTerreno();
 
         return true;
     }
@@ -137,10 +135,9 @@ public class Tablero {
         if (casilla.estaOcupada()) {
             Unidad unidad = casilla.getUnidad();
 
-            aplicarDanioAUnidad(unidad, danio);
+            casilla.recibirDanio(danio);
             
             if (!unidad.estaViva()) {
-                retirarUnidadSiMurio(unidad);
                 return;
             }
             
@@ -155,10 +152,8 @@ public class Tablero {
     public void empujarUnidad(Unidad unidad, Direccion direccion) {
     
         if (!unidad.estaViva()) {
-            retirarUnidadSiMurio(unidad);
             return;
         }
-        
         
         Casilla origen = buscarCasilla(unidad.getPosicion());
 
@@ -187,12 +182,8 @@ public class Tablero {
 
         // Veo si el destino está ocupado por otra unidad, en tal caso el disparo llega a esta ella
         if (llegada.estaOcupada()) {
-            Unidad otraUnidad = llegada.getUnidad();
-
-            // Ambas reciben 1 de daño
-            aplicarDanioAUnidad(unidad, 1);
-            aplicarDanioAUnidad(otraUnidad, 1);
-
+            origen.recibirDanio(1);
+            llegada.recibirDanio(1);
             return;
         }
 
@@ -202,26 +193,10 @@ public class Tablero {
             return;
         }
 
-        // Si llego hasta acá es porque la casilla está dentro del tablero, no está ocupada y el terreno no es transitable, entonces la unidad choca con un obstáculo, la unidad recibe daño y el terreno también (pero según las consignas sólo Tereno lo hace)
-        aplicarDanioAUnidad(unidad, 1);
-        
-        llegada.getTerreno().recibirDanio(1);
+        origen.recibirDanio(1);
+        llegada.recibirDanio(1);
     }
     
-    private void retirarUnidadSiMurio(Unidad unidad) {
-        if (!unidad.estaViva()) {
-            Casilla casilla = buscarCasilla(unidad.getPosicion());
-
-            if (casilla != null && casilla.getUnidad() == unidad) {
-                casilla.desocupar();
-            }
-        }
-    }
-    
-    private void aplicarDanioAUnidad(Unidad unidad, int danio) {
-        unidad.recibirDanio(danio);
-        retirarUnidadSiMurio(unidad);
-    }
 
     public void daniarEn(Posicion posicion, int danio) {
         Casilla casilla = buscarCasilla(posicion);
@@ -229,12 +204,7 @@ public class Tablero {
         if (casilla == null) {
             return;
         }
-
-        if (casilla.estaOcupada()) {
-            aplicarDanioAUnidad(casilla.getUnidad(), danio);
-        } else {
-            casilla.getTerreno().recibirDanio(danio);
-        }
+        casilla.recibirDanio(danio);
     }
 
     public void empujarUnidadEn(Posicion posicion, Direccion direccion) {
