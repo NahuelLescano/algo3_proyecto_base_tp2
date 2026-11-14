@@ -1,18 +1,23 @@
 package edu.fiuba.algo3.repositorios;
 
-import edu.fiuba.algo3.modelo.Message;
-import edu.fiuba.algo3.modelo.MessageRepository;
-import edu.fiuba.algo3.modelo.MessagesFileInvalid;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import edu.fiuba.algo3.modelo.mensaje.Message;
+import edu.fiuba.algo3.modelo.mensaje.MessageRepository;
+import edu.fiuba.algo3.modelo.mensaje.MessagesFileInvalid;
 
 public class JsonMessageRepository implements MessageRepository {
     public static final String MESSAGES_KEY = "messages";

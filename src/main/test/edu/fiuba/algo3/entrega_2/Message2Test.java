@@ -1,8 +1,10 @@
 package edu.fiuba.algo3.entrega_2;
 
-import edu.fiuba.algo3.modelo.Message;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
+import edu.fiuba.algo3.modelo.mensaje.Message;
 
 public class Message2Test {
     @Test

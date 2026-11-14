@@ -1,22 +1,25 @@
 package edu.fiuba.algo3.entrega_1;
 
-import edu.fiuba.algo3.modelo.movimiento.MechCombate;
-import edu.fiuba.algo3.modelo.movimiento.Posicion;
-import edu.fiuba.algo3.modelo.movimiento.Tablero;
-import edu.fiuba.algo3.modelo.excepciones.AccionInvalidaException;
-import edu.fiuba.algo3.modelo.excepciones.AccionYaRealizadaException;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import edu.fiuba.algo3.modelo.excepciones.AccionYaRealizadaException;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.MechDeCombate;
+
 
 public class MechTurnoTest {
 
     private static final Posicion INICIAL = new Posicion(2, 2);
 
     private Tablero tablero;
-    private MechCombate mech;
+    private MechDeCombate mech;
 
     @BeforeEach
     public void setUp() {
@@ -68,7 +71,7 @@ public class MechTurnoTest {
         tablero.moverUnidad(INICIAL, destino);
         mech.atacar(destino, new Posicion(2, 4), tablero);
 
-        assertThrows(AccionInvalidaException.class, () -> {
+        assertThrows(AccionYaRealizadaException.class, () -> {
             mech.deshacerMovimiento(tablero);
         });
 
@@ -82,7 +85,7 @@ public class MechTurnoTest {
         tablero.moverUnidad(INICIAL, destino);
         mech.deshacerMovimiento(tablero);
 
-        assertThrows(AccionInvalidaException.class, () -> {
+        assertThrows(AccionYaRealizadaException.class, () -> {
             mech.deshacerMovimiento(tablero);
         });
 

@@ -1,13 +1,14 @@
 package edu.fiuba.algo3.repositorios;
 
-import edu.fiuba.algo3.modelo.Message;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+
+import edu.fiuba.algo3.modelo.mensaje.Message;
 
 public class JsonTest {
 
