@@ -1,6 +1,8 @@
-package edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo.terreno;
 
-public class Agua extends Terreno {
+import edu.fiuba.algo3.modelo.unidad.Unidad;
+
+public class Suelo extends Terreno {
     @Override
     public boolean esTransitable() {
         return true;
@@ -13,8 +15,8 @@ public class Agua extends Terreno {
 
     @Override
     public void aplicarEfecto(Unidad unidad) {
-    }    
-    
+    }
+
     @Override
     public void recibirDanio(int danio) {
     }

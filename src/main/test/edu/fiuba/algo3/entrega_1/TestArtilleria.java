@@ -1,13 +1,14 @@
 package edu.fiuba.algo3.entrega_1;
 
-import edu.fiuba.algo3.modelo.Tablero;
-import edu.fiuba.algo3.modelo.Posicion;
-import edu.fiuba.algo3.modelo.Luciernaga;
-import edu.fiuba.algo3.modelo.Artilleria;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import edu.fiuba.algo3.modelo.arma.Artilleria;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.Luciernaga;
 
 public class TestArtilleria {
 
@@ -85,10 +86,10 @@ public class TestArtilleria {
         Artilleria artilleria = new Artilleria();
 
         Luciernaga centro = new Luciernaga(new Posicion(3, 3));
-        Luciernaga norte  = new Luciernaga(new Posicion(2, 3));
-        Luciernaga sur    = new Luciernaga(new Posicion(4, 3));
-        Luciernaga este   = new Luciernaga(new Posicion(3, 4));
-        Luciernaga oeste  = new Luciernaga(new Posicion(3, 2));
+        Luciernaga norte = new Luciernaga(new Posicion(2, 3));
+        Luciernaga sur = new Luciernaga(new Posicion(4, 3));
+        Luciernaga este = new Luciernaga(new Posicion(3, 4));
+        Luciernaga oeste = new Luciernaga(new Posicion(3, 2));
 
         assertTrue(tablero.colocarUnidad(centro));
         assertTrue(tablero.colocarUnidad(norte));
@@ -97,10 +98,10 @@ public class TestArtilleria {
         assertTrue(tablero.colocarUnidad(oeste));
 
         int vidaCentro = centro.getVidaActual();
-        int vidaNorte  = norte.getVidaActual();
-        int vidaSur    = sur.getVidaActual();
-        int vidaEste   = este.getVidaActual();
-        int vidaOeste  = oeste.getVidaActual();
+        int vidaNorte = norte.getVidaActual();
+        int vidaSur = sur.getVidaActual();
+        int vidaEste = este.getVidaActual();
+        int vidaOeste = oeste.getVidaActual();
 
         artilleria.atacar(tablero, new Posicion(3, 0), new Posicion(3, 3));
 

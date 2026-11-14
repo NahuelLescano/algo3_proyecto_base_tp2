@@ -1,10 +1,11 @@
-package edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo.unidad;
+
+import edu.fiuba.algo3.modelo.tablero.Posicion;
 
 public class MechArtilleria extends Mech {
-
     private static final int VIDA_INICIAL = 2;
 
-    private final Artilleria arma;
+    private Artilleria arma;
 
     public MechArtilleria(Posicion posicion) {
         this(posicion, new Artilleria());
@@ -15,6 +16,7 @@ public class MechArtilleria extends Mech {
         this.arma = arma;
     }
 
+    // TODO: por que necesita `getPosicion`
     public void iniciarAtaque(Tablero tablero, Posicion objetivo) {
         arma.atacar(tablero, getPosicion(), objetivo);
     }

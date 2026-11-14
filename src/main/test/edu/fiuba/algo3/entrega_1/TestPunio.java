@@ -1,14 +1,15 @@
 package edu.fiuba.algo3.entrega_1;
 
-import edu.fiuba.algo3.modelo.Tablero;
-import edu.fiuba.algo3.modelo.Posicion;
-import edu.fiuba.algo3.modelo.Luciernaga;
-import edu.fiuba.algo3.modelo.Punio;
-import edu.fiuba.algo3.modelo.Direccion;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import edu.fiuba.algo3.modelo.arma.Punio;
+import edu.fiuba.algo3.modelo.tablero.Direccion;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.Luciernaga;
 
 public class TestPunio {
 

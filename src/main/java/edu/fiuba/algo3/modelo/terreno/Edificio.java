@@ -1,4 +1,6 @@
-package edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo.terreno;
+
+import edu.fiuba.algo3.modelo.unidad.Unidad;
 
 public class Edificio extends Terreno {
     private int vida;
@@ -15,6 +17,7 @@ public class Edificio extends Terreno {
     public boolean estaDestruido() {
         return this.vida <= 0;
     }
+
     @Override
     public boolean esTransitable() {
         return false;
@@ -28,5 +31,5 @@ public class Edificio extends Terreno {
     @Override
     public void aplicarEfecto(Unidad unidad) {
     }
-    
+
 }

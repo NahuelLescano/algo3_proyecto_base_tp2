@@ -1,10 +1,15 @@
-package edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo.arma;
+
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Direccion;
 
 // La responsabilidad de Canion es encontrar el primer elemento alcanzado por el disparo
 public class Canion implements ArmaDireccional {
 
     private static final int DANIO = 1;
 
+    // TODO: refactor
     @Override
     public void atacar(Tablero tablero, Posicion origen, Direccion direccion) {
 
@@ -15,9 +20,11 @@ public class Canion implements ArmaDireccional {
 
             Posicion posicionActual = new Posicion(fila, columna);
 
-            // Preguntamos si en la casilla actual encontramos algo que detenga el disparo; o hay una unidad o el terreno detiene el disparo. Delegamos a tablero la resolución del impacto
+            // Preguntamos si en la casilla actual encontramos algo que detenga el disparo;
+            // o hay una unidad o el terreno detiene el disparo. Delegamos a tablero la
+            // resolución del impacto
             if (tablero.hayUnidad(posicionActual) ||
-                tablero.bloqueaDisparos(posicionActual)) {
+                    tablero.bloqueaDisparos(posicionActual)) {
 
                 tablero.resolverImpacto(posicionActual, direccion, DANIO);
                 return;

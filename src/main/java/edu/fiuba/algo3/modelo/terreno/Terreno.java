@@ -1,4 +1,6 @@
-package edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo.terreno;
+
+import edu.fiuba.algo3.modelo.unidad.Unidad;
 
 public abstract class Terreno {
     public abstract boolean esTransitable();

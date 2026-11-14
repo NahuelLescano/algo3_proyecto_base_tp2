@@ -1,10 +1,12 @@
-package edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo.unidad;
+
+import edu.fiuba.algo3.modelo.tablero.Posicion;
 
 public abstract class Unidad {
     private int vidaActual;
     private Posicion posicion;
 
-    public Unidad(int vida, Posicion posicion){
+    public Unidad(int vida, Posicion posicion) {
         this.vidaActual = vida;
         this.posicion = posicion;
     }
@@ -29,10 +31,10 @@ public abstract class Unidad {
         return posicion;
     }
 
-    void setPosicion(Posicion posicion) {
+    public void setPosicion(Posicion posicion) {
         this.posicion = posicion;
     }
-    
+
     public boolean estaViva() {
         return vidaActual > 0;
     }

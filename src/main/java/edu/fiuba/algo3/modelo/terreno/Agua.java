@@ -1,22 +1,23 @@
-package edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo.terreno;
 
-public class Montania extends Terreno {
+import edu.fiuba.algo3.modelo.unidad.Unidad;
+
+public class Agua extends Terreno {
     @Override
     public boolean esTransitable() {
-        return false;
-    }
-
-    @Override
-    public boolean bloqueaDisparos() {
         return true;
     }
 
     @Override
+    public boolean bloqueaDisparos() {
+        return false;
+    }
+
+    @Override
     public void aplicarEfecto(Unidad unidad) {
-    }    
-    
+    }
+
     @Override
     public void recibirDanio(int danio) {
-        // La montaña es indestructible
     }
 }
