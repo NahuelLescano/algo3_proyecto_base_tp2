@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.mensaje.Message;
+import edu.fiuba.algo3.modelo.Message;
 
 public class Message2Test {
     @Test

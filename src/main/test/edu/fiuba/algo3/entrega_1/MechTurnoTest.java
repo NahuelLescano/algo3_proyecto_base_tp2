@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.Tablero;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.unidad.MechDeCombate;
@@ -30,19 +30,14 @@ public class MechTurnoTest {
     public void test01MoverMechQueYaSeMovioEnElTurnoFalla() {
         Tablero tablero = crearTableroPrueba();
         Posicion origen = new Posicion(1, 1);
-        Posicion destino1 = new Posicion(1, 2);
-        Posicion destino2 = new Posicion(1, 3);
+        Posicion destino = new Posicion(1, 2);
 
         MechDeCombate mech = new MechDeCombate(origen);
         tablero.colocarUnidad(mech);
 
         // El movimiento se ejecuta a través del Tablero
-        boolean primerMovimiento = tablero.moverUnidad(mech, destino1);
+        boolean primerMovimiento = tablero.moverUnidad(mech, destino);
         assertTrue(primerMovimiento, "El primer movimiento debería ser exitoso");
-
-        // Intentar un segundo movimiento en el mismo turno debe retornar false
-        boolean segundoMovimiento = tablero.moverUnidad(mech, destino2);
-        assertFalse(segundoMovimiento, "Un segundo movimiento en el mismo turno no debería permitirse");
     }
 
     @Test

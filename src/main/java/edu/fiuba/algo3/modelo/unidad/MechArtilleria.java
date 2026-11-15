@@ -1,6 +1,8 @@
 package edu.fiuba.algo3.modelo.unidad;
 
+import edu.fiuba.algo3.modelo.arma.Artilleria;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
 
 public class MechArtilleria extends Mech {
     private static final int VIDA_INICIAL = 2;

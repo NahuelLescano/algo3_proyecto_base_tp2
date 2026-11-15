@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.mensaje.Message;
+import edu.fiuba.algo3.modelo.Message;
 
 public class JsonTest {
 
@@ -20,7 +20,7 @@ public class JsonTest {
         JsonMessageRepository reader = new JsonMessageRepository(JSON_MESSAGES_JSON);
 
         List<Message> actual = reader.load();
-        List<Message> expected = new ArrayList<>(List.of(new Message[]{
+        List<Message> expected = new ArrayList<>(List.of(new Message[] {
                 new Message("Hola", "Hello")
         }));
 
