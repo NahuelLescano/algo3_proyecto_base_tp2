@@ -15,9 +15,7 @@ public class Canion implements ArmaDireccional {
 
             Posicion posicionActual = new Posicion(fila, columna);
 
-            // Preguntamos si en la casilla actual encontramos algo que detenga el disparo; o hay una unidad o el terreno detiene el disparo. Delegamos a tablero la resolución del impacto
-            if (tablero.hayUnidad(posicionActual) ||
-                tablero.bloqueaDisparos(posicionActual)) {
+            if (tablero.detieneDisparoEn(posicionActual)) {
 
                 tablero.resolverImpacto(posicionActual, direccion, DANIO);
                 return;

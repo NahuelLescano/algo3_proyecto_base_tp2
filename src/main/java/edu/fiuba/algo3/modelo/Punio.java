@@ -11,9 +11,7 @@ public class Punio implements ArmaDireccional {
         int columna = origen.getColumna() + direccion.getDesplazamientoEnColumna();
 
         Posicion objetivo = new Posicion(fila, columna);
-
-        if (tablero.estaDentroDelTablero(objetivo)) {
-            tablero.resolverImpacto(objetivo, direccion, DANIO);
-        }
+        
+        tablero.resolverImpacto(objetivo, direccion, DANIO);
     }
 }

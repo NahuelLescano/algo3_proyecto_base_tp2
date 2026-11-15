@@ -78,7 +78,7 @@ public class CanionTest {
         canon.atacar(tablero, new Posicion(2, 0), Direccion.ESTE);
 
         // La montaña bloquea los disparos
-        assertTrue(tablero.bloqueaDisparos(new Posicion(2, 2)));
+        assertTrue(tablero.detieneDisparoEn(new Posicion(2, 2)));
 
         // La unidad detrás de la montaña no recibe daño
         assertEquals(vidaInicial, unidad.getVidaActual());

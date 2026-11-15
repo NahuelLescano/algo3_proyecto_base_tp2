@@ -3,7 +3,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tablero {
+
     private List<Casilla> casillas;
+    
+    // ==================================================
+    // CONSTRUCTOR
+    // ==================================================
 
     public Tablero(String[] mapa) {
         if (mapa == null || mapa.length == 0) {
@@ -27,24 +32,6 @@ public class Tablero {
 
     }
     
-    public int getFilas() {
-        return casillas.stream().mapToInt(c -> c.getPosicion().getFila()).max().orElse(-1) + 1;
-    }
-
-    public int getColumnas() {
-        return casillas.stream().mapToInt(c -> c.getPosicion().getColumna()).max().orElse(-1) + 1;
-    }
-    
-    public Terreno obtenerTerrenoEn(Posicion posicion) {
-        Casilla casilla = buscarCasilla(posicion);
-
-        if (casilla == null) {
-            return null;
-        }
-
-        return casilla.getTerreno();
-    } // Se utiliza en TestTablero
-
     private Terreno convertirCaracterATerreno(char caracter) {
         switch (caracter) {
             case '-':
@@ -62,20 +49,42 @@ public class Tablero {
         }
     }
     
-    public boolean colocarUnidad(Unidad unidad) {
-        Casilla casilla = buscarCasilla(unidad.getPosicion());
+    // ==================================================
+    // CONSULTAS SOBRE EL TABLERO
+    // ==================================================
+    
+    public int getFilas() {
+        return casillas.stream().mapToInt(c -> c.getPosicion().getFila()).max().orElse(-1) + 1;
+    }
 
-        if (casilla == null || casilla.estaOcupada()) {
-            return false;
+    public int getColumnas() {
+        return casillas.stream().mapToInt(c -> c.getPosicion().getColumna()).max().orElse(-1) + 1;
+    }
+    
+    public Terreno obtenerTerrenoEn(Posicion posicion) {
+        Casilla casilla = buscarCasilla(posicion);
+
+        if (casilla == null) {
+            return null;
         }
 
-        casilla.ocupar(unidad);
-        return true;
-    }
+        return casilla.getTerreno();
+    } // Se utiliza en TestTablero
+    
+    public boolean detieneDisparoEn(Posicion posicion) {
+        Casilla casilla = buscarCasilla(posicion);
 
+        return casilla != null && casilla.detieneDisparo(); // Delega la consulta a Casilla
+    } // Un método que usa Cañon, por ahora no encuentro otra solución
+    
     public boolean estaDentroDelTablero(Posicion posicion) {
         return buscarCasilla(posicion) != null;
-    }
+    } // Lo usa Cañon para comprobación de límites, por ahora no encuentro otra solución
+
+    
+    // ==================================================
+    // BÚSQUEDA DE ELEMENTOS
+    // ==================================================
 
     private Casilla buscarCasilla(Posicion posicion) {
         for (Casilla casilla : casillas) {
@@ -86,14 +95,19 @@ public class Tablero {
         return null;
     }
     
-    public boolean hayUnidad(Posicion posicion) {
-        Casilla casilla = buscarCasilla(posicion);
-        return casilla != null && casilla.estaOcupada();
-    }
+    // ==================================================
+    // COLOCACIÓN Y DESPLAZAMIENTO DE UNIDADES
+    // ==================================================
     
-    public boolean bloqueaDisparos(Posicion posicion) {
-        Casilla casilla = buscarCasilla(posicion);
-        return casilla != null && casilla.bloqueaDisparos();
+    public boolean colocarUnidad(Unidad unidad) {
+        Casilla casilla = buscarCasilla(unidad.getPosicion());
+
+        if (casilla == null || casilla.estaOcupada()) {
+            return false;
+        }
+
+        casilla.ocupar(unidad);
+        return true;
     }
     
     public boolean desplazarUnidad(Unidad unidad, Posicion destino) {
@@ -121,7 +135,25 @@ public class Tablero {
 
         return true;
     }
+    
+    public boolean moverUnidad(Unidad unidad, Posicion destino) {
 
+        if (!unidad.puedeMoverse()) {
+            return false;
+        }
+
+        boolean seMovio = desplazarUnidad(unidad, destino);
+
+        if (seMovio) {
+            unidad.registrarMovimiento();
+        }
+
+        return seMovio;
+    } 
+    
+    // ==================================================
+    // DAÑO, IMPACTOS Y EMPUJES
+    // ==================================================
     
     public void resolverImpacto(Posicion posicion, Direccion direccion, int danio) {
         Casilla casilla = buscarCasilla(posicion);
@@ -136,6 +168,15 @@ public class Tablero {
             empujarUnidad(sobreviviente, direccion);
         }
     }  // resolverImpacto encuentra la casilla alcanzada, aplica el daño, determina si una unidad sobrevivió y si corresponde la empuja hacia una dirección
+    
+    public void daniarEn(Posicion posicion, int danio) {
+        Casilla casilla = buscarCasilla(posicion);
+
+        if (casilla == null) {
+            return;
+        }
+        casilla.recibirDanio(danio);
+    }
     
     public void empujarUnidad(Unidad unidad, Direccion direccion) {
     
@@ -160,7 +201,7 @@ public class Tablero {
         Posicion destino = new Posicion(filaDestino, columnaDestino);
         
 
-        if (!estaDentroDelTablero(destino)) {
+        if (buscarCasilla(destino) == null) {
             return;
         }
         
@@ -185,16 +226,6 @@ public class Tablero {
         llegada.recibirDanio(1);
     }
     
-
-    public void daniarEn(Posicion posicion, int danio) {
-        Casilla casilla = buscarCasilla(posicion);
-
-        if (casilla == null) {
-            return;
-        }
-        casilla.recibirDanio(danio);
-    }
-
     public void empujarUnidadEn(Posicion posicion, Direccion direccion) {
         Casilla casilla = buscarCasilla(posicion);
 
@@ -204,19 +235,4 @@ public class Tablero {
 
         empujarUnidad(casilla.getUnidad(), direccion);
     }
-
-    public boolean moverUnidad(Unidad unidad, Posicion destino) {
-
-        if (!unidad.puedeMoverse()) {
-            return false;
-        }
-
-        boolean seMovio = desplazarUnidad(unidad, destino);
-
-        if (seMovio) {
-            unidad.registrarMovimiento();
-        }
-
-        return seMovio;
-    } 
 }

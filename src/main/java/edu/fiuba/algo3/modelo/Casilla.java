@@ -92,4 +92,8 @@ public class Casilla {
     public boolean estaEnPosicion(Posicion posicion) {
         return this.posicion.equals(posicion);
     }
+    
+    public boolean detieneDisparo() {
+        return estaOcupada() || terreno.bloqueaDisparos();
+    }
 }
