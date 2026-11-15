@@ -40,17 +40,20 @@ public class Casilla {
         this.terreno = nuevoTerreno;
     }
     
-    public void recibirDanio(int danio) {
+    public Unidad recibirDanio(int danio) {
         if (unidad == null) {
             terreno.recibirDanio(danio);
-            return;
+            return null;
         }
 
         unidad.recibirDanio(danio);
 
         if (!unidad.estaViva()) {
             desocupar();
+            return null;
         }
+
+        return unidad;
     }
     
     public void aplicarEfectoDelTerreno() {
@@ -71,22 +74,6 @@ public class Casilla {
     
     public boolean puedeRecibirUnidad(Unidad unidad) {
         return !estaOcupada() && terreno.esTransitable();
-    }
-    
-    public Unidad recibirImpacto(int danio) {
-        if (unidad == null) {
-            terreno.recibirDanio(danio);
-            return null;
-        }
-
-        unidad.recibirDanio(danio);
-
-        if (!unidad.estaViva()) {
-            desocupar();
-            return null;
-        }
-
-        return unidad;
     }
     
     public boolean estaEnPosicion(Posicion posicion) {

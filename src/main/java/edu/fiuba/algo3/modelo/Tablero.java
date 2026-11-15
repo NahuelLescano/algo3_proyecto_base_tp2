@@ -162,7 +162,8 @@ public class Tablero {
             return;
         }
 
-        Unidad sobreviviente = casilla.recibirImpacto(danio);
+        // Unidad sobreviviente = casilla.recibirImpacto(danio);
+        Unidad sobreviviente = casilla.recibirDanio(danio);
 
         if (sobreviviente != null) {
             empujarUnidad(sobreviviente, direccion);
