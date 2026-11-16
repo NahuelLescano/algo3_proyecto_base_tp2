@@ -93,7 +93,7 @@ public class Tablero {
             }
         }
         return null;
-    }
+    }  // Fundamental
     
     // ==================================================
     // COLOCACIÓN Y DESPLAZAMIENTO DE UNIDADES
@@ -107,8 +107,9 @@ public class Tablero {
         }
 
         return casilla.ocupar(unidad);
-    }
+    }  // Tablero se encarga de encontrar dónde colocarla, y Casilla se encarga de determinar si puede recibirla 
     
+    // EL siguiente método ya involucra dos casillas
     public boolean desplazarUnidad(Unidad unidad, Posicion destino) {
         Casilla origen = buscarCasilla(unidad.getPosicion());
         Casilla llegada = buscarCasilla(destino);
@@ -137,7 +138,7 @@ public class Tablero {
         llegada.aplicarEfectoDelTerreno();
 
         return true;
-    }
+    }  // Revisar
     
     public boolean moverUnidad(Unidad unidad, Posicion destino) {
 
@@ -179,7 +180,7 @@ public class Tablero {
             return;
         }
         casilla.aplicarDanio(danio);
-    }
+    } // La diferencia con resolverImpacto() es que no intenta empujar a ninguna unidad.
     
     public void empujarUnidad(Unidad unidad, Direccion direccion) {
     
