@@ -3,8 +3,8 @@ package edu.fiuba.algo3.entrega_1;
 import edu.fiuba.algo3.modelo.Tablero;
 import edu.fiuba.algo3.modelo.Posicion;
 import edu.fiuba.algo3.modelo.Luciernaga;
-import edu.fiuba.algo3.modelo.Canion;
-import edu.fiuba.algo3.modelo.Direccion;
+import edu.fiuba.algo3.modelo.Mech;
+import edu.fiuba.algo3.modelo.MechFactory;
 
 import org.junit.jupiter.api.Test;
 
@@ -24,31 +24,29 @@ public class CanionTest {
         };
 
         Tablero tablero = new Tablero(mapa);
-        Canion canon = new Canion();
+        MechFactory fabrica = new MechFactory();
 
-        // Ubico dos unidades en la misma línea de disparo
+        // Creo un Mech equipado con Cañón
+        Mech mech = fabrica.crearMechCanon(new Posicion(2, 0));
+
+        // Ubico las unidades en la misma línea de disparo
         Luciernaga primeraUnidad = new Luciernaga(new Posicion(2, 2));
         Luciernaga segundaUnidad = new Luciernaga(new Posicion(2, 5));
 
+        assertTrue(tablero.colocarUnidad(mech));
         assertTrue(tablero.colocarUnidad(primeraUnidad));
         assertTrue(tablero.colocarUnidad(segundaUnidad));
 
         int vidaInicialPrimera = primeraUnidad.getVidaActual();
         int vidaInicialSegunda = segundaUnidad.getVidaActual();
 
-        // El Cañón dispara hacia el este
-        canon.atacar(tablero, new Posicion(2, 0), Direccion.ESTE);
+        // El Cañón dispara hacia el este, hasta la última columna
+        mech.iniciarAtaque(tablero, new Posicion(2, 6));
 
-        // La primera unidad recibe 1 de daño
         assertEquals(vidaInicialPrimera - 1, primeraUnidad.getVidaActual());
-
-        // La primera unidad es empujada una casilla hacia el este
         assertEquals(new Posicion(2, 3), primeraUnidad.getPosicion());
 
-        // La segunda unidad no recibe daño
         assertEquals(vidaInicialSegunda, segundaUnidad.getVidaActual());
-
-        // La segunda unidad permanece en su posición
         assertEquals(new Posicion(2, 5), segundaUnidad.getPosicion());
     }
 
@@ -65,25 +63,23 @@ public class CanionTest {
         };
 
         Tablero tablero = new Tablero(mapa);
-        Canion canon = new Canion();
+        MechFactory fabrica = new MechFactory();
 
-        // Ubico una unidad detrás de la montaña
+        Mech mech = fabrica.crearMechCanon(new Posicion(2, 0));
+
         Luciernaga unidad = new Luciernaga(new Posicion(2, 4));
 
+        assertTrue(tablero.colocarUnidad(mech));
         assertTrue(tablero.colocarUnidad(unidad));
 
         int vidaInicial = unidad.getVidaActual();
 
-        // El cañón dispara hacia el este
-        canon.atacar(tablero, new Posicion(2, 0), Direccion.ESTE);
+        // El Cañón apunta hacia el este
+        mech.iniciarAtaque(tablero, new Posicion(2, 6));
 
-        // La montaña bloquea los disparos
         assertTrue(tablero.detieneDisparoEn(new Posicion(2, 2)));
 
-        // La unidad detrás de la montaña no recibe daño
         assertEquals(vidaInicial, unidad.getVidaActual());
-
-        // La unidad permanece en su posición
         assertEquals(new Posicion(2, 4), unidad.getPosicion());
     }
 }

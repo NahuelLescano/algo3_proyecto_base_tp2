@@ -1,6 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
-public class Artilleria implements ArmaDePosicion {
+public class Artilleria implements Arma {
 
     private static final int DANIO = 1;
     private static final int DISTANCIA_MINIMA = 2;
@@ -11,10 +11,10 @@ public class Artilleria implements ArmaDePosicion {
             return;
         }
 
-        // La casilla objetivo recibe daño (la artillería no se frena con obstáculos)
+        // La casilla objetivo recibe daño (ignora obstáculos intermedios).
         tablero.daniarEn(objetivo, DANIO);
 
-        // Las 4 casillas adyacentes se empujan hacia afuera del objetivo
+        // Empuja las unidades de las 4 casillas adyacentes hacia afuera.
         for (Direccion direccion : Direccion.values()) {
             Posicion vecina = objetivo.desplazar(direccion);
             tablero.empujarUnidadEn(vecina, direccion);

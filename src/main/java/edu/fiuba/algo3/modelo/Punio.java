@@ -1,17 +1,18 @@
 package edu.fiuba.algo3.modelo;
 
-public class Punio implements ArmaDireccional {
+public class Punio implements Arma {
 
     private static final int DANIO = 2;
 
     @Override
-    public void atacar(Tablero tablero, Posicion origen, Direccion direccion) {
+    public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
+    
+        if (!origen.esAdyacenteA(objetivo)) {
+           return;
+        }
 
-        int fila = origen.getFila() + direccion.getDesplazamientoEnFila();
-        int columna = origen.getColumna() + direccion.getDesplazamientoEnColumna();
+        Direccion direccion = origen.direccionHacia(objetivo);
 
-        Posicion objetivo = new Posicion(fila, columna);
-        
         tablero.resolverImpacto(objetivo, direccion, DANIO);
     }
 }

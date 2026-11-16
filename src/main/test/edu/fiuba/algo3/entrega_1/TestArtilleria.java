@@ -3,7 +3,8 @@ package edu.fiuba.algo3.entrega_1;
 import edu.fiuba.algo3.modelo.Tablero;
 import edu.fiuba.algo3.modelo.Posicion;
 import edu.fiuba.algo3.modelo.Luciernaga;
-import edu.fiuba.algo3.modelo.Artilleria;
+import edu.fiuba.algo3.modelo.Mech;
+import edu.fiuba.algo3.modelo.MechFactory;
 
 import org.junit.jupiter.api.Test;
 
@@ -25,17 +26,17 @@ public class TestArtilleria {
         };
 
         Tablero tablero = new Tablero(mapa);
-        Artilleria artilleria = new Artilleria();
+        MechFactory fabrica = new MechFactory();
+        Mech mech = fabrica.crearMechArtillero(new Posicion(3, 0));
 
-        // Hay una montaña entre el origen y el objetivo
         Luciernaga objetivo = new Luciernaga(new Posicion(3, 4));
+        assertTrue(tablero.colocarUnidad(mech));
         assertTrue(tablero.colocarUnidad(objetivo));
 
         int vidaInicial = objetivo.getVidaActual();
 
-        artilleria.atacar(tablero, new Posicion(3, 0), new Posicion(3, 4));
+        mech.iniciarAtaque(tablero, new Posicion(3, 4));
 
-        // La montaña no bloquea el disparo: el objetivo recibe daño
         assertEquals(vidaInicial - 1, objetivo.getVidaActual());
     }
 
@@ -53,17 +54,17 @@ public class TestArtilleria {
         };
 
         Tablero tablero = new Tablero(mapa);
-        Artilleria artilleria = new Artilleria();
+        MechFactory fabrica = new MechFactory();
+        Mech mech = fabrica.crearMechArtillero(new Posicion(3, 0));
 
         Luciernaga adyacente = new Luciernaga(new Posicion(3, 1));
+        assertTrue(tablero.colocarUnidad(mech));
         assertTrue(tablero.colocarUnidad(adyacente));
 
         int vidaInicial = adyacente.getVidaActual();
 
-        // Intento atacar la casilla pegada al origen
-        artilleria.atacar(tablero, new Posicion(3, 0), new Posicion(3, 1));
+        mech.iniciarAtaque(tablero, new Posicion(3, 1));
 
-        // No pasa nada: ni daño ni empuje
         assertEquals(vidaInicial, adyacente.getVidaActual());
         assertEquals(new Posicion(3, 1), adyacente.getPosicion());
     }
@@ -82,7 +83,8 @@ public class TestArtilleria {
         };
 
         Tablero tablero = new Tablero(mapa);
-        Artilleria artilleria = new Artilleria();
+        MechFactory fabrica = new MechFactory();
+        Mech mech = fabrica.crearMechArtillero(new Posicion(3, 0));
 
         Luciernaga centro = new Luciernaga(new Posicion(3, 3));
         Luciernaga norte  = new Luciernaga(new Posicion(2, 3));
@@ -90,6 +92,7 @@ public class TestArtilleria {
         Luciernaga este   = new Luciernaga(new Posicion(3, 4));
         Luciernaga oeste  = new Luciernaga(new Posicion(3, 2));
 
+        assertTrue(tablero.colocarUnidad(mech));
         assertTrue(tablero.colocarUnidad(centro));
         assertTrue(tablero.colocarUnidad(norte));
         assertTrue(tablero.colocarUnidad(sur));
@@ -102,13 +105,11 @@ public class TestArtilleria {
         int vidaEste   = este.getVidaActual();
         int vidaOeste  = oeste.getVidaActual();
 
-        artilleria.atacar(tablero, new Posicion(3, 0), new Posicion(3, 3));
+        mech.iniciarAtaque(tablero, new Posicion(3, 3));
 
-        // El objetivo recibe daño y no se mueve
         assertEquals(vidaCentro - 1, centro.getVidaActual());
         assertEquals(new Posicion(3, 3), centro.getPosicion());
 
-        // Las unidades adyacentes son empujadas hacia afuera, sin daño
         assertEquals(new Posicion(1, 3), norte.getPosicion());
         assertEquals(new Posicion(5, 3), sur.getPosicion());
         assertEquals(new Posicion(3, 5), este.getPosicion());
