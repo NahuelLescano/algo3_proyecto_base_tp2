@@ -1,86 +1,109 @@
 package edu.fiuba.algo3.modelo;
 
 public class Casilla {
-    private Terreno terreno;
-    private Unidad unidad;
-    private final Posicion posicion;
 
+    private Terreno terreno;
+    private final Posicion posicion;
+    private EstadoCasilla estado;
+    
+    // ==================================================
+    // CONSTRUCTOR
+    // ==================================================
 
     public Casilla(Terreno terreno, Posicion posicion) {
         this.terreno = terreno;
         this.posicion = posicion;
-        this.unidad = null;
+        this.estado = new CasillaVacia();
     }
+    
+    // ==================================================
+    // RELACIONADOS CON LA OCUPACIÓN
+    // ==================================================
 
-    void ocupar(Unidad unidad) {
-        this.unidad = unidad;
+    public boolean ocupar(Unidad unidad) {
+        if (estado.estaOcupada()) {
+            return false;
+        }
+
+        estado = estado.ocupar(unidad);
+        return true;
     }
 
     public void desocupar() {
-        this.unidad = null;
+        estado = estado.desocupar();
+    } // Delega en EstadoCasilla
+    
+    public boolean estaOcupada() {
+        return estado.estaOcupada();
+    }  // Es una consulta polimórfima, se aplica el mismo ejemplo en la presentación de Polimorfismo
+    
+    public Unidad getUnidad() {
+        return estado.obtenerUnidad();
+    }  // Revisar
+    
+    public boolean puedeRecibirUnidad(Unidad unidad) {
+        return !estado.estaOcupada() && terreno.esTransitable();
+    }  // Revisar
+    
+    public boolean estaOcupadaPor(Unidad unidad) {
+        return estado.obtenerUnidad() == unidad;
     }
+    
+    // ==================================================
+    // RELACIONADOS CON EL TERRENO
+    // ==================================================
 
     public Terreno getTerreno() {
         return terreno;
-    } 
-
-    public Unidad getUnidad() {
-        return unidad;
-    }
-
-    public Posicion getPosicion() {
-        return posicion;
-    }
-    
-    public boolean estaOcupada() {
-        return unidad != null;
     }
     
     public void reemplazarTerreno(Terreno nuevoTerreno) {
         this.terreno = nuevoTerreno;
     }
     
-    public Unidad recibirDanio(int danio) {
-        if (unidad == null) {
-            terreno.recibirDanio(danio);
-            return null;
-        }
-
-        unidad.recibirDanio(danio);
-
-        if (!unidad.estaViva()) {
-            desocupar();
-            return null;
-        }
-
-        return unidad;
-    }
-    
-    public void aplicarEfectoDelTerreno() {
-        if (unidad == null) {
-            return;
-        }
-
-        terreno.aplicarEfecto(unidad);
-
-        if (!unidad.estaViva()) {
-            desocupar();
-        }
-    }
-    
     public boolean bloqueaDisparos() {
         return terreno.bloqueaDisparos();
     }
     
-    public boolean puedeRecibirUnidad(Unidad unidad) {
-        return !estaOcupada() && terreno.esTransitable();
+
+    // ==================================================
+    // RELACIONADOS CON EL DAÑO Y EFECTOS 
+    // ==================================================
+    
+    public void aplicarEfectoDelTerreno() {
+        estado = estado.aplicarEfectoDelTerreno(terreno);
     }
     
+    public Unidad aplicarDanio(int danio) {
+        Unidad unidadAfectada = estado.obtenerUnidad();
+
+        estado = estado.aplicarDanio(danio, terreno);
+
+        if (estado.estaOcupada()) {
+            return unidadAfectada;
+        }
+
+        return null;
+    }
+    
+    // ==================================================
+    // RELACIONADOS CON LOS DISPAROS
+    // ==================================================
+
+    public boolean detieneDisparo() {
+        return estado.detieneDisparo() || terreno.bloqueaDisparos();
+    }
+    
+    // ==================================================
+    // RELACIONADOS CON LA POSICIÓN 
+    // ==================================================
+
+    public Posicion getPosicion() {
+        return posicion;
+    }
+
     public boolean estaEnPosicion(Posicion posicion) {
         return this.posicion.equals(posicion);
     }
     
-    public boolean detieneDisparo() {
-        return estaOcupada() || terreno.bloqueaDisparos();
-    }
 }
