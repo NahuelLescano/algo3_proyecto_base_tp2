@@ -36,18 +36,19 @@ public class Casilla {
     public boolean estaOcupada() {
         return estado.estaOcupada();
     }  // Es una consulta polimórfima, se aplica el mismo ejemplo en la presentación de Polimorfismo
-    
+
+    public boolean estaOcupadaPor(Unidad unidad) {
+        return estado.estaOcupadaPor(unidad);
+    }
+
     public Unidad getUnidad() {
         return estado.obtenerUnidad();
-    }  // Revisar
+    }  // Revisar, lo usa EmpujarUnidadEn en Tablero para saber a qué unidad le da la orde
     
-    public boolean puedeRecibirUnidad(Unidad unidad) {
+    public boolean puedeRecibirUnidad() {
         return !estado.estaOcupada() && terreno.esTransitable();
     }  // Revisar
     
-    public boolean estaOcupadaPor(Unidad unidad) {
-        return estado.obtenerUnidad() == unidad;
-    }
     
     // ==================================================
     // RELACIONADOS CON EL TERRENO

@@ -19,6 +19,21 @@ public class CasillaOcupada implements EstadoCasilla {
     }
 
     @Override
+    public boolean estaOcupada() {
+        return true;
+    }
+    
+    @Override
+    public boolean estaOcupadaPor(Unidad unidad) {
+        return this.unidad == unidad;
+    }
+    
+    @Override
+    public Unidad obtenerUnidad() {
+        return unidad;
+    }
+
+    @Override
     public EstadoCasilla aplicarDanio(int danio, Terreno terreno) {
         unidad.recibirDanio(danio);
 
@@ -38,16 +53,6 @@ public class CasillaOcupada implements EstadoCasilla {
         }
 
         return this;
-    }
-
-    @Override
-    public Unidad obtenerUnidad() {
-        return unidad;
-    }
-
-    @Override
-    public boolean estaOcupada() {
-        return true;
     }
 
     @Override

@@ -11,6 +11,21 @@ public class CasillaVacia implements EstadoCasilla {
     public EstadoCasilla desocupar() {
         return this;
     }
+    
+    @Override
+    public boolean estaOcupada() {
+        return false;
+    }
+    
+    @Override
+    public boolean estaOcupadaPor(Unidad unidad) {
+        return false;
+    }
+    
+    @Override
+    public Unidad obtenerUnidad() {
+        return null;
+    }
 
     @Override
     public EstadoCasilla aplicarDanio(int danio, Terreno terreno) {
@@ -21,16 +36,6 @@ public class CasillaVacia implements EstadoCasilla {
     @Override
     public EstadoCasilla aplicarEfectoDelTerreno(Terreno terreno) {
         return this;
-    }
-
-    @Override
-    public Unidad obtenerUnidad() {
-        return null;
-    }
-
-    @Override
-    public boolean estaOcupada() {
-        return false;
     }
 
     @Override

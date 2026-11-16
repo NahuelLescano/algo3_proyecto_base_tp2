@@ -5,14 +5,16 @@ public interface EstadoCasilla {
     EstadoCasilla ocupar(Unidad unidad);
 
     EstadoCasilla desocupar();
+    
+    boolean estaOcupada();
+
+    boolean estaOcupadaPor(Unidad unidad);
+
+    Unidad obtenerUnidad();
 
     EstadoCasilla aplicarDanio(int danio, Terreno terreno);
 
     EstadoCasilla aplicarEfectoDelTerreno(Terreno terreno);
-
-    Unidad obtenerUnidad();
-
-    boolean estaOcupada();
 
     boolean detieneDisparo();
 }
