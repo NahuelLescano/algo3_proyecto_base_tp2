@@ -11,42 +11,8 @@ public class Tablero {
     // ==================================================
 
     public Tablero(String[] mapa) {
-        if (mapa == null || mapa.length == 0) {
-            throw new IllegalArgumentException("El mapa no puede ser nulo o vacío");
-        }
-
-        this.casillas = new ArrayList<>();
-
-        for (int fila = 0; fila < mapa.length; fila++) {
-            String linea = mapa[fila];
-
-            for (int columna = 0; columna < linea.length(); columna++) {
-                char caracter = linea.charAt(columna);
-
-                Posicion posicion = new Posicion(fila, columna);
-                Terreno terreno = convertirCaracterATerreno(caracter);
-                Casilla casilla = new Casilla(terreno, posicion);
-                this.casillas.add(casilla);
-            }
-        }
-
-    }
-    
-    private Terreno convertirCaracterATerreno(char caracter) {
-        switch (caracter) {
-            case '-':
-                return new Suelo();
-            case 'A':
-                return new Agua();
-            case 'M':
-                return new Montania();
-            case 'X':
-                return new Acido();
-            case 'E':
-                return new Edificio(1);
-            default:
-                throw new IllegalArgumentException("Caracter de terreno inválido: " + caracter);
-        }
+        ParserMapa parser = new ParserMapa();
+        this.casillas = parser.parsear(mapa);
     }
     
     // ==================================================
