@@ -12,4 +12,5 @@ public class CasillaInexistente implements Casilla {
     public void recibirImpacto(int danio)       { }
     public void desocupar()                     { }
     public void alojar(Unidad unidad)           { }
+    public Terreno getTerreno() {return null;}
 }

@@ -1,6 +1,7 @@
 package edu.fiuba.algo3.modelo;
 
 public interface Casilla extends Destino {
+    Terreno getTerreno();
     Posicion getPosicion();
     void ocupar(Unidad unidad);                 
     void recibirEmpuje(Unidad empujada);

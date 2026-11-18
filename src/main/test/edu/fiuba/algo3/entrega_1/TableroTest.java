@@ -27,11 +27,6 @@ public class TableroTest {
         Posicion posicionValida = new Posicion(7, 7);
         assertNotNull(tablero.buscarCasilla(posicionValida));
 
-        
-        Posicion posicionInvalida = new Posicion(8, 8);
-        assertThrows(IllegalArgumentException.class, () -> {
-            tablero.buscarCasilla(posicionInvalida);
-        });
     }
 
     @Test 

@@ -5,6 +5,10 @@ public class CasillaDelTablero implements Casilla {
     private Terreno terreno;
     private EstadoCasilla estado = new CasillaVacia();
 
+    public Terreno getTerreno(){
+        return this.terreno;
+    }
+
     public CasillaDelTablero(Terreno terreno, Posicion posicion) {
         this.terreno = terreno;
         this.posicion = posicion;
