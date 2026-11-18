@@ -2,22 +2,17 @@ package edu.fiuba.algo3.modelo.terreno;
 
 import edu.fiuba.algo3.modelo.unidad.Unidad;
 
-public class Suelo extends Terreno {
+public class Suelo implements Terreno {
     @Override
-    public boolean esTransitable() {
-        return true;
+    public void recibir(Unidad unidad, Destino casilla) {
+        casilla.alojar(unidad);
     }
 
-    @Override
-    public boolean bloqueaDisparos() {
-        return false;
+    public void recibirEmpuje(Unidad empujada, Destino destino) {
+        recibir(empujada, destino);
     }
 
-    @Override
-    public void aplicarEfecto(Unidad unidad) {
-    }
-
-    @Override
-    public void recibirDanio(int danio) {
+    public Terreno recibirImpacto(int danio) {
+        return this;
     }
 }

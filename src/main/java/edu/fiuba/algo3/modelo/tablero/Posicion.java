@@ -45,4 +45,24 @@ public class Posicion {
                 fila + direccion.getDesplazamientoEnFila(),
                 columna + direccion.getDesplazamientoEnColumna());
     }
+    
+    public Direccion direccionHacia(Posicion objetivo) {
+
+        int dFila = objetivo.getFila() - this.fila;
+        int dColumna = objetivo.getColumna() - this.columna;
+
+        if (dFila == 0 && dColumna > 0) return Direccion.ESTE;
+        if (dFila == 0 && dColumna < 0) return Direccion.OESTE;
+        if (dColumna == 0 && dFila > 0) return Direccion.NORTE;
+        if (dColumna == 0 && dFila < 0) return Direccion.SUR;
+
+        throw new IllegalArgumentException("Las posiciones no están alineadas");
+    }
+    
+    public boolean esAdyacenteA(Posicion otra) {
+        int distancia = Math.abs(this.fila - otra.fila)
+                      + Math.abs(this.columna - otra.columna);
+
+        return distancia == 1;
+    }
 }
