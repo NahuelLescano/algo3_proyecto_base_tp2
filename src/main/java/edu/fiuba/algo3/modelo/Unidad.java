@@ -43,12 +43,7 @@ public abstract class Unidad {
 
     public void registrarMovimiento() {
     }
-
-    public void sufrir(Efecto efecto){
-        
-    }
-
-    public void noPudeMoverme(){
-        
+    
+    public void aplicarEfectoDelAgua() {
     }
 }

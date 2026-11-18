@@ -1,39 +1,23 @@
 package edu.fiuba.algo3.modelo;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Edificio implements Terreno, Daniable {
+public class Edificio extends Terreno {
     private int vida;
-    private List<ObservadorEdificio> observadores = new ArrayList<>();
 
     public Edificio(int vida) {
-        this.vida = vida;
+        this.vida = 1;
     }
 
-    public void agregarObserevador(ObservadorEdificio observador){
-        this.observadores.add(observador);
-    }
-
-    public void recibir(Unidad unidad, Casilla casilla){
-        unidad.noPudeMoverme();
-    }
-
-    public void afectarMovimiento(Unidad unidad){
-
-    }
-    
-    public Terreno recibirImpacto(int danio){
-        this.recibirDanio(danio);
-    }
     @Override
-    public void recibirDanio(int danio) {
-        this.vida -= danio;
-        if (this.vida <= 0){
-            this.observadores.forEach(ObservadorEdificio::enEdificioDestruido);
+    public Terreno recibirDanio(int danio) {
+        vida -= danio;
+
+        if (estaDestruido()) {
+            return new Suelo();
         }
+
+        return this;
     }
-    /*
+
     public boolean estaDestruido() {
         return this.vida <= 0;
     }
@@ -50,7 +34,10 @@ public class Edificio implements Terreno, Daniable {
     @Override
     public void aplicarEfecto(Unidad unidad) {
     }
-     */
-
-
+    
+    @Override
+    public int danioQueAfectaRedElectrica(int danio) {
+        return Math.max(0, danio);
+    }
+    
 }

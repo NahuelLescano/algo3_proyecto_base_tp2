@@ -1,12 +1,12 @@
 package edu.fiuba.algo3.modelo;
 
-// La responsabilidad de Canon es encontrar el primer elemento alcanzado por el disparo.
+// La responsabilidad del Cañón es encontrar el primer elemento alcanzado por el disparo.
 public class Canion implements Arma {
 
     private static final int DANIO = 1;
 
     @Override
-    public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
+    public ResultadoAtaque atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
 
         Direccion direccion = origen.direccionHacia(objetivo);
 
@@ -18,18 +18,19 @@ public class Canion implements Arma {
             Posicion posicionActual = new Posicion(fila, columna);
 
             if (tablero.detieneDisparoEn(posicionActual)) {
-                tablero.resolverImpacto(posicionActual, direccion, DANIO);
-                return;
+                return tablero.resolverImpacto(posicionActual, direccion, DANIO);
             }
 
             // Si encontramos el objetivo seleccionado sin impactar nada,
             // terminamos el disparo.
             if (posicionActual.equals(objetivo)) {
-                return;
+                return new ResultadoAtaque(0);
             }
 
             fila += direccion.getDesplazamientoEnFila();
             columna += direccion.getDesplazamientoEnColumna();
         }
+
+        return new ResultadoAtaque(0);
     }
 }

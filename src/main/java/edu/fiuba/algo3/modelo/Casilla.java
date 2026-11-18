@@ -1,9 +1,9 @@
 package edu.fiuba.algo3.modelo;
 
-public class Casilla implements ObservadorEdificio, Destino {
+public class Casilla {
 
     private Terreno terreno;
-    private Posicion posicion;
+    private final Posicion posicion;
     private EstadoCasilla estado;
     
     // ==================================================
@@ -20,19 +20,15 @@ public class Casilla implements ObservadorEdificio, Destino {
     // RELACIONADOS CON LA OCUPACIÓN
     // ==================================================
 
-    public void ocupar(Unidad unidad) {
-        this.terreno.recibir(unidad, this);
+    public boolean ocupar(Unidad unidad) {
+        if (estado.estaOcupada()) {
+            return false;
+        }
+
+        estado = estado.ocupar(unidad);
+        return true;
     }
 
-    public void cambiarEstado(EstadoCasilla nuevoEstado){
-        this.estado = nuevoEstado;
-    }
-
-    @Override 
-    public void alojar(Unidad unidad){
-        this.estado = new CasillaOcupada(unidad);
-    }
-    /*
     public void desocupar() {
         estado = estado.desocupar();
     } // Delega en EstadoCasilla
@@ -48,16 +44,16 @@ public class Casilla implements ObservadorEdificio, Destino {
     public Unidad getUnidad() {
         return estado.obtenerUnidad();
     }  // Revisar, lo usa EmpujarUnidadEn en Tablero para saber a qué unidad le da la orde
-    /*
+    
     public boolean puedeRecibirUnidad() {
         return !estado.estaOcupada() && terreno.esTransitable();
-    }  // Revisar 
-    */
-
+    }  // Revisar
+    
+    
     // ==================================================
     // RELACIONADOS CON EL TERRENO
     // ==================================================
-    
+
     public Terreno getTerreno() {
         return terreno;
     }
@@ -65,66 +61,61 @@ public class Casilla implements ObservadorEdificio, Destino {
     public void reemplazarTerreno(Terreno nuevoTerreno) {
         this.terreno = nuevoTerreno;
     }
-
-    void recibirUnidad(Unidad unidad){
-        terreno.recibir(unidad, this);
-    }
-    /*    public boolean bloqueaDisparos() {
+    
+    public boolean bloqueaDisparos() {
         return terreno.bloqueaDisparos();
     }
-    */    
+    
 
     // ==================================================
     // RELACIONADOS CON EL DAÑO Y EFECTOS 
     // ==================================================
     
-    public void recibirImpacto(int danio){
-        estado.recibirImpacto(danio, this);
-    }
-
-    @Override 
-    public void enEdificioDestruido(){
-        this.reemplazarTerreno(new Suelo());
-    }
-
-    void impactarTerreno(int danio){
-        this.terreno = terreno.recibirImpacto(danio);
-    }
-    /*
     public void aplicarEfectoDelTerreno() {
         estado = estado.aplicarEfectoDelTerreno(terreno);
     }
     
-    public Unidad aplicarDanio(int danio) {
+    
+    public ResultadoDanio aplicarDanio(int danio) {
         Unidad unidadAfectada = estado.obtenerUnidad();
+        int danioAlEdificio = 0;
 
-        estado = estado.aplicarDanio(danio, terreno);
-
-        if (estado.estaOcupada()) {
-            return unidadAfectada;
+        if (unidadAfectada == null) {
+            danioAlEdificio = terreno.danioQueAfectaRedElectrica(danio);
+            terreno = terreno.recibirDanio(danio);
         }
 
-        return null;
+        estado = estado.aplicarDanio(danio);
+
+        Unidad unidadSobreviviente;
+
+        if (estado.estaOcupada()) {
+            unidadSobreviviente = unidadAfectada;
+        } else {
+            unidadSobreviviente = null;
+        }
+
+        return new ResultadoDanio(unidadSobreviviente, danioAlEdificio);
     }
-    
+
     // ==================================================
     // RELACIONADOS CON LOS DISPAROS
     // ==================================================
-    /*
+
     public boolean detieneDisparo() {
         return estado.detieneDisparo() || terreno.bloqueaDisparos();
     }
-     */
+    
     // ==================================================
     // RELACIONADOS CON LA POSICIÓN 
     // ==================================================
-    
-        public Posicion getPosicion() {
+
+    public Posicion getPosicion() {
         return posicion;
     }
-    /*
+
     public boolean estaEnPosicion(Posicion posicion) {
         return this.posicion.equals(posicion);
     }
-    */
+    
 }

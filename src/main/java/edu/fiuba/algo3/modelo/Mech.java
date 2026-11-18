@@ -10,15 +10,18 @@ public class Mech extends Unidad {
         this.arma = arma;
     }
 
-    public boolean iniciarAtaque(Tablero tablero, Posicion objetivo) {
+    public ResultadoInicioAtaque iniciarAtaque(Tablero tablero, Posicion objetivo) {
+
         if (!turno.puedeAtacar()) {
-            return false;
+            return new ResultadoInicioAtaque(false, new ResultadoAtaque(0));
         }
 
-        arma.atacar(tablero, getPosicion(), objetivo);
+        ResultadoAtaque resultado =
+                arma.atacar(tablero, getPosicion(), objetivo);
+
         turno.registrarAtaque();
 
-        return true;
+        return new ResultadoInicioAtaque(true, resultado);
     }
 
     public void iniciarTurno() {
