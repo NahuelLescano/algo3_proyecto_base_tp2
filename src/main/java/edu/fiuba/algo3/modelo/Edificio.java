@@ -8,7 +8,7 @@ public class Edificio implements Terreno, Daniable {
     private List<ObservadorEdificio> observadores = new ArrayList<>();
 
     public Edificio(int vida) {
-        this.vida = vida;
+        this.vida = 1;
     }
 
     public void agregarObserevador(ObservadorEdificio observador){

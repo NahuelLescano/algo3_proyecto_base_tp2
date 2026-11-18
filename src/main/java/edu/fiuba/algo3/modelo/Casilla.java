@@ -95,18 +95,29 @@ public class Casilla implements ObservadorEdificio, Destino {
         estado = estado.aplicarEfectoDelTerreno(terreno);
     }
     
-    public Unidad aplicarDanio(int danio) {
+    
+    public ResultadoDanio aplicarDanio(int danio) {
         Unidad unidadAfectada = estado.obtenerUnidad();
+        int danioAlEdificio = 0;
 
-        estado = estado.aplicarDanio(danio, terreno);
-
-        if (estado.estaOcupada()) {
-            return unidadAfectada;
+        if (unidadAfectada == null) {
+            danioAlEdificio = terreno.danioQueAfectaRedElectrica(danio);
+            terreno = terreno.recibirDanio(danio);
         }
 
-        return null;
+        estado = estado.aplicarDanio(danio);
+
+        Unidad unidadSobreviviente;
+
+        if (estado.estaOcupada()) {
+            unidadSobreviviente = unidadAfectada;
+        } else {
+            unidadSobreviviente = null;
+        }
+
+        return new ResultadoDanio(unidadSobreviviente, danioAlEdificio);
     }
-    
+
     // ==================================================
     // RELACIONADOS CON LOS DISPAROS
     // ==================================================

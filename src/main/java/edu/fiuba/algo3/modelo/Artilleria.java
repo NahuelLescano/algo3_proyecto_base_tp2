@@ -6,19 +6,26 @@ public class Artilleria implements Arma {
     private static final int DISTANCIA_MINIMA = 2;
 
     @Override
-    public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
+    public ResultadoAtaque atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
+
         if (!esObjetivoValido(origen, objetivo)) {
-            return;
+            return new ResultadoAtaque(0);
         }
 
-        // La casilla objetivo recibe daño (ignora obstáculos intermedios).
-        tablero.daniarEn(objetivo, DANIO);
+        // Resultado del daño a la casilla objetivo.
+        ResultadoAtaque resultado = tablero.daniarEn(objetivo, DANIO);
 
         // Empuja las unidades de las 4 casillas adyacentes hacia afuera.
         for (Direccion direccion : Direccion.values()) {
             Posicion vecina = objetivo.desplazar(direccion);
-            tablero.empujarUnidadEn(vecina, direccion);
+
+            ResultadoAtaque resultadoEmpuje =
+                    tablero.empujarUnidadEn(vecina, direccion);
+
+            resultado = resultado.combinar(resultadoEmpuje);
         }
+
+        return resultado;
     }
 
     private boolean esObjetivoValido(Posicion origen, Posicion objetivo) {
