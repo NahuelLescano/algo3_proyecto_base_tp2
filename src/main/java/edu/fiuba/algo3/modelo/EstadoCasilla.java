@@ -6,14 +6,14 @@ public interface EstadoCasilla {
     void recibirImpacto(int danio, Casilla casilla);
     /*
     EstadoCasilla desocupar();
-
+    
     boolean estaOcupada();
 
     boolean estaOcupadaPor(Unidad unidad);
 
     Unidad obtenerUnidad();
 
-    EstadoCasilla aplicarDanio(int danio);
+    EstadoCasilla aplicarDanio(int danio, Terreno terreno);
 
     EstadoCasilla aplicarEfectoDelTerreno(Terreno terreno);
 

@@ -7,7 +7,7 @@ public class MechFactory {
     }
 
     public Mech crearMechCanon(Posicion posicion) {
-        return new Mech(3, posicion, new Canion());
+        return new Mech(3, posicion, new Canon());
     }
 
     public Mech crearMechArtillero(Posicion posicion) {

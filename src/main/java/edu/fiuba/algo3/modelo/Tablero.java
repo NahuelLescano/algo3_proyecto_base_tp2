@@ -36,8 +36,42 @@ public class Tablero {
     // ==================================================
 
     public Tablero(String[] mapa) {
-        ParserMapa parser = new ParserMapa();
-        this.casillas = parser.parsear(mapa);
+        if (mapa == null || mapa.length == 0) {
+            throw new IllegalArgumentException("El mapa no puede ser nulo o vacío");
+        }
+
+        this.casillas = new ArrayList<>();
+
+        for (int fila = 0; fila < mapa.length; fila++) {
+            String linea = mapa[fila];
+
+            for (int columna = 0; columna < linea.length(); columna++) {
+                char caracter = linea.charAt(columna);
+
+                Posicion posicion = new Posicion(fila, columna);
+                Terreno terreno = convertirCaracterATerreno(caracter);
+                Casilla casilla = new Casilla(terreno, posicion);
+                this.casillas.add(casilla);
+            }
+        }
+
+    }
+    
+    private Terreno convertirCaracterATerreno(char caracter) {
+        switch (caracter) {
+            case '-':
+                return new Suelo();
+            case 'A':
+                return new Agua();
+            case 'M':
+                return new Montania();
+            case 'X':
+                return new Acido();
+            case 'E':
+                return new Edificio(1);
+            default:
+                throw new IllegalArgumentException("Caracter de terreno inválido: " + caracter);
+        }
     }
     
     // ==================================================
@@ -149,59 +183,43 @@ public class Tablero {
     // ==================================================
     // DAÑO, IMPACTOS Y EMPUJES
     // ==================================================
-  
-    public ResultadoAtaque resolverImpacto(
-            Posicion posicion, Direccion direccion, int danio) {
-
+    
+    public void resolverImpacto(Posicion posicion, Direccion direccion, int danio) {
         Casilla casilla = buscarCasilla(posicion);
 
         if (casilla == null) {
-            return new ResultadoAtaque(0);
+            return;
         }
 
-        ResultadoDanio resultadoDanio = casilla.aplicarDanio(danio);
-
-        ResultadoAtaque resultadoAtaque =
-                new ResultadoAtaque(resultadoDanio.getDanioAlEdificio());
-
-        Unidad sobreviviente = resultadoDanio.getUnidadSobreviviente();
+        Unidad sobreviviente = casilla.aplicarDanio(danio);
 
         if (sobreviviente != null) {
-            ResultadoAtaque resultadoEmpuje =
-                    empujarUnidad(sobreviviente, direccion);
-
-            resultadoAtaque = resultadoAtaque.combinar(resultadoEmpuje);
+            empujarUnidad(sobreviviente, direccion);
         }
-
-        return resultadoAtaque;
-    }
+    }  // resolverImpacto encuentra la casilla alcanzada, aplica el daño, determina si una unidad sobrevivió y si corresponde la empuja hacia una dirección
     
-    public ResultadoAtaque daniarEn(Posicion posicion, int danio) {
-
+    public void daniarEn(Posicion posicion, int danio) {
         Casilla casilla = buscarCasilla(posicion);
 
         if (casilla == null) {
-            return new ResultadoAtaque(0);
+            return;
         }
-
-        ResultadoDanio resultadoDanio = casilla.aplicarDanio(danio);
-
-        return new ResultadoAtaque(resultadoDanio.getDanioAlEdificio());
-    }
+        casilla.aplicarDanio(danio);
+    } // La diferencia con resolverImpacto() es que no intenta empujar a ninguna unidad.
     
-    public ResultadoAtaque empujarUnidad(Unidad unidad, Direccion direccion) {
-
+    public void empujarUnidad(Unidad unidad, Direccion direccion) {
+    
         if (!unidad.estaViva()) {
-            return new ResultadoAtaque(0);
+            return;
         }
-
+        
         Casilla origen = buscarCasilla(unidad.getPosicion());
 
         if (origen == null || !origen.estaOcupadaPor(unidad)) {
-            return new ResultadoAtaque(0);
+            return;
         }
 
-        // Calcular el destino
+        // Calculo el destino
 
         Posicion posicionActual = unidad.getPosicion();
 
@@ -213,59 +231,40 @@ public class Tablero {
 
         Posicion destino = new Posicion(filaDestino, columnaDestino);
 
-        // Obtener la casilla de destino
-
+        // Obtengo la casilla de destino
+        
         Casilla llegada = buscarCasilla(destino);
 
         if (llegada == null) {
-            return new ResultadoAtaque(0);
+            return;
         }
 
-        // Si el destino está ocupado, ambas unidades reciben daño.
-
+        // Veo si el destino está ocupado por otra unidad, en tal caso el disparo llega a esta ella
         if (llegada.estaOcupada()) {
-
-            ResultadoDanio resultadoOrigen = origen.aplicarDanio(1);
-            ResultadoDanio resultadoLlegada = llegada.aplicarDanio(1);
-
-            int danioTotal =
-                    resultadoOrigen.getDanioAlEdificio()
-                    + resultadoLlegada.getDanioAlEdificio();
-
-            return new ResultadoAtaque(danioTotal);
+            origen.aplicarDanio(1);
+            llegada.aplicarDanio(1);
+            return;
         }
 
-        // Si el terreno permite el desplazamiento, mover la unidad.
-
+        // Si llego hasta acá es porque la casilla está dentro del tablero y no está ocupada, compruebo si el terreno permite el movimiento
         if (llegada.puedeRecibirUnidad()) {
             desplazarUnidad(unidad, destino);
-            return new ResultadoAtaque(0);
+            return;
         }
 
-        // Si el terreno bloquea el desplazamiento, ambas casillas reciben daño.
-
-        ResultadoDanio resultadoOrigen = origen.aplicarDanio(1);
-        ResultadoDanio resultadoLlegada = llegada.aplicarDanio(1);
-
-        int danioTotal =
-                resultadoOrigen.getDanioAlEdificio()
-                + resultadoLlegada.getDanioAlEdificio();
-
-        return new ResultadoAtaque(danioTotal);
+        origen.aplicarDanio(1);
+        llegada.aplicarDanio(1);
     }
     
-    
-    public ResultadoAtaque empujarUnidadEn(
-            Posicion posicion, Direccion direccion) {
-
+    public void empujarUnidadEn(Posicion posicion, Direccion direccion) {
         Casilla casilla = buscarCasilla(posicion);
 
         if (casilla == null || !casilla.estaOcupada()) {
-            return new ResultadoAtaque(0);
+            return;
         }
 
-        return empujarUnidad(casilla.getUnidad(), direccion);
-    }
+        empujarUnidad(casilla.getUnidad(), direccion);
+    }  // Este método busca qué unidad hay en esa posición y la empuja, pasandole como parámetro a empujarUnidad
 
     */
 }
