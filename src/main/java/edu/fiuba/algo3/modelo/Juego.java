@@ -16,6 +16,8 @@ public class Juego {
         this.tablero = tablero;
         this.redElectrica = redElectrica;
 
+        this.tablero.registrarObservadorEnEdificios(redElectrica);
+
         this.estadoPartida = new EnCurso();
         this.faseActual = new FaseVek();
     }
@@ -51,24 +53,6 @@ public class Juego {
     // ==================================================
 
     public boolean iniciarAtaque(Mech mech, Posicion objetivo) {
-
-        ResultadoInicioAtaque resultado =
-                mech.iniciarAtaque(tablero, objetivo);
-
-        if (!resultado.fueRealizado()) {
-            return false;
-        }
-
-        procesarResultadoAtaque(resultado.getResultadoAtaque());
-
-        return true;
-    }
-
-    // ==================================================
-    // DAÑO Y RED ELÉCTRICA
-    // ==================================================
-
-    private void procesarResultadoAtaque(ResultadoAtaque resultado) {
-        redElectrica.reducirEnergia(resultado.getDanioAlEdificio());
+        return mech.iniciarAtaque(tablero, objetivo);
     }
 }

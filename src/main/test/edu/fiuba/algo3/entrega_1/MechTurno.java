@@ -61,12 +61,12 @@ public class MechTurno {
         assertTrue(tablero.colocarUnidad(vek));
 
         boolean primerAtaque =
-                mech.iniciarAtaque(tablero, objetivo).fueRealizado();
+                mech.iniciarAtaque(tablero, objetivo);
 
         assertTrue(primerAtaque, "El primer ataque debería ser exitoso");
 
         boolean segundoAtaque =
-                mech.iniciarAtaque(tablero, objetivo).fueRealizado();
+                mech.iniciarAtaque(tablero, objetivo);
 
         assertFalse(segundoAtaque,
                 "Un segundo ataque en el mismo turno no debería permitirse");

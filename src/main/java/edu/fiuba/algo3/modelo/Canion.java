@@ -6,7 +6,7 @@ public class Canion implements Arma {
     private static final int DANIO = 1;
 
     @Override
-    public ResultadoAtaque atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
+    public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
 
         Direccion direccion = origen.direccionHacia(objetivo);
 
@@ -18,19 +18,18 @@ public class Canion implements Arma {
             Posicion posicionActual = new Posicion(fila, columna);
 
             if (tablero.detieneDisparoEn(posicionActual)) {
-                return tablero.resolverImpacto(posicionActual, direccion, DANIO);
+                tablero.resolverImpacto(posicionActual, direccion, DANIO);
+                return;
             }
 
             // Si encontramos el objetivo seleccionado sin impactar nada,
             // terminamos el disparo.
             if (posicionActual.equals(objetivo)) {
-                return new ResultadoAtaque(0);
+                return;
             }
 
             fila += direccion.getDesplazamientoEnFila();
             columna += direccion.getDesplazamientoEnColumna();
         }
-
-        return new ResultadoAtaque(0);
     }
 }

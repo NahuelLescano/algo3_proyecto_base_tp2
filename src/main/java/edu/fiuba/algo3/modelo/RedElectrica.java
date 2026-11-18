@@ -1,6 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
-public class RedElectrica {
+public class RedElectrica implements ObservadorEdificio {
 
     private int energia;
 
@@ -23,7 +23,12 @@ public class RedElectrica {
 
         energia = Math.max(0, energia - cantidad);
     }
-    
+
+    @Override
+    public void enEdificioDestruido() {
+        reducirEnergia(1);
+    }
+
     public int getEnergia() {
         return energia;
     }

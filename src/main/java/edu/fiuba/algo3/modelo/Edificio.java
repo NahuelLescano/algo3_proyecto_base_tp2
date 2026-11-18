@@ -1,10 +1,19 @@
 package edu.fiuba.algo3.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Edificio extends Terreno {
     private int vida;
+    private final List<ObservadorEdificio> observadores = new ArrayList<>();
+    private boolean destruccionNotificada = false;
 
     public Edificio(int vida) {
         this.vida = 1;
+    }
+
+    public void agregarObservador(ObservadorEdificio observador) {
+        observadores.add(observador);
     }
 
     @Override
@@ -12,11 +21,13 @@ public class Edificio extends Terreno {
         vida -= danio;
 
         if (estaDestruido()) {
+            notificarDestruccion();
             return new Suelo();
         }
 
         return this;
     }
+
 
     public boolean estaDestruido() {
         return this.vida <= 0;
@@ -29,6 +40,18 @@ public class Edificio extends Terreno {
     @Override
     public boolean bloqueaDisparos() {
         return true;
+    }
+    
+    private void notificarDestruccion() {
+        if (destruccionNotificada) {
+            return;
+        }
+
+        destruccionNotificada = true;
+
+        for (ObservadorEdificio observador : observadores) {
+            observador.enEdificioDestruido();
+        }
     }
 
     @Override
