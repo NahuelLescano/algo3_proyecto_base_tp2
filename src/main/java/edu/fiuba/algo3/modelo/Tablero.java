@@ -2,6 +2,7 @@ package edu.fiuba.algo3.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Map;
 public class Tablero {
 
     private List<Casilla> casillas;
@@ -15,31 +16,46 @@ public class Tablero {
         String linea = mapa[fila];
         for (int columna = 0; columna < linea.length(); columna++) {
             Terreno terreno = parser.convertirCaracterATerreno(linea.charAt(columna));
-            casillas.add(new Casilla(terreno, new Posicion(fila, columna)));
+            casillas.add(new CasillaDelTablero(terreno, new Posicion(fila, columna)));
         }
     }
 }
 
     public Casilla buscarCasilla(Posicion p) {
-        if (p.getFila() <  0 || p.getFila() >=  8 || p.getColumna() >= 8 || p.getColumna() < 0) 
+        for (Casilla casilla : casillas) {
+            if (casilla.getPosicion().equals(p)) {
+                return casilla;
+            }
+        }
+        return CasillaInexistente.INSTANCIA;
+        /*if (p.getFila() <  0 || p.getFila() >=  8 || p.getColumna() >= 8 || p.getColumna() < 0) 
             throw new IllegalArgumentException("Casilla inexistente");
         int indice = p.getFila() * 8 + p.getColumna();
         return casillas.get(indice);
+        */
     }
 
     public void colocarUnidad(Unidad unidad, Posicion posicion){
+        buscarCasilla(posicion).ocupar(unidad);
+        /*
         Casilla casilla = buscarCasilla(posicion);
         casilla.ocupar(unidad);
+        */
     }
 
     public void moverUnidad(Unidad unidad, Posicion posicion){
         Casilla casilla = buscarCasilla(posicion);
+        casilla.ocupar(unidad);
     }
 
-    public void empujar (Unidad unidad, Direccion direccion){
-        Posicion destino = unidad.getPosicion().desplazar(direccion);
-        buscarCasilla(destino).recibirEmpuje(unidad); 
-    }
+    public void empujar(Posicion origen, Direccion direccion) {
+    buscarCasilla(origen).empujarHacia(buscarCasilla(origen.desplazar(direccion)));
+
+    /*Casilla desde = buscarCasilla(origen);
+    Casilla hacia = buscarCasilla(origen.desplazar(direccion));
+    desde.empujarHacia(hacia);
+    */
+    }   
     /*
     private List<Casilla> casillas;
     

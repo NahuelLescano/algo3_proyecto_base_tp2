@@ -1,12 +1,30 @@
 package edu.fiuba.algo3.modelo;
 
+import javafx.geometry.Pos;
+
 public abstract class Unidad {
     private int vidaActual;
     private Posicion posicion;
 
+    private Casilla casilla = CasillaInexistente.INSTANCIA; 
+
     public Unidad(int vida){
         this.vidaActual = vida;
         
+    }
+
+    public void ubicarseEn(Casilla nueva){
+        casilla.desocupar();
+        casilla = nueva;
+    }
+
+    public Posicion posicion() {
+        return casilla.getPosicion();
+    }
+
+    public void morir(){
+        casilla.desocupar();
+        casilla = CasillaInexistente.INSTANCIA;
     }
 
     public void recibirDanio(int danio) {
