@@ -1,22 +1,12 @@
 package edu.fiuba.algo3.modelo;
 
-public class Montania extends Terreno {
-    @Override
-    public boolean esTransitable() {
-        return false;
+public class Montania implements Terreno {
+    
+    public void recibir(Unidad unidad, Casilla casilla){
+        unidad.noPudeMoverme();
     }
 
-    @Override
-    public boolean bloqueaDisparos() {
-        return true;
-    }
-
-    @Override
-    public void aplicarEfecto(Unidad unidad) {
-    }    
-  
-    @Override
-    public Terreno recibirDanio(int danio) {
+    public Terreno recibirImpacto(int danio){
         return this;
-    } // La montaña es indestructible
+    }
 }

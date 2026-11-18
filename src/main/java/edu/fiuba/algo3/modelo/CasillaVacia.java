@@ -3,10 +3,15 @@ package edu.fiuba.algo3.modelo;
 public class CasillaVacia implements EstadoCasilla {
 
     @Override
-    public EstadoCasilla ocupar(Unidad unidad) {
-        return new CasillaOcupada(unidad);
+    public void ocupar(Unidad unidad, Casilla casilla) {
+        casilla.recibirUnidad(unidad);
     }
 
+    public void recibirImpacto(int danio, Casilla casilla){
+        casilla.impactarTerreno(danio);
+    }
+
+    /*
     @Override
     public EstadoCasilla desocupar() {
         return this;
@@ -41,4 +46,5 @@ public class CasillaVacia implements EstadoCasilla {
     public boolean detieneDisparo() {
         return false;
     }
-}
+ */
+    }

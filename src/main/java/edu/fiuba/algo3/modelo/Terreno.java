@@ -1,11 +1,14 @@
 package edu.fiuba.algo3.modelo;
 
-public abstract class Terreno {
-    public abstract boolean esTransitable();
+public interface Terreno {
+    void recibir(Unidad unidad, Casilla casilla);
+    Terreno recibirImpacto(int danio);
+    /*
+    void afectarMovimiento(Unidad unidad);
+    void recibirImpacto(int danio);
+    */
+    /*public abstract boolean esTransitable();
     public abstract boolean bloqueaDisparos();
     public abstract void aplicarEfecto(Unidad unidad);
-    public abstract Terreno recibirDanio(int danio);
-    public int danioQueAfectaRedElectrica(int danio) {
-      return 0;
-    }
+    public abstract void recibirDanio(int danio);*/
 }

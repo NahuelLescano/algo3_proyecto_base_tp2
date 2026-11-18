@@ -1,22 +1,11 @@
 package edu.fiuba.algo3.modelo;
 
-public class Agua extends Terreno {
-    @Override
-    public boolean esTransitable() {
-        return true;
+public class Agua implements Terreno{
+    public void recibir(Unidad unidad, Casilla casilla){
+        casilla.alojar(unidad);
+        unidad.sufrir(new EfectoAgua());
     }
-
-    @Override
-    public boolean bloqueaDisparos() {
-        return false;
-    }
-
-    @Override
-    public void aplicarEfecto(Unidad unidad) {
-    }    
-    
-    @Override
-    public Terreno recibirDanio(int danio) {
+    public Terreno recibirImpacto(int danio){
         return this;
     }
 }
