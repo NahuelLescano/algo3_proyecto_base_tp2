@@ -60,14 +60,20 @@ public class MechTurno {
         assertTrue(tablero.colocarUnidad(mech));
         assertTrue(tablero.colocarUnidad(vek));
 
-        boolean primerAtaque = mech.iniciarAtaque(tablero, objetivo);
+        boolean primerAtaque =
+                mech.iniciarAtaque(tablero, objetivo).fueRealizado();
+
         assertTrue(primerAtaque, "El primer ataque debería ser exitoso");
 
-        boolean segundoAtaque = mech.iniciarAtaque(tablero, objetivo);
+        boolean segundoAtaque =
+                mech.iniciarAtaque(tablero, objetivo).fueRealizado();
+
         assertFalse(segundoAtaque,
                 "Un segundo ataque en el mismo turno no debería permitirse");
     }
 
+    // Test de deshacer movimiento pendiente.
+    
     // @Test
     // public void test03DeshacerMovimientoMechQueSoloSeMovioVuelveAPosicionAnterior() {
     //    Tablero tablero = crearTableroPrueba();

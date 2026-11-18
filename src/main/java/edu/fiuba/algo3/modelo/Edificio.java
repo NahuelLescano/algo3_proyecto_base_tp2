@@ -35,4 +35,9 @@ public class Edificio extends Terreno {
     public void aplicarEfecto(Unidad unidad) {
     }
     
+    @Override
+    public int danioQueAfectaRedElectrica(int danio) {
+        return Math.max(0, danio);
+    }
+    
 }

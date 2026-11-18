@@ -5,14 +5,14 @@ public class Punio implements Arma {
     private static final int DANIO = 2;
 
     @Override
-    public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
-    
+    public ResultadoAtaque atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
+
         if (!origen.esAdyacenteA(objetivo)) {
-           return;
+            return new ResultadoAtaque(0);
         }
 
         Direccion direccion = origen.direccionHacia(objetivo);
 
-        tablero.resolverImpacto(objetivo, direccion, DANIO);
+        return tablero.resolverImpacto(objetivo, direccion, DANIO);
     }
 }

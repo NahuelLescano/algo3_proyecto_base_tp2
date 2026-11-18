@@ -75,21 +75,29 @@ public class Casilla {
         estado = estado.aplicarEfectoDelTerreno(terreno);
     }
     
-    public Unidad aplicarDanio(int danio) {
+    
+    public ResultadoDanio aplicarDanio(int danio) {
         Unidad unidadAfectada = estado.obtenerUnidad();
+        int danioAlEdificio = 0;
 
         if (unidadAfectada == null) {
+            danioAlEdificio = terreno.danioQueAfectaRedElectrica(danio);
             terreno = terreno.recibirDanio(danio);
         }
 
         estado = estado.aplicarDanio(danio);
 
+        Unidad unidadSobreviviente;
+
         if (estado.estaOcupada()) {
-            return unidadAfectada;
+            unidadSobreviviente = unidadAfectada;
+        } else {
+            unidadSobreviviente = null;
         }
 
-        return null;
+        return new ResultadoDanio(unidadSobreviviente, danioAlEdificio);
     }
+
     // ==================================================
     // RELACIONADOS CON LOS DISPAROS
     // ==================================================
