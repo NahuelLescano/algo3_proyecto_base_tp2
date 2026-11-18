@@ -28,19 +28,19 @@ public class CasillaOcupada implements EstadoCasilla {
     public boolean estaOcupada() {
         return true;
     }
-
+    
     @Override
     public boolean estaOcupadaPor(Unidad unidad) {
         return this.unidad == unidad;
     }
-
+    
     @Override
     public Unidad obtenerUnidad() {
         return unidad;
     }
 
     @Override
-    public EstadoCasilla aplicarDanio(int danio) {
+    public EstadoCasilla aplicarDanio(int danio, Terreno terreno) {
         unidad.recibirDanio(danio);
 
         if (!unidad.estaViva()) {
