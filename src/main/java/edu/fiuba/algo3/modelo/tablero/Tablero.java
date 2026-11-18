@@ -3,6 +3,7 @@ package edu.fiuba.algo3.modelo.tablero;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.fiuba.algo3.modelo.excepciones.IntoTheBreachExcepcion;
 import edu.fiuba.algo3.modelo.terreno.Acido;
 import edu.fiuba.algo3.modelo.terreno.Agua;
 import edu.fiuba.algo3.modelo.terreno.Edificio;
@@ -106,9 +107,26 @@ public class Tablero {
     }
 
     public boolean moverUnidad(Unidad unidad, Posicion destino) {
-        Casilla origen = buscarCasilla(unidad.getPosicion());
-        Casilla llegada = buscarCasilla(destino);
+        try {
+            unidad.mover(this, destino);
+            return true;
+        } catch (IntoTheBreachExcepcion e) {
+            return false;
+        }
+    }
 
+    public boolean desplazarUnidad(Unidad unidad, Posicion destino) {
+        return this.trasladar(unidad, destino, true);
+    }
+
+    public boolean revertirDesplazamiento(Unidad unidad, Posicion destino) {
+        return this.trasladar(unidad, destino, false);
+    }
+
+    // TODO: refactor de este codigo
+    private boolean trasladar(Unidad unidad, Posicion destino, boolean aplicarEfectoDelTerreno) {
+        Casilla origen = this.buscarCasilla(unidad.getPosicion());
+        Casilla llegada = this.buscarCasilla(destino);
         if (origen == null || llegada == null) {
             return false;
         }
@@ -119,24 +137,22 @@ public class Tablero {
 
         if (llegada.estaOcupada() || !llegada.getTerreno().esTransitable()) {
             return false;
-        } // El destino debe estar libre y ser transitable
+        }
 
         origen.desocupar();
         llegada.ocupar(unidad);
 
-        unidad.setPosicion(destino);
-
-        llegada.getTerreno().aplicarEfecto(unidad); // Se aplica el efecto del terreno de destino
+        unidad.actualizarPosicion(destino);
+        if (aplicarEfectoDelTerreno) {
+            llegada.getTerreno().aplicarEfecto(unidad);
+        }
 
         retirarUnidadSiMurio(unidad);
-
         return true;
     }
 
     public void resolverImpacto(Posicion posicion, Direccion direccion, int danio) {
-
         Casilla casilla = buscarCasilla(posicion);
-
         if (casilla == null) {
             return;
         }
@@ -216,34 +232,6 @@ public class Tablero {
         aplicarDanioAUnidad(unidad, 1);
 
         llegada.getTerreno().recibirDanio(1);
-    }
-
-    public boolean desplazarUnidad(Unidad unidad, Posicion destino) {
-        Casilla origen = buscarCasilla(unidad.getPosicion());
-        Casilla llegada = buscarCasilla(destino);
-
-        if (origen == null || llegada == null) {
-            return false;
-        }
-
-        if (origen.getUnidad() != unidad) {
-            return false;
-        }
-
-        if (llegada.estaOcupada() || !llegada.getTerreno().esTransitable()) {
-            return false;
-        }  // El destino debe estar libre y ser transitable
-
-        origen.desocupar();
-        llegada.ocupar(unidad);
-
-        unidad.setPosicion(destino);
-
-        llegada.getTerreno().aplicarEfecto(unidad);   // Se aplica el efecto del terreno de destino
-
-        retirarUnidadSiMurio(unidad);
-
-        return true;
     }
 
     private void retirarUnidadSiMurio(Unidad unidad) {

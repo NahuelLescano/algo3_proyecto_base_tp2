@@ -13,8 +13,12 @@ public class MechCanion extends Mech {
         super(VIDA_INICIAL, posicion, arma);
     }
 
-    // TODO: por que necesita `getPosicion`
-    public void iniciarAtaque(Tablero tablero, Direccion direccion) {
+    public boolean iniciarAtaque(Tablero tablero, Direccion direccion) {
+        if (!consumirAtaque()) {
+            return false;
+        }
+        // TODO: refactor; getArma para despues hacer getPosicion? Buscar mejor solucion
         getArma().atacar(tablero, getPosicion(), direccion);
+        return true;
     }
 }
