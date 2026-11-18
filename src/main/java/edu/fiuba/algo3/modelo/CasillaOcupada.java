@@ -10,7 +10,9 @@ public class CasillaOcupada implements EstadoCasilla {
 
     @Override
     public EstadoCasilla ocupar(Unidad unidad) {
-        return null;
+        throw new IllegalStateException(
+            "No se puede ocupar una casilla que ya está ocupada"
+        );
     }
 
     @Override
@@ -22,19 +24,19 @@ public class CasillaOcupada implements EstadoCasilla {
     public boolean estaOcupada() {
         return true;
     }
-    
+
     @Override
     public boolean estaOcupadaPor(Unidad unidad) {
         return this.unidad == unidad;
     }
-    
+
     @Override
     public Unidad obtenerUnidad() {
         return unidad;
     }
 
     @Override
-    public EstadoCasilla aplicarDanio(int danio, Terreno terreno) {
+    public EstadoCasilla aplicarDanio(int danio) {
         unidad.recibirDanio(danio);
 
         if (!unidad.estaViva()) {

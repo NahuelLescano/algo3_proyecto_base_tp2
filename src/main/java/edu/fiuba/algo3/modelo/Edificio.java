@@ -4,12 +4,18 @@ public class Edificio extends Terreno {
     private int vida;
 
     public Edificio(int vida) {
-        this.vida = vida;
+        this.vida = 1;
     }
 
     @Override
-    public void recibirDanio(int danio) {
-        this.vida -= danio;
+    public Terreno recibirDanio(int danio) {
+        vida -= danio;
+
+        if (estaDestruido()) {
+            return new Suelo();
+        }
+
+        return this;
     }
 
     public boolean estaDestruido() {

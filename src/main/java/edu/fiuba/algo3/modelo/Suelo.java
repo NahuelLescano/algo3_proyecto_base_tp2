@@ -16,6 +16,7 @@ public class Suelo extends Terreno {
     }
     
     @Override
-    public void recibirDanio(int danio) {
+    public Terreno recibirDanio(int danio) {
+        return this;
     }
 }

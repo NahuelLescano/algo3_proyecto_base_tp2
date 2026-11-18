@@ -78,7 +78,11 @@ public class Casilla {
     public Unidad aplicarDanio(int danio) {
         Unidad unidadAfectada = estado.obtenerUnidad();
 
-        estado = estado.aplicarDanio(danio, terreno);
+        if (unidadAfectada == null) {
+            terreno = terreno.recibirDanio(danio);
+        }
+
+        estado = estado.aplicarDanio(danio);
 
         if (estado.estaOcupada()) {
             return unidadAfectada;
@@ -86,7 +90,6 @@ public class Casilla {
 
         return null;
     }
-    
     // ==================================================
     // RELACIONADOS CON LOS DISPAROS
     // ==================================================
