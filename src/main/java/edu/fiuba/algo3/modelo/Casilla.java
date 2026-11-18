@@ -20,6 +20,10 @@ public class Casilla implements ObservadorEdificio, Destino {
     // RELACIONADOS CON LA OCUPACIÓN
     // ==================================================
 
+    public void moverUnidad(Unidad unidad){
+        this.estado.moverUnidad(unidad);
+    }
+
     public void ocupar(Unidad unidad) {
         this.terreno.recibir(unidad, this);
     }
@@ -32,6 +36,15 @@ public class Casilla implements ObservadorEdificio, Destino {
     public void alojar(Unidad unidad){
         this.estado = new CasillaOcupada(unidad);
     }
+
+    public void recibirEmpuje(Unidad empujada){
+        estado.recibirEmpuje(empujada,this);
+    }
+
+    void empujarSobreTerreno(Unidad empujada){
+        terreno.recibirEmpuje(empujada, this);
+    }
+
     /*
     public void desocupar() {
         estado = estado.desocupar();

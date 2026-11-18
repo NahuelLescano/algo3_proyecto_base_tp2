@@ -15,7 +15,7 @@ public class Edificio implements Terreno, Daniable {
         this.observadores.add(observador);
     }
 
-    public void recibir(Unidad unidad, Casilla casilla){
+    public void recibir(Unidad unidad, Destino casilla){
         unidad.noPudeMoverme();
     }
 
@@ -32,6 +32,11 @@ public class Edificio implements Terreno, Daniable {
         if (this.vida <= 0){
             this.observadores.forEach(ObservadorEdificio::enEdificioDestruido);
         }
+    }
+
+    public void recibirEmpuje(Unidad empujada, Destino destino){
+        empujada.recibirDanio(1);
+        this.recibirDanio(1);
     }
     /*
     public boolean estaDestruido() {

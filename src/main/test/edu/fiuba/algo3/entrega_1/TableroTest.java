@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TableroTest {
 
-        private final String[] mapaValido = {
+        private String[] mapaValido = {
                 "-MM-----",
                 "--------",
                 "---E----",

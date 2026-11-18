@@ -18,6 +18,11 @@ public class CasillaOcupada implements EstadoCasilla {
     public void recibirImpacto(int danio, Casilla casilla){
         unidad.recibirDanio(danio);
     }
+
+    public void recibirEmpuje(Unidad empujada, Casilla casilla){
+        empujada.recibirDanio(1);
+        unidad.recibirDanio(1);
+    }
 /*
     @Override
     public EstadoCasilla desocupar() {

@@ -4,9 +4,9 @@ public abstract class Unidad {
     private int vidaActual;
     private Posicion posicion;
 
-    public Unidad(int vida, Posicion posicion){
+    public Unidad(int vida){
         this.vidaActual = vida;
-        this.posicion = posicion;
+        
     }
 
     public void recibirDanio(int danio) {

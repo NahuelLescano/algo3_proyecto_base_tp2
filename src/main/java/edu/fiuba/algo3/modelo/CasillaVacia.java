@@ -11,6 +11,10 @@ public class CasillaVacia implements EstadoCasilla {
         casilla.impactarTerreno(danio);
     }
 
+    public void recibirEmpuje(Unidad empujada, Casilla casilla){
+        casilla.empujarSobreTerreno(empujada);
+    }
+
     /*
     @Override
     public EstadoCasilla desocupar() {

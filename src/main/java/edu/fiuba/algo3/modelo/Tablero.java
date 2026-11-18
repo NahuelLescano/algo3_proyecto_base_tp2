@@ -27,7 +27,19 @@ public class Tablero {
         return casillas.get(indice);
     }
 
+    public void colocarUnidad(Unidad unidad, Posicion posicion){
+        Casilla casilla = buscarCasilla(posicion);
+        casilla.ocupar(unidad);
+    }
 
+    public void moverUnidad(Unidad unidad, Posicion posicion){
+        Casilla casilla = buscarCasilla(posicion);
+    }
+
+    public void empujar (Unidad unidad, Direccion direccion){
+        Posicion destino = unidad.getPosicion().desplazar(direccion);
+        buscarCasilla(destino).recibirEmpuje(unidad); 
+    }
     /*
     private List<Casilla> casillas;
     

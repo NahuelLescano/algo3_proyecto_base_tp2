@@ -1,8 +1,9 @@
 package edu.fiuba.algo3.modelo;
 
 public interface Terreno {
-    void recibir(Unidad unidad, Casilla casilla);
+    void recibir(Unidad unidad, Destino casilla);
     Terreno recibirImpacto(int danio);
+    void recibirEmpuje(Unidad empujada, Destino destino);
     /*
     void afectarMovimiento(Unidad unidad);
     void recibirImpacto(int danio);
