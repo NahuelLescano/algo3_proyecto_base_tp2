@@ -24,7 +24,7 @@ public class Edificio implements Terreno, Daniable {
     }
     
     public Terreno recibirImpacto(int danio){
-        return new Suelo();
+        this.recibirDanio(danio);
     }
     @Override
     public void recibirDanio(int danio) {
