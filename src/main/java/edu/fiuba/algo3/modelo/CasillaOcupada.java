@@ -1,5 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.exceptions.*;
 public class CasillaOcupada implements EstadoCasilla {
 
     private final Unidad unidad;
@@ -9,10 +10,15 @@ public class CasillaOcupada implements EstadoCasilla {
     }
 
     @Override
-    public EstadoCasilla ocupar(Unidad unidad) {
-        return null;
+    public void ocupar(Unidad unidad, Casilla casilla) {
+        throw new CasillaOcupadaException("La casilla ya está ocupada.");
     }
 
+    @Override 
+    public void recibirImpacto(int danio, Casilla casilla){
+        unidad.recibirDanio(danio);
+    }
+/*
     @Override
     public EstadoCasilla desocupar() {
         return new CasillaVacia();
@@ -59,4 +65,5 @@ public class CasillaOcupada implements EstadoCasilla {
     public boolean detieneDisparo() {
         return true;
     }
-}
+ */
+    }

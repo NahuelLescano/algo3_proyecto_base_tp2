@@ -2,8 +2,9 @@ package edu.fiuba.algo3.modelo;
 
 public interface EstadoCasilla {
 
-    EstadoCasilla ocupar(Unidad unidad);
-
+    void ocupar(Unidad unidad, Casilla casilla);
+    void recibirImpacto(int danio, Casilla casilla);
+    /*
     EstadoCasilla desocupar();
     
     boolean estaOcupada();
@@ -17,4 +18,5 @@ public interface EstadoCasilla {
     EstadoCasilla aplicarEfectoDelTerreno(Terreno terreno);
 
     boolean detieneDisparo();
-}
+ */
+    }

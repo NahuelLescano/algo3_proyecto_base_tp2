@@ -1,21 +1,12 @@
 package edu.fiuba.algo3.modelo;
 
-public class Acido extends Terreno {
-    @Override
-    public boolean esTransitable() {
-        return true;
+public class Acido implements Terreno {
+    public void recibir(Unidad unidad, Casilla casilla){
+        casilla.alojar(unidad);
+        unidad.sufrir(new EfectoAcido());
     }
 
-    @Override
-    public boolean bloqueaDisparos() {
-        return false;
-    }
-
-    @Override
-    public void aplicarEfecto(Unidad unidad) {
-    }    
-    
-    @Override
-    public void recibirDanio(int danio) {
+    public Terreno recibirImpacto(int danio){
+        return this;
     }
 }

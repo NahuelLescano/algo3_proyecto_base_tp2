@@ -5,6 +5,31 @@ import java.util.List;
 public class Tablero {
 
     private List<Casilla> casillas;
+
+    public Tablero(String[] mapa, ParserTablero parser) {
+    if (mapa == null || mapa.length == 0) {
+        throw new IllegalArgumentException("El mapa no puede ser nulo o vacío");
+    }
+    this.casillas = new ArrayList<>();
+    for (int fila = 0; fila < mapa.length; fila++) {
+        String linea = mapa[fila];
+        for (int columna = 0; columna < linea.length(); columna++) {
+            Terreno terreno = parser.convertirCaracterATerreno(linea.charAt(columna));
+            casillas.add(new Casilla(terreno, new Posicion(fila, columna)));
+        }
+    }
+}
+
+    public Casilla buscarCasilla(Posicion p) {
+        if (p.getFila() <  0 || p.getFila() >=  8 || p.getColumna() >= 8 || p.getColumna() < 0) 
+            throw new IllegalArgumentException("Casilla inexistente");
+        int indice = p.getFila() * 8 + p.getColumna();
+        return casillas.get(indice);
+    }
+
+
+    /*
+    private List<Casilla> casillas;
     
     // ==================================================
     // CONSTRUCTOR
@@ -241,4 +266,5 @@ public class Tablero {
         empujarUnidad(casilla.getUnidad(), direccion);
     }  // Este método busca qué unidad hay en esa posición y la empuja, pasandole como parámetro a empujarUnidad
 
+    */
 }

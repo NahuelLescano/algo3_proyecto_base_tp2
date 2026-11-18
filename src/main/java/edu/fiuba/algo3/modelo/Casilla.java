@@ -1,9 +1,9 @@
 package edu.fiuba.algo3.modelo;
 
-public class Casilla {
+public class Casilla implements ObservadorEdificio, Destino {
 
     private Terreno terreno;
-    private final Posicion posicion;
+    private Posicion posicion;
     private EstadoCasilla estado;
     
     // ==================================================
@@ -20,15 +20,19 @@ public class Casilla {
     // RELACIONADOS CON LA OCUPACIÓN
     // ==================================================
 
-    public boolean ocupar(Unidad unidad) {
-        if (estado.estaOcupada()) {
-            return false;
-        }
-
-        estado = estado.ocupar(unidad);
-        return true;
+    public void ocupar(Unidad unidad) {
+        this.terreno.recibir(unidad, this);
     }
 
+    public void cambiarEstado(EstadoCasilla nuevoEstado){
+        this.estado = nuevoEstado;
+    }
+
+    @Override 
+    public void alojar(Unidad unidad){
+        this.estado = new CasillaOcupada(unidad);
+    }
+    /*
     public void desocupar() {
         estado = estado.desocupar();
     } // Delega en EstadoCasilla
@@ -44,16 +48,16 @@ public class Casilla {
     public Unidad getUnidad() {
         return estado.obtenerUnidad();
     }  // Revisar, lo usa EmpujarUnidadEn en Tablero para saber a qué unidad le da la orde
-    
+    /*
     public boolean puedeRecibirUnidad() {
         return !estado.estaOcupada() && terreno.esTransitable();
-    }  // Revisar
-    
-    
+    }  // Revisar 
+    */
+
     // ==================================================
     // RELACIONADOS CON EL TERRENO
     // ==================================================
-
+    
     public Terreno getTerreno() {
         return terreno;
     }
@@ -61,16 +65,32 @@ public class Casilla {
     public void reemplazarTerreno(Terreno nuevoTerreno) {
         this.terreno = nuevoTerreno;
     }
-    
-    public boolean bloqueaDisparos() {
+
+    void recibirUnidad(Unidad unidad){
+        terreno.recibir(unidad, this);
+    }
+    /*    public boolean bloqueaDisparos() {
         return terreno.bloqueaDisparos();
     }
-    
+    */    
 
     // ==================================================
     // RELACIONADOS CON EL DAÑO Y EFECTOS 
     // ==================================================
     
+    public void recibirImpacto(int danio){
+        estado.recibirImpacto(danio, this);
+    }
+
+    @Override 
+    public void enEdificioDestruido(){
+        this.reemplazarTerreno(new Suelo());
+    }
+
+    void impactarTerreno(int danio){
+        this.terreno = terreno.recibirImpacto(danio);
+    }
+    /*
     public void aplicarEfectoDelTerreno() {
         estado = estado.aplicarEfectoDelTerreno(terreno);
     }
@@ -90,21 +110,21 @@ public class Casilla {
     // ==================================================
     // RELACIONADOS CON LOS DISPAROS
     // ==================================================
-
+    /*
     public boolean detieneDisparo() {
         return estado.detieneDisparo() || terreno.bloqueaDisparos();
     }
-    
+     */
     // ==================================================
     // RELACIONADOS CON LA POSICIÓN 
     // ==================================================
-
-    public Posicion getPosicion() {
+    
+        public Posicion getPosicion() {
         return posicion;
     }
-
+    /*
     public boolean estaEnPosicion(Posicion posicion) {
         return this.posicion.equals(posicion);
     }
-    
+    */
 }
