@@ -1,8 +1,14 @@
 package edu.fiuba.algo3.modelo;
+import edu.fiuba.algo3.modelo.casilla.Casilla;
+import edu.fiuba.algo3.modelo.casilla.CasillaDelTablero;
+import edu.fiuba.algo3.modelo.casilla.CasillaInexistente;
+import edu.fiuba.algo3.modelo.terreno.Edificio;
+import edu.fiuba.algo3.modelo.terreno.Terreno;
+import edu.fiuba.algo3.modelo.unidad.Unidad;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.Map;
 public class Tablero {
 
     private List<Casilla> casillas;

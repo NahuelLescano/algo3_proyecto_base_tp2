@@ -1,7 +1,8 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.casilla.Casilla;
 import edu.fiuba.algo3.modelo.exceptions.*;
-import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.unidad.Mech;
 
 public class Movido implements EstadoTurnoMech {
     private final MementoMech memento;
@@ -17,7 +18,7 @@ public class Movido implements EstadoTurnoMech {
 
     @Override
     public void atacar(Mech mech, Casilla objetivo, Tablero tablero, ControladorDeshacer controlador) {
-        mech.ejecutarAtaque(objetivo, tablero);
+        mech.iniciarAtaque(objetivo, tablero);
         controlador.invalidarSiCorresponde(mech);
         mech.cambiarEstadoTurno(new Agotado());
     }

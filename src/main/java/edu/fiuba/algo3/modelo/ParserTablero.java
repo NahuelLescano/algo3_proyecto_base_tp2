@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.terreno.*;
+
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.HashMap;

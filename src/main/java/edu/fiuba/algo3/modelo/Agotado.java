@@ -1,7 +1,8 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.casilla.Casilla;
 import edu.fiuba.algo3.modelo.exceptions.*;
-import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.unidad.Mech;
 
 public class Agotado implements EstadoTurnoMech {
 

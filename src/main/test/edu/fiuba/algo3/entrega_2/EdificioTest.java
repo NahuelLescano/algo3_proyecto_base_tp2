@@ -1,13 +1,12 @@
 package edu.fiuba.algo3.entrega_2;
 
 import edu.fiuba.algo3.modelo.*;
-
+import edu.fiuba.algo3.modelo.casilla.Casilla;
+import edu.fiuba.algo3.modelo.unidad.Vek;
+import edu.fiuba.algo3.modelo.unidad.VekFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Disabled;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EdificioTest {

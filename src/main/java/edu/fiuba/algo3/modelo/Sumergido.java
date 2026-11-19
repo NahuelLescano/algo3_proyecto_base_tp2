@@ -1,5 +1,5 @@
 package edu.fiuba.algo3.modelo;
 
-public class Sumergido implements EstadoUnidad {
-    
-}
+//public class Sumergido implements EstadoUnidad {
+//
+//}

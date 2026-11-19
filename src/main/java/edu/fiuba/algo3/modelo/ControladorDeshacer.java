@@ -1,12 +1,12 @@
 package edu.fiuba.algo3.modelo;
 
 import edu.fiuba.algo3.modelo.exceptions.*;
-import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.unidad.Mech;
 
 import java.util.Stack;
 
 public class ControladorDeshacer {
-    private final Stack<MementoMech> historial = new Stack<>();
+    private  Stack<MementoMech> historial = new Stack<>();
     private Mech mechMovido;
     private boolean yaSeDeshizoEnTurno = false;
 

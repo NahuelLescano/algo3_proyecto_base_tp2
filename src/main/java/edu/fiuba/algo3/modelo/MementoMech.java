@@ -1,11 +1,9 @@
 package edu.fiuba.algo3.modelo;
 
-import edu.fiuba.algo3.modelo.exceptions.*;
-import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.casilla.Casilla;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class MementoMech {
     private final Casilla casillaAnterior;

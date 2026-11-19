@@ -1,5 +1,9 @@
 package edu.fiuba.algo3.modelo;
 
+import edu.fiuba.algo3.modelo.casilla.Casilla;
+import edu.fiuba.algo3.modelo.casilla.CasillaDelTablero;
+import edu.fiuba.algo3.modelo.unidad.Unidad;
+
 public interface EstadoCasilla {
 
     void ocupar(Unidad unidad, CasillaDelTablero casilla);

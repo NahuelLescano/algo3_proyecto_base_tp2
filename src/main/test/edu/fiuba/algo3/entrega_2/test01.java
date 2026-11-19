@@ -3,6 +3,8 @@ package edu.fiuba.algo3.entrega_2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.unidad.Vek;
+import edu.fiuba.algo3.modelo.unidad.VekFactory;
 import org.junit.jupiter.api.Test;
 
 public class test01 {
