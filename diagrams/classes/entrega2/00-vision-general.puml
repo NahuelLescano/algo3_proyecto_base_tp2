@@ -1,0 +1,151 @@
+@startuml
+!include style.iuml
+title Into the Breach — Visión general
+
+left to right direction
+
+package "modelo.tablero" {
+  class Tablero
+  class Posicion
+  enum Direccion
+  class ParserTablero
+}
+
+package "modelo.casilla" {
+  interface Casilla
+  interface EstadoCasilla
+  class CasillaDelTablero
+  class CasillaVacia
+  class CasillaOcupada
+  class CasillaInexistente
+}
+
+package "modelo.terreno" {
+  interface Terreno
+  class Suelo
+  class Agua
+  class Acido
+  class Montania
+  class Edificio
+  interface Efecto
+  class EfectoAgua
+  class EfectoAcido
+}
+
+package "modelo.unidad" {
+  abstract class Unidad
+  class Mech
+  class Vek
+  interface Desplazamiento
+  interface EstadoUnidad
+  class MechFactory
+  class VekFactory
+}
+
+package "modelo.arma" {
+  interface Arma
+  class Punio
+  class Canion
+  class Artilleria
+  interface AtaqueVek
+  class Mordida
+  class Picadura
+  class EscupirAcido
+}
+
+package "modelo.unidad.turno" {
+  interface EstadoTurnoMech
+  class Disponible
+  class Movido
+  class Agotado
+  class MementoMech
+  class ControladorDeshacer
+}
+
+package "modelo.partida" {
+  class Juego
+  interface EstadoPartida
+  interface FaseDeTurno
+  class IAVek <<diseno>>
+}
+
+package "modelo.estructura" {
+  interface Daniable
+  interface ObservadorEdificio
+  class RedElectrica
+}
+
+package "modelo.mensaje" {
+  class Localize
+  class Message
+  interface MessageRepository
+}
+
+package "repositorios" {
+  class JsonMessageRepository
+}
+
+' ---- Relaciones clave ----
+Tablero "1" o-- "*" Casilla : contiene
+Tablero ..> Posicion
+Tablero ..> Direccion
+Casilla --> "1" Posicion
+Casilla --> "1" Terreno
+Casilla --> "1" EstadoCasilla
+
+EstadoCasilla <|.. CasillaVacia
+EstadoCasilla <|.. CasillaOcupada
+Casilla <|.. CasillaDelTablero
+Casilla <|.. CasillaInexistente
+
+Terreno <|.. Suelo
+Terreno <|.. Agua
+Terreno <|.. Acido
+Terreno <|.. Montania
+Terreno <|.. Edificio
+Efecto <|.. EfectoAgua
+Efecto <|.. EfectoAcido
+
+Unidad <|-- Mech
+Unidad <|-- Vek
+Unidad --> Desplazamiento
+Unidad o-- "*" EstadoUnidad
+Mech --> Arma
+Vek --> AtaqueVek
+Mech --> EstadoTurnoMech
+
+Arma <|.. Punio
+Arma <|.. Canion
+Arma <|.. Artilleria
+AtaqueVek <|.. Mordida
+AtaqueVek <|.. Picadura
+AtaqueVek <|.. EscupirAcido
+
+EstadoTurnoMech <|.. Disponible
+EstadoTurnoMech <|.. Movido
+EstadoTurnoMech <|.. Agotado
+ControladorDeshacer o-- MementoMech
+
+Juego --> Tablero
+Juego --> RedElectrica
+Juego --> FaseDeTurno
+Juego --> EstadoPartida
+Juego --> IAVek
+Juego o-- "*" Mech
+Juego o-- "*" Vek
+
+Daniable <|.. Edificio
+Daniable <|.. RedElectrica
+RedElectrica ..|> ObservadorEdificio
+
+Message --|> Localize
+MessageRepository <|.. JsonMessageRepository
+
+legend right
+  <b>Leyenda</b>
+  Las clases con fondo amarillo están
+  planteadas como diseño y todavía no
+  están implementadas.
+endlegend
+
+@enduml

@@ -1,0 +1,561 @@
+@startuml
+title Into the Breach
+
+class Tablero {
+  + Tablero(mapa : String[])
+  + colocarUnidad(unidad : Unidad, posicion) : boolean
+  + moverUnidad(unidad : Unidad, destino : Posicion) : boolean
+  + desplazarUnidad(unidad : Unidad, destino : Posicion) : boolean
+  + resolverImpacto(posicion : Posicion, direccion : Direccion, danio : int)
+  + daniarEn(posicion : Posicion, danio : int)
+  + buscarCasilla(posicion : Posicion) : Casilla
+  + registrarObservadorEnEdificios()
+  + buscarCasilla(posicion : Posicion) : Casilla
+}
+
+interface FaseDeTurno {
+  + ejecutar(juego: Juego)
+}
+
+interface EstadoUnidad{
+  + modificarDanio(danio: int)
+  + atacar(tablero: Tablero, origen: Posicion, destino: Casilla)
+}
+
+class Sano{
+  + modificarDanio(danio: int)
+  + atacar(tablero: Tablero, origen: Posicion, destino: Casilla)
+}
+
+class Contaminada {
+  + modificarDanio(danio: int)
+  + atacar(tablero: Tablero, origen: Posicion, destino: Casilla)
+}
+
+class Sumergido {
+  + modificarDanio(danio: int)
+  + atacar(tablero: Tablero, origen: Posicion, destino: Casilla)
+}
+
+class EfectoAgua {
+  + aplicarEfecto(unidad: Unidad)
+}
+
+class EfectoAcido {
+  + aplicarEfecto(unidad: Unidad)
+
+}
+
+interface EstadoCasilla{
+  + ocupar(unidad: Unidad, casilla: Casilla)
+}
+
+interface Daniable{
+  + recibirDanio(danio: int)
+}
+
+interface Destino {
+  + alojar(unidad Unidad): void
+}
+
+interface Desplazamiento{
+  + afectar (efecto: Efecto, unidad: Unidad)
+}
+
+class Terrestre{
+  + afectar (efecto: Efecto, unidad: Unidad)
+}
+
+class Volador{
+  + afectar (efecto: Efecto, unidad: Unidad)
+}
+
+class CasillaLibre {
+  + ocupar(unidad: Unidad, casilla: Casilla)
+}
+
+class CasillaOcupada{
+  - unidad: Unidad
+  + CasillaOcupada(unidad: Unidad)
+  + ocupar(unidad: Unidad, casilla: Casilla)
+}
+
+class ParserTablero {
+  + convertirCaracterATerreno(caracter : char) : Terreno
+}
+
+interface Casilla {
+  + ocupar(unidad : Unidad): void
+  + recibirEmpuje(empujada: Unidad)
+  + recibirIMpacto(danio: int)
+  + desocupar()
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int): Posicion
+}
+
+class CasillaDelTablero {
+  + ocupar(unidad : Unidad): void
+  + recibirEmpuje(empujada: Unidad)
+  + recibirIMpacto(danio: int)
+  + desocupar()
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int): Posicion
+  + alojar(unidad Unidad): void
+  + consultarTerreno(unidad: Unidad): void
+  + empujarSobreTerreno(unidad: Unidad): void
+  + impactarTerreno(danio: int): void
+}
+
+class CasillaInexsistente {
+  + ocupar(unidad : Unidad): void
+  + recibirEmpuje(empujada: Unidad)
+  + recibirIMpacto(danio: int)
+  + desocupar()
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int): Posicion
+  + alojar(unidad Unidad): void
+  + consultarTerreno(unidad: Unidad): void
+  + empujarSobreTerreno(unidad: Unidad): void
+  + impactarTerreno(danio: int): void
+}
+
+interface EstadoCasilla {
+
+  + ocupar(unidad Uniadad, casilla CasillaDelTablero): void
+  + recibirImpacto(danio int, casilla CasillaDelTablero): void
+  + recibirEmpuje(unidad Uniadad, casilla CasillaDelTablero): void
+  + empujarHacia(casilla, Casilla): void
+  + avanzarDisparoEnLinea(casilla CasillaDelTablero, actual Posicion, direccion Direccion, tablero: Tablero, danio: int): Posicion
+
+}
+
+class CasillaOcupada {
+
+  + ocupar(unidad Uniadad, casilla CasillaDelTablero): void
+  + recibirImpacto(danio int, casilla CasillaDelTablero): void
+  + recibirEmpuje(unidad Uniadad, casilla CasillaDelTablero): void
+  + empujarHacia(casilla, Casilla): void
+  + avanzarDisparoEnLinea(casilla CasillaDelTablero, actual Posicion, direccion Direccion, tablero: Tablero, danio: int): Posicion
+}
+
+class CasillaVacia {
+
+  + ocupar(unidad Uniadad, casilla CasillaDelTablero): void
+  + recibirImpacto(danio int, casilla CasillaDelTablero): void
+  + recibirEmpuje(unidad Uniadad, casilla CasillaDelTablero): void
+  + empujarHacia(casilla, Casilla): void
+  + avanzarDisparoEnLinea(casilla CasillaDelTablero, actual Posicion, direccion Direccion, tablero: Tablero, danio: int): Posicion
+}
+
+
+interface Terreno {
+  + recibir(unidad: Unidad, casilla: Casilla)
+  + recibirEmpuje(empujada: Unidad, destino: Destino)
+  + recibirImapcto(danio: int)
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int)}
+
+class Suelo{
+  + recibir(unidad: Unidad, casilla: Casilla)
+  + recibirEmpuje(empujada: Unidad, destino: Destino)
+  + recibirImapcto(danio: int)
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int)
+}
+
+class Montania{
+  + recibir(unidad: Unidad, casilla: Casilla)
+  + recibirEmpuje(empujada: Unidad, destino: Destino)
+  + recibirImapcto(danio: int)
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int)
+}
+
+class Agua{
+  + recibir(unidad: Unidad, casilla: Casilla)
+  + recibirEmpuje(empujada: Unidad, destino: Destino)
+  + recibirImapcto(danio: int)
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int)
+}
+
+class Acido{
+  + recibir(unidad: Unidad, casilla: Casilla)
+  + recibirEmpuje(empujada: Unidad, destino: Destino)
+  + recibirImapcto(danio: int)
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int)
+}
+
+class Edificio{
+  - vida: int
+  + agregarObservador(observador ObsrevadorEdifico): void
+  + recibir(unidad: Unidad, casilla: Destino)
+  + afectarMovimiento(unidad: Unidad)
+  + recibirImpacto(danio: int)
+  + recibirDanio(danio: int)
+  + recibirEmpuje(empujada: Unidad, destino: Destino)
+  + avanzarDisparoEnLinea(actual: Posicion, direccion: Direccion, tablero: Tablero, danio: int)
+}
+
+interface ObservadorEdificio {
+  enEdificioDestruido()
+}
+
+class Posicion {
+  columna : int
+  fila : int
+  + Posicion(fila : int, columna : int)
+  + getFila() : int
+  + getColumna() : int
+  + equals(objeto : Object) : boolean
+  + hashCode() : int
+  + desplazar(direccion : Direccion) : Posicion
+}
+
+enum Direccion {
+  NORTE
+  SUR
+  ESTE
+  OESTE
+}
+
+abstract class Unidad {
+  + ubicarseEn(nueva Casilla)
+  + morir()
+  + recibirDanio(danio int)
+  + Mover(casilla:Casilla)
+  + sufrir(Efecto: efecto)
+  + sacarEstado(estado: EstadoUnidad)
+  + reemplazarEstados(nuevosEstados)
+}
+
+interface Arma {
+  + atacar(tablero: Tablero, origen: Posicion, objetivo: Posicion)
+}
+
+class Canion {
+  - danio: int
+  + atacar(tablero: Tablero, origen: Posicion, objetivo: Posicion)
+}
+
+class Punio {
+  + atacar(tablero: Tablero, origen: Posicion, objetivo: Posicion)
+}
+
+class Artilleria{
+  + atacar(tablero: Tablero, origen: Posicion, objetivo: Posicion)
+  + esObjetivoValido(Poscion origen, Posicion objetivo)
+}
+
+class Mech {
+  + mover (destino Posicion, tablero Tablero, controlador ControladorDeshacer)
+  + atacar(destino Posicion, tablero Tablero, controlador ControladorDeshacer)
+  + deshacerMovimiento(tablero Tablero)
+  + reinciarTurno()
+  + cambiarEstadoTurno(nuevoEstado EstadoTurnoMech)
+  + crearMemento()
+  + restaurarDesdeMemento(memento MementoMech, tablero Tablero)
+  + ejecutarDesplazamiento(casilla Casilla, tablero Tablero)
+  + iniciarAtaque(tablero: Tablero, origen: Posicion, destino: Casilla)
+}
+
+class MechFactory {
+  + crearMechDeCombate()
+  + crearMechCanon()
+  + crearMechArtillero()
+}
+
+class Vek {
+  + ejecutarAtaque(Tablero tablero, origen Posicion, objetivo Posicion)
+  + anunciarAtaque(): AtaqueAnunciado
+}
+
+class VekFactory {
+  + crearSaltador()
+  + crearLuciernaga()
+  + crearAvispon()
+}
+
+interface AtaqueVek {
+  + atacar(Tablero tablero, origen Posicion, objetivo Posicion)
+}
+
+class EscupirAcido {
+  - danio: int
+  + atacar(Tablero tablero, origen Posicion, objetivo Posicion)
+}
+
+class Mordida {
+  + atacar(Tablero tablero, origen Posicion, objetivo Posicion)
+}
+
+class Picadura {
+  + atacar(Tablero tablero, origen Posicion, objetivo Posicion)
+}
+
+class FactoryMechs{
+  + crearMech(tipo: TipoMech): Mech
+}
+
+class FactoryVeks{
+  + crearVek(tipo: TipoMech): Mech
+}
+
+class RedElectrica {
+  - vida: int
+  + recirDanio(int danio)
+  + enEdifcioDestruido()
+}
+
+interface EstadoTurnoMech {
+  + mover(mech : Mech, destino : Casilla, tablero : Tablero) : void
+  + atacar(mech : Mech, objetivo : Casilla, tablero : Tablero) : void
+  + deshacerMovimiento(mech : Mech, tablero : Tablero) : void
+}
+
+class Disponible {
+  + mover(mech : Mech, destino : Casilla, tablero : Tablero, controlador ControladorDeshacer) : void
+  + atacar(mech : Mech, objetivo : Casilla, tablero : Tablero, controlador ControladorDeshacer) : void
+  + deshacerMovimiento(mech : Mech, tablero : Tablero) : void
+}
+
+class Movido {
+  - memento : MementoMech
+  + Movido(memento : MementoMech)
+  + mover(mech : Mech, destino : Casilla, tablero : Tablero) : void
+  + atacar(mech : Mech, objetivo : Casilla, tablero : Tablero) : void
+  + deshacerMovimiento(mech : Mech, tablero : Tablero) : void
+}
+
+class Agotado {
+  + mover(mech : Mech, destino : Casilla, tablero : Tablero, controlador : ControladorDeshacer) : void
+  + atacar(mech : Mech, objetivo : Casilla, tablero : Tablero, controlador : ControladorDeshacer) : void
+  + deshacerMovimiento(mech : Mech, tablero : Tablero) : void
+}
+
+class MementoMech {
+  - casillaAnterior : Casilla
+  - estadosAnteriores : List<EstadoUnidad>
+  + MementoMech(casilla : Casilla, estados : List<EstadoUnidad>)
+  + getCasillaAnterior() : Casilla
+  + getEstadosAnteriores() : List<EstadoUnidad>
+}
+
+class ControladorDeshacer {
+  - historial : Stack<MementoMech>
+  - mechMovido : Mech
+  + registrarMovimiento(mech : Mech, memento : MementoMech) : void
+  + invalidarSiCorresponde(mech Mech): void
+  + deshacerUltimoMovimiento(tablero : Tablero) : void
+  + reiniciarTurno() : void
+}
+
+class Juego {
+  - turnoActual : int
+  - turnosTotales : int
+  + Juego(tablero Tablero, redElectrica RedElectrica)
+  + cambiarFase(nuevaFase FaseDeturno)
+  + cambiarEstadoPartida(nuevoEstado : EstadoPartida) : void
+  + ejecutarFaseActual(): void
+  + finalizarFaseJugador()
+  + iniciarAtaque(mech Mech, objetivo Casilla): void
+
+}
+
+interface EstadoPartida {
+  + estaEnCurso()
+  + finalizarFaseJugador(juego Juego)
+}
+
+class EnCurso{
+  + estaEnCurso()
+  + finalizarFaseJugador(juego Juego)
+}
+class Victoria
+class Derrota
+
+class FaseVek {
+  + ejecutar()
+}
+
+class FaseJugador {
+  + ejecutar()
+}
+
+class FaseResolucion {
+  + ejecutar()
+}
+
+class FaseEmergencia {
+  + ejecutar()
+}
+
+class AtaqueAnunciado {
+  - direccion : Direccion
+  + AtaqueAnunciado(atacante : Vek, direccion : Direccion)
+  + ejecutar(tablero : Tablero) : void
+  + obtenerCasillaObjetivo(tablero : Tablero) : Posicion
+}
+
+class PuntoEmergencia {
+  + PuntoEmergencia(casilla : Casilla, vekAEmerger : Vek)
+  + resolverEmergencia(tablero : Tablero) : void
+}
+
+class IAVek {
+  + decidirJugada(vek : Vek, tablero : Tablero) : AtaqueAnunciado
+}
+
+interface ReglaPrioridadVek {
+  + evaluar(vek : Vek, candidatos : List<Casilla>, tablero : Tablero, desempate : CriterioDesempate) : DecisionVek
+}
+
+class PrioridadAtacarEdificio {
+  + evaluar(vek : Vek, candidatos : List<Casilla>, tablero : Tablero, desempate : CriterioDesempate) : DecisionVek
+}
+
+class PrioridadAtacarMech {
+  + evaluar(vek : Vek, candidatos : List<Casilla>, tablero : Tablero, desempate : CriterioDesempate) : DecisionVek
+}
+
+class PrioridadAcercarseEdificio {
+  + evaluar(vek : Vek, candidatos : List<Casilla>, tablero : Tablero, desempate : CriterioDesempate) : DecisionVek
+}
+
+class DecisionVek {
+  - destino : Casilla
+  - direccionAtaque : Direccion
+  + ejecutar(vek : Vek, tablero : Tablero) : AtaqueAnunciado
+}
+
+interface CriterioDesempate {
+  + elegirMejor(opciones : List<Casilla>) : Casilla
+}
+
+class DesempateMenorFilaColumna {
+  + elegirMejor(opciones : List<Casilla>) : Casilla
+}
+
+Tablero "1" -- "0..64" Casilla : contiene
+Tablero ..> Posicion : usa
+Tablero ..> Direccion : usa
+Tablero ..> Unidad : usa
+Tablero ..> Terreno : usa
+Casilla --> "1" Posicion : posicion
+Casilla --> "1" Terreno : terreno
+Posicion ..> Direccion : usa
+EstadoCasilla <|.. CasillaOcupada
+EstadoCasilla <|.. CasillaLibre
+Casilla --> EstadoCasilla
+Tablero ..> ParserTablero : usa
+Terreno <|.. Suelo
+Terreno <|.. Montania
+Terreno <|.. Agua
+Terreno <|.. Edificio
+Terreno <|.. Acido
+Daniable <|.. Unidad
+Daniable <|.. Edificio
+Desplazamiento <|.. Terrestre
+Desplazamiento <|.. Volador
+Desplazamiento <-- Unidad
+Efecto <|.. EfectoAgua
+Efecto <|.. EfectoAcido
+Agua <--Efecto
+Acido <-- Efecto
+Unidad <.. Efecto
+Unidad <|-- Mech
+Unidad <|-- Vek
+Vek <|-- Saltador
+Vek <|-- Avispon
+Vek <|-- Luciernaga
+Mech <|-- MechDeCombate
+Mech <|-- MechCanion
+Mech <|-- MechArtilleria
+Arma <|.. Canion
+Arma <|.. Artilleria
+Arma <|.. Punio
+Mech <-- Arma
+Daniable <|.. RedElectrica
+Mech <.. FactoryMechs
+Vek <.. FactoryVeks
+EstadoTurnoMech <|.. Disponible
+EstadoTurnoMech <|.. Movido
+EstadoTurnoMech <|.. Agotado
+EstadoTurnoMech <-- Mech
+Unidad <-- EstadoUnidad
+EstadoUnidad <|.. Contaminada
+EstadoUnidad <|.. Sumergido
+EstadoUnidad <|.. Sano
+Mech --> "1" EstadoTurnoMech
+Mech ..> MementoMech
+Movido o-- "1" MementoMech
+Disponible ..> MementoMech
+ControladorDeshacer o-- "0..1" MementoMech
+ControladorDeshacer --> "0..1" Mech
+Unidad o-- "*" EstadoUnidad
+MementoMech o-- "*" EstadoUnidad
+MementoMech --> "1" Casilla
+
+Juego --> "1" Tablero
+Juego --> "1" RedElectrica
+Juego --> "1" FaseDeTurno
+Juego --> "1" EstadoPartida
+Juego --> "1" ControladorDeshacer
+Juego --> "1" IAVek
+Juego o-- "0..3" Mech
+Juego o-- "*" Vek : veksActivos
+Juego o-- "*" AtaqueAnunciado
+Juego o-- "*" PuntoEmergencia
+Juego ..> FactoryMechs
+Juego ..> FactoryVeks
+
+EstadoPartida <|.. EnCurso
+EstadoPartida <|.. Victoria
+EstadoPartida <|.. Derrota
+
+FaseDeTurno <|.. FaseVek
+FaseDeTurno <|.. FaseJugador
+FaseDeTurno <|.. FaseResolucion
+FaseDeTurno <|.. FaseEmergencia
+
+FaseVek ..> Juego
+FaseJugador ..> Juego
+FaseResolucion ..> Juego
+FaseEmergencia ..> Juego
+
+AtaqueAnunciado --> "1" Vek
+AtaqueAnunciado --> "1" Direccion
+AtaqueAnunciado ..> Tablero
+
+PuntoEmergencia --> "1" Casilla
+PuntoEmergencia --> "1" Vek
+PuntoEmergencia ..> Tablero
+
+IAVek o-- "3" ReglaPrioridadVek
+IAVek --> "1" CriterioDesempate
+IAVek ..> Vek
+IAVek ..> Tablero
+IAVek ..> DecisionVek
+
+ReglaPrioridadVek <|.. PrioridadAtacarEdificio
+ReglaPrioridadVek <|.. PrioridadAtacarMech
+ReglaPrioridadVek <|.. PrioridadAcercarseEdificio
+ReglaPrioridadVek ..> DecisionVek
+
+CriterioDesempate <|.. DesempateMenorFilaColumna
+DecisionVek --> "1" Casilla
+DecisionVek ..> AtaqueAnunciado
+
+Unidad <-- Desplazamiento
+AtaqueVek <|.. Mordida
+AtaqueVek <|.. Picadura
+AtaqueVek <|.. EscupirAcido
+
+EstadoCasilla <|.. CasillaVacia
+EstadoCasilla <|.. CasillaOcupada
+
+MechFactory <.. Mech
+Destino <|-- Casilla
+VekFactory <.. Vek
+Vek <-- AtaqueVek
+
+Casilla <|-- CasillaDelTablero
+Casilla <|-- CasillaInexsistente
+
+Tablero --> ObservadorEdificio
+RedElectrica ..|> ObservadorEdificio
+
+@enduml

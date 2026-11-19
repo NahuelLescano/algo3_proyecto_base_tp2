@@ -1,0 +1,42 @@
+@startuml
+!include style.iuml
+title Mensajes y repositorio de mensajes
+
+left to right direction
+
+package "modelo.mensaje" {
+  class Localize {
+    # esContent: String
+    # usContent: String
+    + Localize(esContent: String, usContent: String)
+    + greet(lang: String): String
+  }
+
+  class Message {
+    + Message(esContent: String, usContent: String)
+    + greet(): String
+  }
+
+  interface MessageRepository {
+    + load(): List<Message>
+  }
+
+  class MessagesFileInvalid {
+  }
+}
+
+package "repositorios" {
+  class JsonMessageRepository {
+    + JsonMessageRepository(path: String)
+    + load(): List<Message>
+  }
+}
+
+' ---- Relaciones ----
+Message --|> Localize
+MessageRepository <|.. JsonMessageRepository
+JsonMessageRepository ..> Message : crea
+JsonMessageRepository ..> MessagesFileInvalid : lanza
+MessagesFileInvalid --|> RuntimeException
+
+@enduml

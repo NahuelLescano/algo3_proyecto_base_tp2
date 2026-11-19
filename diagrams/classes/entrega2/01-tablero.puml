@@ -1,0 +1,147 @@
+@startuml
+!include style.iuml
+title Tablero, casillas y terreno
+
+package "modelo.tablero" {
+  class Tablero {
+    + Tablero(...)
+    + buscarCasilla(...): Casilla
+    + colocarUnidad(...)
+    + moverUnidad(...)
+    + daniarEn(...)
+    + empujar(...)
+    + registrarObservadorEnEdificios(...)
+  }
+
+  class Posicion {
+    - fila: int
+    - columna: int
+    + desplazar(...): Posicion
+  }
+
+  enum Direccion {
+    NORTE
+    SUR
+    ESTE
+    OESTE
+  }
+
+  class ParserTablero {
+    + convertirCaracterATerreno(...): Terreno
+  }
+}
+
+package "modelo.casilla" {
+  interface Destino {
+    + alojar(...)
+  }
+
+  interface Casilla {
+    + getTerreno(): Terreno
+    + getPosicion(): Posicion
+    + ocupar(...)
+    + desocupar()
+    + recibirEmpuje(...)
+    + empujarHacia(...)
+    + recibirImpacto(...)
+    + avanzarDisparoEnLinea(...): Posicion
+  }
+
+  class CasillaDelTablero {
+    - terreno: Terreno
+    - estado: EstadoCasilla
+    + alojar(...)
+    + consultarTerreno(...)
+    + empujarSobreTerreno(...)
+    + impactarTerreno(...)
+  }
+
+  class CasillaInexistente {
+    + {static} INSTANCIA: CasillaInexistente
+  }
+
+  interface EstadoCasilla {
+    + ocupar(...)
+    + recibirImpacto(...)
+    + recibirEmpuje(...)
+    + empujarHacia(...)
+    + avanzarDisparoEnLinea(...): Posicion
+  }
+
+  class CasillaVacia
+
+  class CasillaOcupada {
+    - unidad: Unidad
+    + CasillaOcupada(...)
+  }
+}
+
+package "modelo.terreno" {
+  interface Terreno {
+    + recibir(...)
+    + recibirEmpuje(...)
+    + recibirImpacto(...): Terreno
+    + avanzarDisparoEnLinea(...): Posicion
+  }
+
+  class Suelo
+  class Agua
+  class Acido
+  class Montania
+  class Edificio {
+    - vida: int
+    + agregarObservador(...)
+    + recibirDanio(...)
+  }
+
+  interface Efecto {
+    + aplicarEfecto(...)
+  }
+
+  class EfectoAgua
+  class EfectoAcido
+}
+
+package "modelo.estructura" {
+  interface Daniable {
+    + recibirDanio(...)
+  }
+  interface ObservadorEdificio {
+    + enEdificioDestruido()
+  }
+}
+
+' ---- Relaciones ----
+Tablero "1" o-- "*" Casilla : contiene
+Tablero ..> Posicion : usa
+Tablero ..> Direccion : usa
+Tablero ..> ParserTablero : usa
+ParserTablero ..> Terreno : crea
+
+Destino <|-- Casilla
+Casilla <|.. CasillaDelTablero
+Casilla <|.. CasillaInexistente
+Casilla --> "1" Posicion
+Casilla --> "1" Terreno
+Casilla --> "1" EstadoCasilla
+
+EstadoCasilla <|.. CasillaVacia
+EstadoCasilla <|.. CasillaOcupada
+
+Terreno <|.. Suelo
+Terreno <|.. Agua
+Terreno <|.. Acido
+Terreno <|.. Montania
+Terreno <|.. Edificio
+
+Edificio ..|> Daniable
+Edificio ..> ObservadorEdificio : notifica
+
+Efecto <|.. EfectoAgua
+Efecto <|.. EfectoAcido
+Agua ..> Efecto : usa
+Acido ..> Efecto : usa
+
+Posicion ..> Direccion : usa
+
+@enduml

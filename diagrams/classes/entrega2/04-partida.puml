@@ -1,0 +1,157 @@
+@startuml
+!include style.iuml
+title Partida, fases, red eléctrica e IA
+
+left to right direction
+
+package "modelo.partida" {
+  class Juego {
+    - tablero: Tablero
+    - redElectrica: RedElectrica
+    - estadoPartida: EstadoPartida
+    - faseActual: FaseDeTurno
+    + Juego(tablero: Tablero, redElectrica: RedElectrica)
+    + cambiarFase(nuevaFase: FaseDeTurno)
+    + cambiarEstadoDePartida(nuevoEstado: EstadoPartida)
+    + ejecutarFaseActual()
+    + finalizarFaseJugador()
+    + iniciarAtaque(mech: Mech, objetivo: Casilla)
+  }
+
+  interface EstadoPartida {
+    + estaEnCurso(): boolean
+    + finalizarFaseJugador(juego: Juego)
+  }
+
+  class EnCurso
+  class Victoria <<diseno>>
+  class Derrota <<diseno>>
+
+  interface FaseDeTurno {
+    + ejecutar(juego: Juego)
+  }
+
+  class FaseVek
+  class FaseJugador
+  class FaseResolucion
+  class FaseEmergencia
+}
+
+package "modelo.estructura" {
+  interface Daniable {
+    + recibirDanio(danio: int)
+  }
+
+  interface ObservadorEdificio {
+    + enEdificioDestruido()
+  }
+
+  class RedElectrica {
+    - energia: int
+    + getEnergia(): int
+    + recibirDanio(danio: int)
+    + enEdificioDestruido()
+    + registrarEdificioDestruido()
+  }
+}
+
+package "modelo.partida.ia" <<diseno>> {
+  class IAVek <<diseno>> {
+    + decidirJugada(vek: Vek, tablero: Tablero): AtaqueAnunciado
+  }
+
+  interface ReglaPrioridadVek <<diseno>> {
+    + evaluar(vek: Vek, candidatos: List<Casilla>, tablero: Tablero, desempate: CriterioDesempate): DecisionVek
+  }
+
+  class PrioridadAtacarEdificio <<diseno>>
+  class PrioridadAtacarMech <<diseno>>
+  class PrioridadAcercarseEdificio <<diseno>>
+
+  interface CriterioDesempate <<diseno>> {
+    + elegirMejor(opciones: List<Casilla>): Casilla
+  }
+
+  class DesempateMenorFilaColumna <<diseno>>
+
+  class DecisionVek <<diseno>> {
+    - destino: Casilla
+    - direccionAtaque: Direccion
+    + ejecutar(vek: Vek, tablero: Tablero): AtaqueAnunciado
+  }
+
+  class AtaqueAnunciado <<diseno>> {
+    - direccion: Direccion
+    + ejecutar(tablero: Tablero)
+    + obtenerCasillaObjetivo(tablero: Tablero): Posicion
+  }
+
+  class PuntoEmergencia <<diseno>> {
+    + resolverEmergencia(tablero: Tablero)
+  }
+}
+
+package "referencias" {
+  class Tablero
+  class Casilla
+  class Mech
+  class Vek
+  class Posicion
+  enum Direccion
+  class ControladorDeshacer
+}
+
+' ---- Relaciones ----
+Juego --> "1" Tablero
+Juego --> "1" RedElectrica
+Juego --> "1" FaseDeTurno
+Juego --> "1" EstadoPartida
+Juego --> "1" ControladorDeshacer
+Juego --> "1" IAVek
+Juego o-- "0..3" Mech
+Juego o-- "*" Vek
+Juego o-- "*" AtaqueAnunciado
+Juego o-- "*" PuntoEmergencia
+
+EstadoPartida <|.. EnCurso
+EstadoPartida <|.. Victoria
+EstadoPartida <|.. Derrota
+
+FaseDeTurno <|.. FaseVek
+FaseDeTurno <|.. FaseJugador
+FaseDeTurno <|.. FaseResolucion
+FaseDeTurno <|.. FaseEmergencia
+
+FaseVek ..> Juego
+FaseJugador ..> Juego
+FaseResolucion ..> Juego
+FaseEmergencia ..> Juego
+
+Daniable <|.. RedElectrica
+ObservadorEdificio <|.. RedElectrica
+
+IAVek o-- "3" ReglaPrioridadVek
+IAVek --> "1" CriterioDesempate
+IAVek ..> DecisionVek : produce
+IAVek ..> Vek
+IAVek ..> Tablero
+
+ReglaPrioridadVek <|.. PrioridadAtacarEdificio
+ReglaPrioridadVek <|.. PrioridadAtacarMech
+ReglaPrioridadVek <|.. PrioridadAcercarseEdificio
+ReglaPrioridadVek ..> DecisionVek
+
+CriterioDesempate <|.. DesempateMenorFilaColumna
+
+DecisionVek --> "1" Casilla
+DecisionVek ..> AtaqueAnunciado
+
+AtaqueAnunciado --> "1" Vek
+AtaqueAnunciado --> "1" Direccion
+AtaqueAnunciado ..> Tablero
+
+PuntoEmergencia --> "1" Casilla
+PuntoEmergencia --> "1" Vek
+PuntoEmergencia ..> Tablero
+
+@enduml
