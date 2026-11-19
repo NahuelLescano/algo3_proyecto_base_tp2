@@ -3,6 +3,7 @@ package edu.fiuba.algo3.modelo;
 public abstract class Unidad {
     private int vidaActual;
     private Posicion posicion;
+    private EstadoUnidad estado = new Sano();
 
     public Unidad(int vida, Posicion posicion){
         this.vidaActual = vida;
@@ -14,7 +15,8 @@ public abstract class Unidad {
             throw new IllegalArgumentException("El daño no puede ser negativo");
         }
 
-        vidaActual -= danio;
+        int danioReal = estado.calcularDanioRecibido(danio);
+        vidaActual -= danioReal;
 
         if (vidaActual < 0) {
             vidaActual = 0;
@@ -44,7 +46,19 @@ public abstract class Unidad {
     public void registrarMovimiento() {
     }
     
+    public void contaminar() {
+        estado = new Contaminado();
+    }
+
+    public void sanar() {
+        estado = new Sano();
+    }
+
     public void aplicarEfectoDelAgua() {
+    }
+
+    public void aplicarEfectoDelAcido() {
+        contaminar();
     }
 
 }

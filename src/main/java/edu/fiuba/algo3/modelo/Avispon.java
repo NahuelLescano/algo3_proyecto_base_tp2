@@ -7,7 +7,7 @@ public class Avispon extends Vek {
     }
 
     @Override
-    public void aplicarEfectoDelAgua() {
-        return;
+    public void aplicarEfectoDelAcido() {
+        // El Avispon no se ve afectado por el ácido. La Unidad por defecto se contamina, menos el Avispón
     }
 }

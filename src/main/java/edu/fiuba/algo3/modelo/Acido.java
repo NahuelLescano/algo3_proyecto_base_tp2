@@ -1,6 +1,7 @@
 package edu.fiuba.algo3.modelo;
 
 public class Acido extends Terreno {
+
     @Override
     public boolean esTransitable() {
         return true;
@@ -13,8 +14,9 @@ public class Acido extends Terreno {
 
     @Override
     public void aplicarEfecto(Unidad unidad) {
-    }    
-    
+        unidad.aplicarEfectoDelAcido();
+    }
+
     @Override
     public Terreno recibirDanio(int danio) {
         return this;
