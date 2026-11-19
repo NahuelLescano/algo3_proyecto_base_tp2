@@ -25,10 +25,9 @@ public class EdificioTest {
 
         tablero.buscarCasilla(posicion).recibirImpacto(1);
 
-        // Un Suelo admite unidades; un Edificio no
-        Unidad unidad = new Vek(2);
-        tablero.colocarUnidad(unidad, posicion);
-        assertEquals(posicion, unidad.posicion());
+        Vek vek = new VekFactory().crearSaltador();
+        tablero.colocarUnidad(vek, posicion);
+        assertEquals(posicion, vek.posicion());
     }
 
     @Test
@@ -72,7 +71,7 @@ public class EdificioTest {
             "-----",
             "--E--"
         },red);
-        Unidad empujada = new Vek(2);            // vida 2
+        Vek empujada = new VekFactory().crearSaltador();
         tablero.colocarUnidad(empujada, new Posicion(3, 2));
 
         tablero.empujar(new Posicion(3, 2), Direccion.SUR);

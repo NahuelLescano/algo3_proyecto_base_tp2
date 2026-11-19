@@ -9,8 +9,8 @@ public class test01 {
     @Test
 public void empujarUnidadContraOtraNoLaMueveYAmbasRecibenDanio() {
     Tablero tablero = new Tablero(new String[]{ "--", "--" }, new ParserTablero());
-    Unidad empujada = new Vek(2);
-    Unidad bloqueo = new Vek(2);
+    Vek bloqueo = new VekFactory().crearSaltador();
+    Vek empujada = new VekFactory().crearSaltador();
     tablero.colocarUnidad(empujada, new Posicion(0, 0));
     tablero.colocarUnidad(bloqueo, new Posicion(0, 1));
 
