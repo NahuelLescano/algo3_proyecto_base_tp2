@@ -1,38 +1,48 @@
 package edu.fiuba.algo3.entrega_1;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import edu.fiuba.algo3.modelo.excepciones.AccionInvalidaException;
+import edu.fiuba.algo3.modelo.excepciones.AtaqueInvalidoException;
+import edu.fiuba.algo3.modelo.excepciones.MovimientoInvalidoException;
+import edu.fiuba.algo3.modelo.tablero.ParserTablero;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.Mech;
+import edu.fiuba.algo3.modelo.unidad.MechFactory;
+import edu.fiuba.algo3.modelo.unidad.Vek;
+import edu.fiuba.algo3.modelo.unidad.VekFactory;
+import edu.fiuba.algo3.modelo.unidad.turno.ControladorDeshacer;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.excepciones.AccionYaRealizadaException;
-import edu.fiuba.algo3.modelo.tablero.Posicion;
-import edu.fiuba.algo3.modelo.tablero.Tablero;
-import edu.fiuba.algo3.modelo.unidad.MechDeCombate;
 
 public class MechTurnoTest {
 
     private static final Posicion INICIAL = new Posicion(2, 2);
     private static final String[] MAPA = {
-            "-------",
-            "-------",
-            "-------",
-            "-------",
-            "-------"
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------"
     };
 
     private Tablero tablero;
-    private MechDeCombate mech;
+    private ControladorDeshacer controlador;
+    private Mech mech;
 
     @BeforeEach
     public void setUp() {
-        tablero = new Tablero(MAPA);
-        mech = new MechDeCombate(INICIAL);
-        assertTrue(tablero.colocarUnidad(mech));
+        tablero = new Tablero(MAPA, new ParserTablero());
+        controlador = new ControladorDeshacer();
+        mech = new MechFactory().crearMechDeCombate();
+        tablero.colocarUnidad(mech, INICIAL);
     }
 
     @Test
@@ -40,57 +50,58 @@ public class MechTurnoTest {
         Posicion intermedio = new Posicion(2, 3);
         Posicion destinoFinal = new Posicion(2, 4);
 
-        assertTrue(tablero.moverUnidad(mech, intermedio));
-        assertFalse(tablero.moverUnidad(mech, destinoFinal));
+        mech.mover(intermedio, tablero, controlador);
+        assertThrows(MovimientoInvalidoException.class,
+                () -> mech.mover(destinoFinal, tablero, controlador));
 
-        assertSame(mech, tablero.obtenerUnidad(intermedio));
+        assertEquals(intermedio, mech.posicion());
     }
 
     @Test
     public void test02MechNoPuedeAtacarDosVecesEnElMismoTurno() {
         Posicion objetivo = new Posicion(2, 3);
+        Vek vek = new VekFactory().crearLuciernaga();
+        tablero.colocarUnidad(vek, objetivo);
 
-        assertTrue(mech.iniciarAtaque(tablero, objetivo));
-        assertFalse(mech.iniciarAtaque(tablero, objetivo));
+        mech.atacar(objetivo, tablero, controlador);
+        assertThrows(AtaqueInvalidoException.class,
+                () -> mech.atacar(objetivo, tablero, controlador));
     }
 
     @Test
     public void test03SePuedeDeshacerElMovimientoSiElMechTodaviaNoAtaco() {
         Posicion destino = new Posicion(2, 4);
 
-        assertTrue(tablero.moverUnidad(mech, destino));
+        mech.mover(destino, tablero, controlador);
         mech.deshacerMovimiento(tablero);
 
-        assertSame(mech, tablero.obtenerUnidad(INICIAL));
-        assertNull(tablero.obtenerUnidad(destino));
+        assertEquals(INICIAL, mech.posicion());
     }
 
     @Test
     public void test04NoSePuedeDeshacerElMovimientoDespuesDeAtacar() {
         Posicion destino = new Posicion(2, 3);
 
-        assertTrue(tablero.moverUnidad(mech, destino));
-        assertTrue(mech.iniciarAtaque(tablero, new Posicion(2, 4)));
+        mech.mover(destino, tablero, controlador);
+        mech.atacar(new Posicion(2, 4), tablero, controlador);
 
-        assertThrows(AccionYaRealizadaException.class, () -> {
-            mech.deshacerMovimiento(tablero);
-        });
+        assertThrows(AccionInvalidaException.class,
+                () -> mech.deshacerMovimiento(tablero));
 
-        assertSame(mech, tablero.obtenerUnidad(destino));
+        assertEquals(destino, mech.posicion());
     }
 
     @Test
     public void test05NoSePuedeDeshacerElMovimientoMasDeUnaVezEnElMismoTurno() {
         Posicion destino = new Posicion(2, 4);
 
-        assertTrue(tablero.moverUnidad(mech, destino));
+        mech.mover(destino, tablero, controlador);
         mech.deshacerMovimiento(tablero);
 
-        assertThrows(AccionYaRealizadaException.class, () -> {
-            mech.deshacerMovimiento(tablero);
-        });
+        assertThrows(AccionInvalidaException.class,
+                () -> mech.deshacerMovimiento(tablero));
 
-        assertSame(mech, tablero.obtenerUnidad(INICIAL));
+        assertEquals(INICIAL, mech.posicion());
     }
 
     @Test
@@ -98,10 +109,10 @@ public class MechTurnoTest {
         Posicion destino = new Posicion(2, 4);
         Posicion nuevoDestino = new Posicion(2, 3);
 
-        assertTrue(tablero.moverUnidad(mech, destino));
+        mech.mover(destino, tablero, controlador);
         mech.deshacerMovimiento(tablero);
 
-        assertTrue(tablero.moverUnidad(mech, nuevoDestino));
-        assertSame(mech, tablero.obtenerUnidad(nuevoDestino));
+        mech.mover(nuevoDestino, tablero, controlador);
+        assertEquals(nuevoDestino, mech.posicion());
     }
 }

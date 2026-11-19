@@ -1,43 +1,63 @@
 package edu.fiuba.algo3.modelo.unidad;
 
 import edu.fiuba.algo3.modelo.arma.Arma;
-import edu.fiuba.algo3.modelo.excepciones.AccionYaRealizadaException;
+import edu.fiuba.algo3.modelo.casilla.Casilla;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.turno.ControladorDeshacer;
+import edu.fiuba.algo3.modelo.unidad.turno.Disponible;
 import edu.fiuba.algo3.modelo.unidad.turno.EstadoTurnoMech;
-import edu.fiuba.algo3.modelo.unidad.turno.PuedeMoverYAtacar;
+import edu.fiuba.algo3.modelo.unidad.turno.MementoMech;
 
-public abstract class Mech extends Unidad {
+public class Mech extends Unidad {
     private Arma arma;
-    private EstadoTurnoMech estadoTurno;
+    private EstadoTurnoMech estadoTurno = new Disponible();
 
-    public Mech(int vida, Posicion posicion, Arma arma) {
-        super(vida, posicion);
+    public Mech(int vida, Arma arma, Desplazamiento desplazamiento) {
+        super(vida);
         this.arma = arma;
-        this.estadoTurno = new PuedeMoverYAtacar();
+        asignarDesplazamiento(desplazamiento);
     }
 
-    @Override
-    public void mover(Tablero tablero, Posicion destino) {
-        this.estadoTurno = estadoTurno.mover(this, tablero, destino);
+    public void mover(Posicion destino, Tablero tablero, ControladorDeshacer controlador) {
+        Casilla casillaDestino = tablero.buscarCasilla(destino);
+        this.estadoTurno.mover(this, casillaDestino, tablero, controlador);
+    }
+
+    public void atacar(Posicion objetivo, Tablero tablero, ControladorDeshacer controlador) {
+        Casilla casillaObjetivo = tablero.buscarCasilla(objetivo);
+        this.estadoTurno.atacar(this, casillaObjetivo, tablero, controlador);
     }
 
     public void deshacerMovimiento(Tablero tablero) {
-        this.estadoTurno = this.estadoTurno.deshacerMovimiento(this, tablero);
+        this.estadoTurno.deshacerMovimiento(this, tablero);
     }
 
-    protected boolean consumirAtaque() {
-        try {
-            this.estadoTurno = estadoTurno.atacar(this);
-            return true;
-        } catch (AccionYaRealizadaException e) {
-            return false;
-        }
+    public void reiniciarTurno() {
+        this.estadoTurno = new Disponible();
     }
 
-    protected Arma getArma() {
-        return arma;
+    public void cambiarEstadoTurno(EstadoTurnoMech nuevoEstado) {
+        this.estadoTurno = nuevoEstado;
     }
 
-    public abstract boolean iniciarAtaque(Tablero tablero, Posicion objetivo);
+    public MementoMech crearMemento() {
+        return new MementoMech(obtenerCasillaActual(), obtenerEstadosActuales());
+    }
+
+    public void restaurarDesdeMemento(MementoMech memento, Tablero tablero) {
+        obtenerCasillaActual().desocupar();
+        Casilla casillaAnterior = memento.getCasillaAnterior();
+        tablero.colocarUnidad(this, casillaAnterior.getPosicion());
+        reemplazarEstados(memento.getEstadosAnteriores());
+    }
+
+    public void ejecutarDesplazamiento(Casilla destino, Tablero tablero) {
+        tablero.moverUnidad(this, destino.getPosicion());
+    }
+
+    public void iniciarAtaque(Casilla objetivo, Tablero tablero) {
+        Posicion objetivoDeAtaque = objetivo.getPosicion();
+        this.arma.atacar(tablero, this.posicion(), objetivoDeAtaque);
+    }
 }

@@ -1,19 +1,20 @@
 package edu.fiuba.algo3.modelo.unidad;
 
+import edu.fiuba.algo3.modelo.arma.Artilleria;
 import edu.fiuba.algo3.modelo.arma.Canion;
-import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.arma.Punio;
 
 public class MechFactory {
 
-    public Mech crearMechDeCombate(Posicion posicion) {
-        return new MechDeCombate(posicion);
+    public Mech crearMechDeCombate() {
+        return new Mech(3, new Punio(), new Terrestre());
     }
 
-    public Mech crearMechCanon(Posicion posicion) {
-        return new MechCanion(posicion, new Canion());
+    public Mech crearMechCanon() {
+        return new Mech(3, new Canion(), new Terrestre());
     }
 
-    public Mech crearMechArtillero(Posicion posicion) {
-        return new MechArtilleria(posicion);
+    public Mech crearMechArtillero() {
+        return new Mech(2, new Artilleria(), new Terrestre());
     }
 }

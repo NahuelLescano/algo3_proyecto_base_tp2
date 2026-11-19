@@ -1,25 +1,16 @@
 package edu.fiuba.algo3.modelo.arma;
 
+import edu.fiuba.algo3.modelo.excepciones.AtaqueInvalidoException;
 import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 
-public class Punio implements ArmaDireccional {
-
-    private static final int DANIO = 2;
-
-    @Override
+public class Punio implements Arma {
     public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
-        if (!origen.esAdyacenteA(objetivo)) {
-            return;
-        }
+        if (!origen.esAdyacenteA(objetivo)) throw new AtaqueInvalidoException("Ataque invalido");
 
-        Direccion direccion = origen.direccionHacia(objetivo);
-        tablero.resolverImpacto(objetivo, direccion, DANIO);
-    }
-
-    @Override
-    public void atacar(Tablero tablero, Posicion origen, Direccion direccion) {
-        atacar(tablero, origen, origen.desplazar(direccion));
+        Direccion dir = origen.direccionHacia(objetivo);
+        tablero.daniarEn(objetivo, 2);
+        tablero.empujar(objetivo, dir);
     }
 }

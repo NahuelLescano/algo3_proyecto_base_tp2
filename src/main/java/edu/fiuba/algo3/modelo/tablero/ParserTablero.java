@@ -15,15 +15,15 @@ public class ParserTablero {
     private final Map<Character, Supplier<Terreno>> creadores = new HashMap<>();
 
     public ParserTablero() {
-        this.creadores.put('-', Suelo::new);
-        this.creadores.put('M', Montania::new);
-        this.creadores.put('A', Agua::new);
-        this.creadores.put('X', Acido::new);
-        this.creadores.put('E', () -> new Edificio(1));
+        creadores.put('-', Suelo::new);
+        creadores.put('M', Montania::new);
+        creadores.put('A', Agua::new);
+        creadores.put('X', Acido::new);
+        creadores.put('E', () -> new Edificio(1));
     }
 
     public Terreno convertirCaracterATerreno(char caracter) {
-        Supplier<Terreno> creador = this.creadores.get(caracter);
+        Supplier<Terreno> creador = creadores.get(caracter);
         if (creador == null) {
             throw new IllegalArgumentException("Caracter de terreno inválido: " + caracter);
         }

@@ -1,23 +1,28 @@
 package edu.fiuba.algo3.modelo.terreno;
 
+import edu.fiuba.algo3.modelo.casilla.Destino;
+import edu.fiuba.algo3.modelo.tablero.Direccion;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.terreno.efecto.EfectoAcido;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
 
-public class Acido extends Terreno {
-    @Override
-    public boolean esTransitable() {
-        return true;
+public class Acido implements Terreno {
+    public void recibir(Unidad unidad, Destino casilla) {
+        casilla.alojar(unidad);
+        unidad.sufrir(new EfectoAcido());
+    }
+
+    public void recibirEmpuje(Unidad empujada, Destino destino) {
+        recibir(empujada, destino);
+    }
+
+    public Terreno recibirImpacto(int danio) {
+        return this;
     }
 
     @Override
-    public boolean bloqueaDisparos() {
-        return false;
-    }
-
-    @Override
-    public void aplicarEfecto(Unidad unidad) {
-    }
-
-    @Override
-    public void recibirDanio(int danio) {
+    public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio) {
+        return actual.desplazar(direccion);
     }
 }
