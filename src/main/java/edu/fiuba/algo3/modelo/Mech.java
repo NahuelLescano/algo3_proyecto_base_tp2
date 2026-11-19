@@ -1,37 +1,54 @@
 package edu.fiuba.algo3.modelo;
-
 public class Mech extends Unidad {
+    private Arma arma;
+    private EstadoTurnoMech estadoTurno = new Disponible();
 
-    private final Arma arma;
-    private final TurnoMech turno = new TurnoMech();
-
-    public Mech(int vida, Posicion posicion, Arma arma) {
-        super(vida, posicion);
+    public Mech(int vida, Arma arma, Desplazamiento desplazamiento){
+        super(vida);
         this.arma = arma;
+        asignarDesplazamiento(desplazamiento);
     }
 
-    public boolean iniciarAtaque(Tablero tablero, Posicion objetivo) {
-        if (!turno.puedeAtacar()) {
-            return false;
-        }
-
-        arma.atacar(tablero, getPosicion(), objetivo);
-        turno.registrarAtaque();
-
-        return true;
+    public void mover(Posicion destino, Tablero tablero, ControladorDeshacer controlador) {
+        Casilla casillaDestino = tablero.buscarCasilla(destino);
+        this.estadoTurno.mover(this, casillaDestino, tablero, controlador);
     }
 
-    public void iniciarTurno() {
-        turno.iniciarNuevoTurno();
+    public void atacar(Posicion objetivo, Tablero tablero, ControladorDeshacer controlador) {
+        Casilla casillaObjetivo = tablero.buscarCasilla(objetivo);
+        this.estadoTurno.atacar(this, casillaObjetivo, tablero, controlador);
     }
 
-    @Override
-    public boolean puedeMoverse() {
-        return turno.puedeMoverse();
+    public void deshacerMovimiento(Tablero tablero) {
+        this.estadoTurno.deshacerMovimiento(this, tablero);
     }
 
-    @Override
-    public void registrarMovimiento() {
-        turno.registrarMovimiento();
+    public void reiniciarTurno() {
+        this.estadoTurno = new Disponible();
+    }
+
+    // Métodos públicos invocados por Disponible y Movido
+    public void cambiarEstadoTurno(EstadoTurnoMech nuevoEstado) {
+        this.estadoTurno = nuevoEstado;
+    }
+
+    public MementoMech crearMemento() {
+        return new MementoMech(obtenerCasillaActual(), obtenerEstadoActuales());
+    }
+
+    public void restaurarDesdeMemento(MementoMech memento, Tablero tablero) {
+        obtenerCasillaActual().desocupar();
+        Casilla casillaAnterior = memento.getCasillaAnterior();
+        tablero.colocarUnidad(this, casillaAnterior.getPosicion());
+        reemplazarEstados(memento.getEstadosAnteriores());
+    }
+
+    public void ejecutarDesplazamiento(Casilla destino, Tablero tablero) {
+        tablero.moverUnidad(this, destino.getPosicion());
+    }
+
+    public void iniciarAtaque(Casilla objetivo, Tablero tablero) {
+        Posicion objetivoDeAtaque = objetivo.getPosicion();
+        this.arma.atacar(tablero, this.getPosicion(), objetivoDeAtaque);
     }
 }

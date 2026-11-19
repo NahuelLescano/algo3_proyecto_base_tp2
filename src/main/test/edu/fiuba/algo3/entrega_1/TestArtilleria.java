@@ -1,10 +1,7 @@
 package edu.fiuba.algo3.entrega_1;
 
-import edu.fiuba.algo3.modelo.Tablero;
-import edu.fiuba.algo3.modelo.Posicion;
-import edu.fiuba.algo3.modelo.Luciernaga;
-import edu.fiuba.algo3.modelo.Mech;
-import edu.fiuba.algo3.modelo.MechFactory;
+import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.exceptions.AtaqueInvalidoException;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +9,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestArtilleria {
 
+    private Tablero tableroVacio() {
+        String[] mapa = {
+                "-------",
+                "-------",
+                "-------",
+                "-------",
+                "-------",
+                "-------",
+                "-------"
+        };
+        return new Tablero(mapa, new ParserTablero());
+    }
+
     @Test
     void artilleriaAtacaPorEncimaDeObstaculos() {
-
         String[] mapa = {
                 "-------",
                 "-------",
@@ -24,100 +33,73 @@ public class TestArtilleria {
                 "-------",
                 "-------"
         };
+        Tablero tablero = new Tablero(mapa, new ParserTablero());
+        Mech mech = new MechFactory().crearMechArtillero();
+        Vek objetivo = new Vek(3);
 
-        Tablero tablero = new Tablero(mapa);
-        MechFactory fabrica = new MechFactory();
-        Mech mech = fabrica.crearMechArtillero(new Posicion(3, 0));
-
-        Luciernaga objetivo = new Luciernaga(new Posicion(3, 4));
-        assertTrue(tablero.colocarUnidad(mech));
-        assertTrue(tablero.colocarUnidad(objetivo));
-
+        tablero.colocarUnidad(mech, new Posicion(3, 0));
+        tablero.colocarUnidad(objetivo, new Posicion(3, 4));
         int vidaInicial = objetivo.getVidaActual();
 
-        mech.iniciarAtaque(tablero, new Posicion(3, 4));
+        mech.atacar(tablero, new Posicion(3, 4));
 
         assertEquals(vidaInicial - 1, objetivo.getVidaActual());
     }
 
     @Test
     void artilleriaNoPuedeAtacarCasillasAdyacentes() {
+        Tablero tablero = tableroVacio();
+        Mech mech = new MechFactory().crearMechArtillero();
+        Unidad adyacente = new Saltador();
 
-        String[] mapa = {
-                "-------",
-                "-------",
-                "-------",
-                "-------",
-                "-------",
-                "-------",
-                "-------"
-        };
-
-        Tablero tablero = new Tablero(mapa);
-        MechFactory fabrica = new MechFactory();
-        Mech mech = fabrica.crearMechArtillero(new Posicion(3, 0));
-
-        Luciernaga adyacente = new Luciernaga(new Posicion(3, 1));
-        assertTrue(tablero.colocarUnidad(mech));
-        assertTrue(tablero.colocarUnidad(adyacente));
-
+        tablero.colocarUnidad(mech, new Posicion(3, 0));
+        tablero.colocarUnidad(adyacente, new Posicion(3, 1));
         int vidaInicial = adyacente.getVidaActual();
 
-        mech.iniciarAtaque(tablero, new Posicion(3, 1));
+        assertThrows(AtaqueInvalidoException.class,
+                () -> mech.atacar(tablero, new Posicion(3, 1)));
 
         assertEquals(vidaInicial, adyacente.getVidaActual());
-        assertEquals(new Posicion(3, 1), adyacente.getPosicion());
+        assertEquals(new Posicion(3, 1), adyacente.posicion());
     }
 
     @Test
     void artilleriaDaniaElObjetivoYEmpujaALasCuatroCasillasAdyacentes() {
+        Tablero tablero = tableroVacio();
+        Mech mech = new MechFactory().crearMechArtillero();
 
-        String[] mapa = {
-                "-------",
-                "-------",
-                "-------",
-                "-------",
-                "-------",
-                "-------",
-                "-------"
-        };
+        Luciernaga centro = new Luciernaga();
+        Luciernaga norte  = new Luciernaga();
+        Luciernaga sur    = new Luciernaga();
+        Luciernaga este   = new Luciernaga();
+        Luciernaga oeste  = new Luciernaga();
 
-        Tablero tablero = new Tablero(mapa);
-        MechFactory fabrica = new MechFactory();
-        Mech mech = fabrica.crearMechArtillero(new Posicion(3, 0));
+        tablero.colocarUnidad(mech,   new Posicion(3, 0));
+        tablero.colocarUnidad(centro, new Posicion(3, 3));
+        tablero.colocarUnidad(norte,  new Posicion(2, 3));
+        tablero.colocarUnidad(sur,    new Posicion(4, 3));
+        tablero.colocarUnidad(este,   new Posicion(3, 4));
+        tablero.colocarUnidad(oeste,  new Posicion(3, 2));
 
-        Luciernaga centro = new Luciernaga(new Posicion(3, 3));
-        Luciernaga norte  = new Luciernaga(new Posicion(2, 3));
-        Luciernaga sur    = new Luciernaga(new Posicion(4, 3));
-        Luciernaga este   = new Luciernaga(new Posicion(3, 4));
-        Luciernaga oeste  = new Luciernaga(new Posicion(3, 2));
+        int vidaCentro = centro.vida();
+        int vidaNorte = norte.vida();
+        int vidaSur = sur.vida();
+        int vidaEste = este.vida();
+        int vidaOeste = oeste.vida();
 
-        assertTrue(tablero.colocarUnidad(mech));
-        assertTrue(tablero.colocarUnidad(centro));
-        assertTrue(tablero.colocarUnidad(norte));
-        assertTrue(tablero.colocarUnidad(sur));
-        assertTrue(tablero.colocarUnidad(este));
-        assertTrue(tablero.colocarUnidad(oeste));
+        mech.atacar(tablero, new Posicion(3, 3));
 
-        int vidaCentro = centro.getVidaActual();
-        int vidaNorte  = norte.getVidaActual();
-        int vidaSur    = sur.getVidaActual();
-        int vidaEste   = este.getVidaActual();
-        int vidaOeste  = oeste.getVidaActual();
+        assertEquals(vidaCentro - 1, centro.vida());
+        assertEquals(new Posicion(3, 3), centro.posicion());
 
-        mech.iniciarAtaque(tablero, new Posicion(3, 3));
+        assertEquals(new Posicion(1, 3), norte.posicion());
+        assertEquals(new Posicion(5, 3), sur.posicion());
+        assertEquals(new Posicion(3, 5), este.posicion());
+        assertEquals(new Posicion(3, 1), oeste.posicion());
 
-        assertEquals(vidaCentro - 1, centro.getVidaActual());
-        assertEquals(new Posicion(3, 3), centro.getPosicion());
-
-        assertEquals(new Posicion(1, 3), norte.getPosicion());
-        assertEquals(new Posicion(5, 3), sur.getPosicion());
-        assertEquals(new Posicion(3, 5), este.getPosicion());
-        assertEquals(new Posicion(3, 1), oeste.getPosicion());
-
-        assertEquals(vidaNorte, norte.getVidaActual());
-        assertEquals(vidaSur, sur.getVidaActual());
-        assertEquals(vidaEste, este.getVidaActual());
-        assertEquals(vidaOeste, oeste.getVidaActual());
+        assertEquals(vidaNorte, norte.vida());
+        assertEquals(vidaSur, sur.vida());
+        assertEquals(vidaEste, este.vida());
+        assertEquals(vidaOeste, oeste.vida());
     }
 }

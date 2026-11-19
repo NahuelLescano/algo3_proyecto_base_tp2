@@ -14,13 +14,25 @@ public class CasillaDelTablero implements Casilla {
         this.posicion = posicion;
     }
 
-    public Posicion getPosicion() { return posicion; }
+    public Posicion getPosicion() { 
+        return posicion; 
+    }
 
-    public void ocupar(Unidad unidad)          { estado.ocupar(unidad, this); }
-    public void recibirEmpuje(Unidad empujada) { estado.recibirEmpuje(empujada, this); }
-    public void empujarHacia(Casilla destino)  { estado.empujarHacia(destino); }
-    public void recibirImpacto(int danio)      { estado.recibirImpacto(danio, this); }
-    public void desocupar()                    { estado = new CasillaVacia(); }
+    public void ocupar(Unidad unidad){ 
+        estado.ocupar(unidad, this); 
+    }
+    public void recibirEmpuje(Unidad empujada) { 
+        estado.recibirEmpuje(empujada, this); 
+    }
+    public void empujarHacia(Casilla destino)  { 
+        estado.empujarHacia(destino); 
+    }
+    public void recibirImpacto(int danio){
+         estado.recibirImpacto(danio, this);
+    }
+    public void desocupar() {
+        estado = new CasillaVacia(); 
+    }
 
     @Override
     public void alojar(Unidad unidad) {        
@@ -28,7 +40,13 @@ public class CasillaDelTablero implements Casilla {
         unidad.ubicarseEn(this);
     }
 
-    void consultarTerreno(Unidad u)    { terreno.recibir(u, this); }
-    void empujarSobreTerreno(Unidad u) { terreno.recibirEmpuje(u, this); }
-    void impactarTerreno(int danio)    { terreno = terreno.recibirImpacto(danio); }
+    void consultarTerreno(Unidad unidad){ 
+        terreno.recibir(unidad, this);
+    }
+    void empujarSobreTerreno(Unidad unidad){ 
+        terreno.recibirEmpuje(unidad, this); 
+    }
+    void impactarTerreno(int danio){ 
+        terreno = terreno.recibirImpacto(danio);
+    }
 }

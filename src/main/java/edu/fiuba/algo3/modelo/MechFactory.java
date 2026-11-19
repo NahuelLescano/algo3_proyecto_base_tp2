@@ -2,15 +2,15 @@ package edu.fiuba.algo3.modelo;
 
 public class MechFactory {
 
-    public Mech crearMechDeCombate(Posicion posicion) {
-        return new Mech(3, posicion, new Punio());
+    public Mech crearMechDeCombate() {
+        return new Mech(3, new Punio(), new Terrestre());
     }
 
-    public Mech crearMechCanon(Posicion posicion) {
-        return new Mech(3, posicion, new Canon());
+    public Mech crearMechCanon() {
+        return new Mech(3, new Canion(), new Terrestre());
     }
 
-    public Mech crearMechArtillero(Posicion posicion) {
-        return new Mech(2, posicion, new Artilleria());
+    public Mech crearMechArtillero() {
+        return new Mech(2, new Artilleria(), new Terrestre());
     }
 }

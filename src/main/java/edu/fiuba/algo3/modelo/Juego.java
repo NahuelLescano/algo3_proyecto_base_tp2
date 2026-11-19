@@ -52,7 +52,7 @@ public class Juego {
     // ATAQUES
     // ==================================================
 
-    public boolean iniciarAtaque(Mech mech, Posicion objetivo) {
-        return mech.iniciarAtaque(tablero, objetivo);
+    public void iniciarAtaque(Mech mech, Casilla objetivo) {
+        mech.iniciarAtaque(objetivo,tablero);
     }
 }

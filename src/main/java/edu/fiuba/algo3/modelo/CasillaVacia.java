@@ -2,10 +2,18 @@ package edu.fiuba.algo3.modelo;
 
 public class CasillaVacia implements EstadoCasilla {
     
-    public void ocupar(Unidad u, CasillaDelTablero c)          { c.consultarTerreno(u); }
-    public void recibirEmpuje(Unidad u, CasillaDelTablero c)   { c.empujarSobreTerreno(u); }
-    public void empujarHacia(Casilla destino)                  { /* nadie para empujar */ }
-    public void recibirImpacto(int d, CasillaDelTablero c)     { c.impactarTerreno(d); }
+    public void ocupar(Unidad unidad, CasillaDelTablero casilla)          { 
+        casilla.consultarTerreno(unidad); 
+    }
+    public void recibirEmpuje(Unidad unidad, CasillaDelTablero casilla){ 
+        casilla.empujarSobreTerreno(unidad); 
+    }
+    public void empujarHacia(Casilla destino){
+
+    }
+    public void recibirImpacto(int destino, CasillaDelTablero casilla){ 
+        casilla.impactarTerreno(destino); 
+    }
 }
 
     

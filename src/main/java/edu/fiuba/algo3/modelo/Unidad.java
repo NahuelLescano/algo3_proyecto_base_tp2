@@ -1,25 +1,38 @@
 package edu.fiuba.algo3.modelo;
 
-import javafx.geometry.Pos;
+import java.util.List;
 
 public abstract class Unidad {
     private int vidaActual;
     private Posicion posicion;
-
+    private Desplazamiento desplazamiento;
     private Casilla casilla = CasillaInexistente.INSTANCIA; 
+    private List<EstadoUnidad> estados;
 
     public Unidad(int vida){
         this.vidaActual = vida;
-        
+    }
+
+    public Unidad(int vida, Desplazamiento desplazamiento){
+        this.vidaActual = vida;
+        this.desplazamiento = desplazamiento;
+    }
+
+    public void asignarDesplazamiento(Desplazamiento desplazamiento){
+        this.desplazamiento = desplazamiento;
     }
 
     public void ubicarseEn(Casilla nueva){
         casilla.desocupar();
         casilla = nueva;
     }
-
+ 
     public Posicion posicion() {
         return casilla.getPosicion();
+    }
+
+    protected Casilla obtenerCasillaActual(){
+        return this.casilla;
     }
 
     public void morir(){
@@ -51,14 +64,6 @@ public abstract class Unidad {
         this.posicion = posicion;
     }
     
-    public boolean estaViva() {
-        return vidaActual > 0;
-    }
-    
-    public boolean puedeMoverse() {
-        return true;
-    }
-
     public void registrarMovimiento() {
     }
 
@@ -68,5 +73,14 @@ public abstract class Unidad {
 
     public void noPudeMoverme(){
         
+    }
+
+    protected List<EstadoUnidad> obtenerEstadoActuales(){
+        return this.estados;
+    }
+
+    protected void reemplazarEstados(List<EstadoUnidad> nuevosEstados){
+        this.estados.clear();
+        this.estados.addAll(nuevosEstados);
     }
 }
