@@ -10,5 +10,5 @@ public class Saltador extends Vek {
     public void aplicarEfectoDelAgua() {
         recibirDanio(getVidaActual());
     }
-    
+
 }

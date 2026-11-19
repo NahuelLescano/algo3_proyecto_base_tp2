@@ -233,4 +233,8 @@ public class Tablero {
             }
         }
     }
+
+    public boolean estaEnAgua(Posicion posicion) {
+        return obtenerTerrenoEn(posicion) instanceof Agua;
+    }
 }

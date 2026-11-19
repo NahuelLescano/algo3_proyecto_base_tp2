@@ -12,7 +12,7 @@ public class Mech extends Unidad {
 
     public boolean iniciarAtaque(Tablero tablero, Posicion objetivo) {
 
-        if (!turno.puedeAtacar()) {
+        if (!turno.puedeAtacar() || tablero.estaEnAgua(getPosicion())) {
             return false;
         }
 
