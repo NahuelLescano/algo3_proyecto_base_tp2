@@ -11,7 +11,7 @@ public class Edificio implements Terreno, Daniable {
         this.vida = vida;
     }
 
-    public void agregarObserevador(ObservadorEdificio observador){
+    public void agregarObservador(ObservadorEdificio observador){
         this.observadores.add(observador);
     }
 
@@ -24,7 +24,11 @@ public class Edificio implements Terreno, Daniable {
     }
     
     public Terreno recibirImpacto(int danio){
-        return new Suelo();
+        this.recibirDanio(danio);
+        if(this.vida <= 0){
+            return new Suelo();
+        }
+        return this;
     }
     @Override
     public void recibirDanio(int danio) {

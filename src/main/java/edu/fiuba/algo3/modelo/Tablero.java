@@ -56,6 +56,19 @@ public class Tablero {
     desde.empujarHacia(hacia);
     */
     }   
+
+    public void registrarObservadorEnEdificios(
+            ObservadorEdificio observador) {
+
+        for (Casilla casilla : casillas) {
+            Terreno terreno = casilla.getTerreno();
+
+            if (terreno instanceof Edificio) {
+                Edificio edificio = (Edificio) terreno;
+                edificio.agregarObservador(observador);
+            }
+        }
+    }
     /*
     private List<Casilla> casillas;
     

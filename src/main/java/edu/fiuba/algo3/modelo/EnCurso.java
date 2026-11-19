@@ -1,0 +1,16 @@
+package edu.fiuba.algo3.modelo;
+
+public class EnCurso implements EstadoPartida {
+
+    @Override
+    public boolean estaEnCurso() {
+        return true;
+    }
+
+
+    @Override
+    public void finalizarFaseJugador(Juego juego) {
+        juego.cambiarFase(new FaseResolucion());
+    }
+
+}
