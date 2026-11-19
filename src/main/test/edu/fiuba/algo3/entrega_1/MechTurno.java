@@ -3,11 +3,8 @@ package edu.fiuba.algo3.entrega_1;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.fiuba.algo3.modelo.Tablero;
-import edu.fiuba.algo3.modelo.Posicion;
-import edu.fiuba.algo3.modelo.Mech;
-import edu.fiuba.algo3.modelo.MechFactory;
-import edu.fiuba.algo3.modelo.Luciernaga;
+import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.exceptions.*;
 
 public class MechTurno {
 
@@ -22,71 +19,64 @@ public class MechTurno {
             "--------",
             "--------"
         };
-        return new Tablero(mapaVacio);
+        return new Tablero(mapaVacio, new ParserTablero());
     }
 
     @Test
     public void test01MoverMechQueYaSeMovioEnElTurnoFalla() {
         Tablero tablero = crearTableroPrueba();
+        ControladorDeshacer controlador = new ControladorDeshacer();
 
         Posicion origen = new Posicion(1, 1);
         Posicion destino1 = new Posicion(1, 2);
         Posicion destino2 = new Posicion(1, 3);
 
-        MechFactory fabrica = new MechFactory();
-        Mech mech = fabrica.crearMechDeCombate(origen);
+        Mech mech = new MechFactory().crearMechDeCombate();
+        tablero.colocarUnidad(mech, origen);
 
-        assertTrue(tablero.colocarUnidad(mech));
+        mech.mover(destino1, tablero, controlador);
+        assertEquals(destino1, mech.posicion());
 
-        boolean primerMovimiento = tablero.moverUnidad(mech, destino1);
-        assertTrue(primerMovimiento, "El primer movimiento debería ser exitoso");
-
-        boolean segundoMovimiento = tablero.moverUnidad(mech, destino2);
-        assertFalse(segundoMovimiento,
-                "Un segundo movimiento en el mismo turno no debería permitirse");
+        assertThrows(RuntimeException.class,
+                () -> mech.mover(destino2, tablero, controlador));
+        assertEquals(destino1, mech.posicion());
     }
 
     @Test
     public void test02AtacarMechQueYaAtacoEnElTurnoFalla() {
         Tablero tablero = crearTableroPrueba();
+        ControladorDeshacer controlador = new ControladorDeshacer();
 
         Posicion origen = new Posicion(1, 1);
         Posicion objetivo = new Posicion(1, 2);
 
-        MechFactory fabrica = new MechFactory();
-        Mech mech = fabrica.crearMechDeCombate(origen);
-        Luciernaga vek = new Luciernaga(objetivo);
+        Mech mech = new MechFactory().crearMechDeCombate();
+        Vek vek = new VekFactory().crearLuciernaga();
 
-        assertTrue(tablero.colocarUnidad(mech));
-        assertTrue(tablero.colocarUnidad(vek));
+        tablero.colocarUnidad(mech, origen);
+        tablero.colocarUnidad(vek, objetivo);
 
-        boolean primerAtaque = mech.iniciarAtaque(tablero, objetivo);
-        assertTrue(primerAtaque, "El primer ataque debería ser exitoso");
+        mech.atacar(objetivo, tablero, controlador);
 
-        boolean segundoAtaque = mech.iniciarAtaque(tablero, objetivo);
-        assertFalse(segundoAtaque,
-                "Un segundo ataque en el mismo turno no debería permitirse");
+        assertThrows(RuntimeException.class,
+                () -> mech.atacar(objetivo, tablero, controlador));
     }
 
-    // @Test
-    // public void test03DeshacerMovimientoMechQueSoloSeMovioVuelveAPosicionAnterior() {
-    //    Tablero tablero = crearTableroPrueba();
+    @Test
+    public void test03DeshacerMovimientoMechQueSoloSeMovioVuelveAPosicionAnterior() {
+        Tablero tablero = crearTableroPrueba();
+        ControladorDeshacer controlador = new ControladorDeshacer();
 
-    //   Posicion inicial = new Posicion(2, 2);
-    //   Posicion destino = new Posicion(2, 4);
+        Posicion inicial = new Posicion(2, 2);
+        Posicion destino = new Posicion(2, 4);
 
-    //    MechFactory fabrica = new MechFactory();
-    //    Mech mech = fabrica.crearMechDeCombate(inicial);
+        Mech mech = new MechFactory().crearMechDeCombate();
+        tablero.colocarUnidad(mech, inicial);
 
-    //    assertTrue(tablero.colocarUnidad(mech));
+        mech.mover(destino, tablero, controlador);
+        assertEquals(destino, mech.posicion());
 
-    //    boolean movimientoExitoso = tablero.moverUnidad(mech, destino);
-    //    assertTrue(movimientoExitoso);
-
-    //    assertEquals(destino, mech.getPosicion());
-
-    //    tablero.deshacerMovimiento(mech);
-
-    //    assertEquals(inicial, mech.getPosicion());
-    // }
+        mech.deshacerMovimiento(tablero);
+        assertEquals(inicial, mech.posicion());
+    }
 }

@@ -6,19 +6,7 @@ public interface EstadoCasilla {
     void recibirImpacto(int danio, CasillaDelTablero casilla);
     void recibirEmpuje(Unidad unidad, CasillaDelTablero casilla);
     void empujarHacia(Casilla casilla);
-    /*
-    EstadoCasilla desocupar();
+    Posicion avanzarDisparoEnLinea(CasillaDelTablero casilla, Posicion actual, Direccion direccion, Tablero tablero, int danio);
     
-    boolean estaOcupada();
-
-    boolean estaOcupadaPor(Unidad unidad);
-
-    Unidad obtenerUnidad();
-
-    EstadoCasilla aplicarDanio(int danio, Terreno terreno);
-
-    EstadoCasilla aplicarEfectoDelTerreno(Terreno terreno);
-
-    boolean detieneDisparo();
- */
-    }
+}
+ 

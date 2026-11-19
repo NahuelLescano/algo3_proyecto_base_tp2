@@ -49,4 +49,8 @@ public class CasillaDelTablero implements Casilla {
     void impactarTerreno(int danio){ 
         terreno = terreno.recibirImpacto(danio);
     }
+    @Override
+    public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio) {
+        return estado.avanzarDisparoEnLinea(this, actual, direccion, tablero, danio);
+    }
 }

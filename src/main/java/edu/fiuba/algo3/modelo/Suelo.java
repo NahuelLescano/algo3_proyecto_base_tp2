@@ -13,4 +13,8 @@ public class Suelo implements  Terreno {
     public Terreno recibirImpacto(int danio){
         return this;
     }
+    @Override
+    public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio) {
+        return actual.desplazar(direccion);
+    }
 }

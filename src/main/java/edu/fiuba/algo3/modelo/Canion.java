@@ -1,35 +1,23 @@
 package edu.fiuba.algo3.modelo;
 
-// La responsabilidad de Canon es encontrar el primer elemento alcanzado por el disparo.
+import edu.fiuba.algo3.modelo.exceptions.*;
+
 public class Canion implements Arma {
 
     private static final int DANIO = 1;
 
     @Override
     public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
+        if (origen.equals(objetivo)) {
+            throw new AtaqueInvalidoException("Ataque invalido");
+        }
 
         Direccion direccion = origen.direccionHacia(objetivo);
+        Posicion actual = origen.desplazar(direccion);
 
-        int fila = origen.getFila() + direccion.getDesplazamientoEnFila();
-        int columna = origen.getColumna() + direccion.getDesplazamientoEnColumna();
-
-        while (tablero.estaDentroDelTablero(new Posicion(fila, columna))) {
-
-            Posicion posicionActual = new Posicion(fila, columna);
-
-            if (tablero.detieneDisparoEn(posicionActual)) {
-                tablero.resolverImpacto(posicionActual, direccion, DANIO);
-                return;
-            }
-
-            // Si encontramos el objetivo seleccionado sin impactar nada,
-            // terminamos el disparo.
-            if (posicionActual.equals(objetivo)) {
-                return;
-            }
-
-            fila += direccion.getDesplazamientoEnFila();
-            columna += direccion.getDesplazamientoEnColumna();
+        while (actual != null) {
+            Casilla casilla = tablero.buscarCasilla(actual);
+            actual = casilla.avanzarDisparoEnLinea(actual, direccion, tablero, DANIO);
         }
     }
 }

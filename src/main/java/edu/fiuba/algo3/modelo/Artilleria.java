@@ -2,8 +2,8 @@ package edu.fiuba.algo3.modelo;
 
 public class Artilleria implements Arma {
 
-    private static final int DANIO = 1;
-    private static final int DISTANCIA_MINIMA = 2;
+    private int danio = 1;
+    private int distanciaMinima = 2;
 
     @Override
     public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
@@ -11,13 +11,11 @@ public class Artilleria implements Arma {
             return;
         }
 
-        // La casilla objetivo recibe daño (ignora obstáculos intermedios).
-        tablero.daniarEn(objetivo, DANIO);
-
-        // Empuja las unidades de las 4 casillas adyacentes hacia afuera.
+        tablero.daniarEn(objetivo, danio);
+        
         for (Direccion direccion : Direccion.values()) {
             Posicion vecina = objetivo.desplazar(direccion);
-            tablero.empujarUnidadEn(vecina, direccion);
+            tablero.empujar(vecina, direccion);
         }
     }
 
@@ -28,6 +26,6 @@ public class Artilleria implements Arma {
         boolean enLineaRecta = (dFila == 0) != (dColumna == 0);
         int distancia = dFila + dColumna;
 
-        return enLineaRecta && distancia >= DISTANCIA_MINIMA;
+        return enLineaRecta && distancia >= distanciaMinima;
     }
 }

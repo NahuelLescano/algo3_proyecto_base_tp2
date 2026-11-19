@@ -1,5 +1,6 @@
 package edu.fiuba.algo3.modelo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Unidad {
@@ -55,11 +56,7 @@ public abstract class Unidad {
     public int getVidaActual() {
         return vidaActual;
     }
-
-    public Posicion getPosicion() {
-        return posicion;
-    }
-
+    
     void setPosicion(Posicion posicion) {
         this.posicion = posicion;
     }
@@ -75,7 +72,10 @@ public abstract class Unidad {
         
     }
 
-    protected List<EstadoUnidad> obtenerEstadoActuales(){
+    protected List<EstadoUnidad> obtenerEstadosActuales() {
+        if (this.estados == null) {
+            this.estados = new ArrayList<>();
+        }
         return this.estados;
     }
 

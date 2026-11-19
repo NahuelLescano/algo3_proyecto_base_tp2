@@ -29,4 +29,8 @@ public class CasillaInexistente implements Casilla {
     public Terreno getTerreno(){
         return null;
     }
+    @Override
+    public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio) {
+    return null;
+    }
 }

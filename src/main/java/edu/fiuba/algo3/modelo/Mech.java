@@ -26,14 +26,13 @@ public class Mech extends Unidad {
     public void reiniciarTurno() {
         this.estadoTurno = new Disponible();
     }
-
-    // Métodos públicos invocados por Disponible y Movido
+    
     public void cambiarEstadoTurno(EstadoTurnoMech nuevoEstado) {
         this.estadoTurno = nuevoEstado;
     }
 
     public MementoMech crearMemento() {
-        return new MementoMech(obtenerCasillaActual(), obtenerEstadoActuales());
+        return new MementoMech(obtenerCasillaActual(), obtenerEstadosActuales());
     }
 
     public void restaurarDesdeMemento(MementoMech memento, Tablero tablero) {
@@ -49,6 +48,6 @@ public class Mech extends Unidad {
 
     public void iniciarAtaque(Casilla objetivo, Tablero tablero) {
         Posicion objetivoDeAtaque = objetivo.getPosicion();
-        this.arma.atacar(tablero, this.getPosicion(), objetivoDeAtaque);
+        this.arma.atacar(tablero, this.posicion(), objetivoDeAtaque);
     }
 }

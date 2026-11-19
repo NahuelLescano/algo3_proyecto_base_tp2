@@ -27,4 +27,11 @@ public class CasillaOcupada implements EstadoCasilla {
     public void empujarHacia(Casilla destino){
         destino.recibirEmpuje(unidad);
     }
+
+    @Override
+    public Posicion avanzarDisparoEnLinea(CasillaDelTablero casilla, Posicion actual, Direccion direccion, Tablero tablero, int danio) {
+        tablero.daniarEn(actual, danio);
+        tablero.empujar(actual, direccion);
+        return null;
+    }
     }

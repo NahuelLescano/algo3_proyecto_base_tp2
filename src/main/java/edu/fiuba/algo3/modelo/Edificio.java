@@ -42,24 +42,12 @@ public class Edificio implements Terreno, Daniable {
         empujada.recibirDanio(1);
         this.recibirDanio(1);
     }
-    /*
-    public boolean estaDestruido() {
-        return this.vida <= 0;
-    }
-    @Override
-    public boolean esTransitable() {
-        return false;
-    }
 
     @Override
-    public boolean bloqueaDisparos() {
-        return true;
+    public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio) {
+        tablero.daniarEn(actual, danio);
+        tablero.empujar(actual, direccion);
+        return null;
     }
-
-    @Override
-    public void aplicarEfecto(Unidad unidad) {
-    }
-     */
-
 
 }

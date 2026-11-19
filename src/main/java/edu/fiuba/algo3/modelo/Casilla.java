@@ -8,4 +8,5 @@ public interface Casilla extends Destino {
     void empujarHacia(Casilla destino);
     void recibirImpacto(int danio);
     void desocupar();
+    Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio);
 }

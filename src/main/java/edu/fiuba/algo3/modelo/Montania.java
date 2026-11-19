@@ -13,4 +13,12 @@ public class Montania implements Terreno {
     public Terreno recibirImpacto(int danio){
         return this;
     }
+
+    @Override
+    public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio) {
+        tablero.daniarEn(actual, danio);
+        tablero.empujar(actual, direccion);
+        return null;
+    }
+
 }
