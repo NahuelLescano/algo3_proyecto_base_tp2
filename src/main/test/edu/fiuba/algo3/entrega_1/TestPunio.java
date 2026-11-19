@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.Mech;
-import edu.fiuba.algo3.modelo.MechFactory;
+import edu.fiuba.algo3.modelo.unidad.Mech;
+import edu.fiuba.algo3.modelo.unidad.MechFactory;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Luciernaga;
@@ -14,7 +14,7 @@ import edu.fiuba.algo3.modelo.unidad.Luciernaga;
 public class TestPunio {
 
     @Test
-    void punioCausaDosDanioYEmpujaUnaCasilla() {
+    public void punioCausaDosDanioYEmpujaUnaCasilla() {
 
         String[] mapa = {
                 "-------",

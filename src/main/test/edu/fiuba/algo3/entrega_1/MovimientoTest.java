@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.Mech;
-import edu.fiuba.algo3.modelo.MechFactory;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Luciernaga;
@@ -24,6 +22,7 @@ public class MovimientoTest {
             "--------",
             "--------"
     };
+
     private Tablero tablero;
     private Posicion posicionInicial;
 
@@ -39,11 +38,6 @@ public class MovimientoTest {
         Posicion destino2 = new Posicion(1, 3);
 
         MechDeCombate mech = new MechDeCombate(posicionInicial);
-        tablero.colocarUnidad(mech);
-
-        MechFactory fabrica = new MechFactory();
-        Mech mech = fabrica.crearMechDeCombate(origen);
-
         assertTrue(tablero.colocarUnidad(mech));
 
         boolean primerMovimiento = tablero.moverUnidad(mech, destino1);
@@ -56,11 +50,9 @@ public class MovimientoTest {
 
     @Test
     public void test02AtacarMechQueYaAtacoEnElTurnoFalla() {
-        MechDeCombate mech = new MechDeCombate(posicionInicial);
-        tablero.colocarUnidad(mech);
+        Posicion objetivo = new Posicion(1, 2);
 
-        MechFactory fabrica = new MechFactory();
-        Mech mech = fabrica.crearMechDeCombate(origen);
+        MechDeCombate mech = new MechDeCombate(posicionInicial);
         Luciernaga vek = new Luciernaga(objetivo);
 
         assertTrue(tablero.colocarUnidad(mech));

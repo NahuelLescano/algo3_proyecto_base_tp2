@@ -35,8 +35,9 @@ public abstract class Mech extends Unidad {
         }
     }
 
-    // TODO: refactor
     protected Arma getArma() {
-        return this.arma;
+        return arma;
     }
+
+    public abstract boolean iniciarAtaque(Tablero tablero, Posicion objetivo);
 }

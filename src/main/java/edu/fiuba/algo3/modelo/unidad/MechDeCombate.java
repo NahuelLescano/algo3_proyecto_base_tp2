@@ -15,7 +15,7 @@ public class MechDeCombate extends Mech {
         this(posicion, new Punio());
     }
 
-    private MechDeCombate(Posicion posicion, ArmaDireccional arma) {
+    public MechDeCombate(Posicion posicion, ArmaDireccional arma) {
         super(VIDA_INICIAL, posicion, arma);
         this.arma = arma;
     }
@@ -26,6 +26,16 @@ public class MechDeCombate extends Mech {
         }
 
         arma.atacar(tablero, getPosicion(), direccion);
+        return true;
+    }
+
+    @Override
+    public boolean iniciarAtaque(Tablero tablero, Posicion objetivo) {
+        if (!consumirAtaque()) {
+            return false;
+        }
+
+        arma.atacar(tablero, getPosicion(), objetivo);
         return true;
     }
 }

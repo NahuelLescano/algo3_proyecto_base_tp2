@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.Mech;
-import edu.fiuba.algo3.modelo.MechFactory;
+import edu.fiuba.algo3.modelo.unidad.Mech;
+import edu.fiuba.algo3.modelo.unidad.MechFactory;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Luciernaga;
@@ -14,7 +14,7 @@ import edu.fiuba.algo3.modelo.unidad.Luciernaga;
 public class TestArtilleria {
 
     @Test
-    void artilleriaAtacaPorEncimaDeObstaculos() {
+    public void artilleriaAtacaPorEncimaDeObstaculos() {
 
         String[] mapa = {
                 "-------",
@@ -42,7 +42,7 @@ public class TestArtilleria {
     }
 
     @Test
-    void artilleriaNoPuedeAtacarCasillasAdyacentes() {
+    public void artilleriaNoPuedeAtacarCasillasAdyacentes() {
 
         String[] mapa = {
                 "-------",
@@ -71,7 +71,7 @@ public class TestArtilleria {
     }
 
     @Test
-    void artilleriaDaniaElObjetivoYEmpujaALasCuatroCasillasAdyacentes() {
+    public void artilleriaDaniaElObjetivoYEmpujaALasCuatroCasillasAdyacentes() {
 
         String[] mapa = {
                 "-------",
@@ -88,10 +88,10 @@ public class TestArtilleria {
         Mech mech = fabrica.crearMechArtillero(new Posicion(3, 0));
 
         Luciernaga centro = new Luciernaga(new Posicion(3, 3));
-        Luciernaga norte  = new Luciernaga(new Posicion(2, 3));
-        Luciernaga sur    = new Luciernaga(new Posicion(4, 3));
-        Luciernaga este   = new Luciernaga(new Posicion(3, 4));
-        Luciernaga oeste  = new Luciernaga(new Posicion(3, 2));
+        Luciernaga norte = new Luciernaga(new Posicion(2, 3));
+        Luciernaga sur = new Luciernaga(new Posicion(4, 3));
+        Luciernaga este = new Luciernaga(new Posicion(3, 4));
+        Luciernaga oeste = new Luciernaga(new Posicion(3, 2));
 
         assertTrue(tablero.colocarUnidad(mech));
         assertTrue(tablero.colocarUnidad(centro));
@@ -101,10 +101,10 @@ public class TestArtilleria {
         assertTrue(tablero.colocarUnidad(oeste));
 
         int vidaCentro = centro.getVidaActual();
-        int vidaNorte  = norte.getVidaActual();
-        int vidaSur    = sur.getVidaActual();
-        int vidaEste   = este.getVidaActual();
-        int vidaOeste  = oeste.getVidaActual();
+        int vidaNorte = norte.getVidaActual();
+        int vidaSur = sur.getVidaActual();
+        int vidaEste = este.getVidaActual();
+        int vidaOeste = oeste.getVidaActual();
 
         mech.iniciarAtaque(tablero, new Posicion(3, 3));
 

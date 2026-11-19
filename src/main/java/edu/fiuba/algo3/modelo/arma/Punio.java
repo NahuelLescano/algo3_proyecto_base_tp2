@@ -4,19 +4,22 @@ import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 
-public class Punio implements Arma {
+public class Punio implements ArmaDireccional {
 
     private static final int DANIO = 2;
 
     @Override
     public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
-    
         if (!origen.esAdyacenteA(objetivo)) {
-           return;
+            return;
         }
 
         Direccion direccion = origen.direccionHacia(objetivo);
-
         tablero.resolverImpacto(objetivo, direccion, DANIO);
+    }
+
+    @Override
+    public void atacar(Tablero tablero, Posicion origen, Direccion direccion) {
+        atacar(tablero, origen, origen.desplazar(direccion));
     }
 }

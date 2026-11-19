@@ -10,7 +10,7 @@ public class MechArtilleria extends Mech {
     private Artilleria arma;
 
     public MechArtilleria(Posicion posicion) {
-        super(VIDA_INICIAL, posicion, new Artilleria());
+        this(posicion, new Artilleria());
     }
 
     public MechArtilleria(Posicion posicion, Artilleria arma) {
@@ -18,11 +18,12 @@ public class MechArtilleria extends Mech {
         this.arma = arma;
     }
 
+    @Override
     public boolean iniciarAtaque(Tablero tablero, Posicion objetivo) {
         if (!consumirAtaque()) {
             return false;
         }
-        // TODO: por que necesita `getPosicion`
+
         arma.atacar(tablero, getPosicion(), objetivo);
         return true;
     }

@@ -4,302 +4,280 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.fiuba.algo3.modelo.excepciones.IntoTheBreachExcepcion;
-import edu.fiuba.algo3.modelo.terreno.Acido;
-import edu.fiuba.algo3.modelo.terreno.Agua;
-import edu.fiuba.algo3.modelo.terreno.Edificio;
-import edu.fiuba.algo3.modelo.terreno.Montania;
-import edu.fiuba.algo3.modelo.terreno.Suelo;
 import edu.fiuba.algo3.modelo.terreno.Terreno;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
 
 public class Tablero {
+    private final List<Casilla> casillas;
+    private final int filas;
+    private final int columnas;
 
-    private List<Casilla> casillas;
+    public Tablero(String[] mapa) {
+        this(mapa, new ParserTablero());
+    }
 
     public Tablero(String[] mapa, ParserTablero parser) {
-        if (mapa == null || mapa.length == 0) {
+        if (mapa == null || mapa.length == 0 || mapa[0] == null || mapa[0].isEmpty()) {
             throw new IllegalArgumentException("El mapa no puede ser nulo o vacío");
         }
+
+        this.filas = mapa.length;
+        this.columnas = mapa[0].length();
         this.casillas = new ArrayList<>();
-        for (int fila = 0; fila < mapa.length; fila++) {
+
+        for (int fila = 0; fila < filas; fila++) {
             String linea = mapa[fila];
-            for (int columna = 0; columna < linea.length(); columna++) {
+
+            if (linea.length() != columnas) {
+                throw new IllegalArgumentException("El mapa debe ser rectangular");
+            }
+
+            for (int columna = 0; columna < columnas; columna++) {
                 Terreno terreno = parser.convertirCaracterATerreno(linea.charAt(columna));
-                casillas.add(new Casilla(terreno, new Posicion(fila, columna)));
+                Casilla casilla = new Casilla(terreno, new Posicion(fila, columna));
+                this.casillas.add(casilla);
             }
         }
     }
 
-    public Casilla buscarCasilla(Posicion p) {
-        if (p.getFila() < 0 || p.getFila() >= 8 || p.getColumna() >= 8 || p.getColumna() < 0)
-            throw new IllegalArgumentException("Casilla inexistente");
-        int indice = p.getFila() * 8 + p.getColumna();
-        return casillas.get(indice);
+    public Casilla buscarCasilla(Posicion posicion) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+
+        if (casilla == null) {
+            throw new IllegalArgumentException(
+                    "Casilla inexistente: fila " + posicion.getFila() +
+                            ", columna " + posicion.getColumna());
+        }
+
+        return casilla;
     }
 
-    public void colocarUnidad(Unidad unidad, Posicion posicion) {
-        Casilla casilla = buscarCasilla(posicion);
+    private Casilla buscarCasillaOFuera(Posicion posicion) {
+        if (!estaDentroDelTablero(posicion)) {
+            return null;
+        }
+
+        return casillas.get(posicion.getFila() * columnas + posicion.getColumna());
+    }
+
+    public boolean estaDentroDelTablero(Posicion posicion) {
+        return posicion != null
+                && posicion.getFila() >= 0
+                && posicion.getFila() < filas
+                && posicion.getColumna() >= 0
+                && posicion.getColumna() < columnas;
+    }
+
+    public int getFilas() {
+        return filas;
+    }
+
+    public int getColumnas() {
+        return columnas;
+    }
+
+    public Terreno obtenerTerrenoEn(Posicion posicion) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+        return casilla == null ? null : casilla.getTerreno();
+    }
+
+    public boolean hayUnidad(Posicion posicion) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+        return casilla != null && casilla.estaOcupada();
+    }
+
+    public Unidad obtenerUnidad(Posicion posicion) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+        return casilla == null ? null : casilla.getUnidad();
+    }
+
+    public boolean bloqueaDisparos(Posicion posicion) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+        return casilla != null && casilla.getTerreno().bloqueaDisparos();
+    }
+
+    public boolean detieneDisparoEn(Posicion posicion) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+
+        return casilla != null
+                && (casilla.estaOcupada() || casilla.getTerreno().bloqueaDisparos());
+    }
+
+    // ==================================================
+    // COLOCACIÓN Y MOVIMIENTO
+    // ==================================================
+
+    public boolean colocarUnidad(Unidad unidad) {
+        if (unidad == null || unidad.getPosicion() == null) {
+            return false;
+        }
+
+        return colocarUnidad(unidad, unidad.getPosicion());
+    }
+
+    public boolean colocarUnidad(Unidad unidad, Posicion posicion) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+
+        if (casilla == null || casilla.estaOcupada()) {
+            return false;
+        }
+
+        unidad.actualizarPosicion(posicion);
         casilla.ocupar(unidad);
+        return true;
     }
 
-    public void moverUnidad(Unidad unidad, Posicion posicion) {
-        Casilla casilla = buscarCasilla(posicion);
-        casilla.recibirUnidad(unidad);
+    public boolean moverUnidad(Unidad unidad, Posicion destino) {
+        try {
+            unidad.mover(this, destino);
+            return true;
+        } catch (IntoTheBreachExcepcion e) {
+            return false;
+        }
+    }
+
+    public boolean desplazarUnidad(Unidad unidad, Posicion destino) {
+        return this.trasladar(unidad, destino, true);
+    }
+
+    public boolean revertirDesplazamiento(Unidad unidad, Posicion destino) {
+        return this.trasladar(unidad, destino, false);
+    }
+
+    private boolean trasladar(Unidad unidad, Posicion destino, boolean aplicarEfectoDelTerreno) {
+        Casilla origen = buscarCasillaOFuera(unidad.getPosicion());
+        Casilla llegada = buscarCasillaOFuera(destino);
+
+        if (origen == null || llegada == null) {
+            return false;
+        }
+
+        if (origen.getUnidad() != unidad) {
+            return false;
+        }
+
+        if (llegada.estaOcupada() || !llegada.getTerreno().esTransitable()) {
+            return false;
+        }
+
+        origen.desocupar();
+        llegada.ocupar(unidad);
+        unidad.actualizarPosicion(destino);
+
+        if (aplicarEfectoDelTerreno) {
+            llegada.getTerreno().aplicarEfecto(unidad);
+        }
+
+        retirarUnidadSiMurio(unidad);
+        return true;
+    }
+
+    // ==================================================
+    // DAÑO, IMPACTOS Y EMPUJES
+    // ==================================================
+
+    public void resolverImpacto(Posicion posicion, Direccion direccion, int danio) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+
+        if (casilla == null) {
+            return;
+        }
+
+        if (casilla.estaOcupada()) {
+            Unidad unidad = casilla.getUnidad();
+
+            aplicarDanioAUnidad(unidad, danio);
+
+            if (!unidad.estaViva()) {
+                return;
+            }
+
+            empujarUnidad(unidad, direccion);
+            return;
+        }
+
+        casilla.getTerreno().recibirDanio(danio);
+    }
+
+    public void daniarEn(Posicion posicion, int danio) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+
+        if (casilla == null) {
+            return;
+        }
+
+        if (casilla.estaOcupada()) {
+            aplicarDanioAUnidad(casilla.getUnidad(), danio);
+        } else {
+            casilla.getTerreno().recibirDanio(danio);
+        }
     }
 
     public void empujar(Unidad unidad, Direccion direccion) {
-        Posicion destino = unidad.getPosicion().desplazar(direccion);
-        buscarCasilla(destino).recibirEmpuje(unidad);
+        empujarUnidad(unidad, direccion);
     }
-    /*
-     * private List<Casilla> casillas;
-     *
-     * // ==================================================
-     * // CONSTRUCTOR
-     * // ==================================================
-     *
-     * public Tablero(String[] mapa) {
-     * if (mapa == null || mapa.length == 0) {
-     * throw new IllegalArgumentException("El mapa no puede ser nulo o vacío");
-     * }
-     *
-     * this.casillas = new ArrayList<>();
-     *
-     * for (int fila = 0; fila < mapa.length; fila++) {
-     * String linea = mapa[fila];
-     *
-     * for (int columna = 0; columna < linea.length(); columna++) {
-     * char caracter = linea.charAt(columna);
-     *
-     * Posicion posicion = new Posicion(fila, columna);
-     * Terreno terreno = convertirCaracterATerreno(caracter);
-     * Casilla casilla = new Casilla(terreno, posicion);
-     * this.casillas.add(casilla);
-     * }
-     * }
-     *
-     * }
-     *
-     * private Terreno convertirCaracterATerreno(char caracter) {
-     * switch (caracter) {
-     * case '-':
-     * return new Suelo();
-     * case 'A':
-     * return new Agua();
-     * case 'M':
-     * return new Montania();
-     * case 'X':
-     * return new Acido();
-     * case 'E':
-     * return new Edificio(1);
-     * default:
-     * throw new IllegalArgumentException("Caracter de terreno inválido: " +
-     * caracter);
-     * }
-     * }
-     *
-     * // ==================================================
-     * // CONSULTAS SOBRE EL TABLERO
-     * // ==================================================
-     *
-     * public int getFilas() {
-     * return casillas.stream().mapToInt(c ->
-     * c.getPosicion().getFila()).max().orElse(-1) + 1;
-     * }
-     *
-     * public int getColumnas() {
-     * return casillas.stream().mapToInt(c ->
-     * c.getPosicion().getColumna()).max().orElse(-1) + 1;
-     * }
-     *
-     * public Terreno obtenerTerrenoEn(Posicion posicion) {
-     * Casilla casilla = buscarCasilla(posicion);
-     *
-     * if (casilla == null) {
-     * return null;
-     * }
-     *
-     * return casilla.getTerreno();
-     * } // Se utiliza en TestTablero
-     *
-     * public boolean detieneDisparoEn(Posicion posicion) {
-     * Casilla casilla = buscarCasilla(posicion);
-     *
-     * return casilla != null && casilla.detieneDisparo(); // Delega la consulta a
-     * Casilla
-     * } // Un método que usa Cañon
-     *
-     * public boolean estaDentroDelTablero(Posicion posicion) {
-     * return buscarCasilla(posicion) != null;
-     * } // Lo usa Cañon para comprobación de límites
-     *
-     *
-     * // ==================================================
-     * // BÚSQUEDA DE ELEMENTOS
-     * // ==================================================
-     *
-     * private Casilla buscarCasilla(Posicion posicion) {
-     * for (Casilla casilla : casillas) {
-     * if (casilla.estaEnPosicion(posicion)) {
-     * return casilla;
-     * }
-     * }
-     * return null;
-     * } // Fundamental
-     *
-     * // ==================================================
-     * // COLOCACIÓN Y DESPLAZAMIENTO DE UNIDADES
-     * // ==================================================
-     *
-     * public boolean colocarUnidad(Unidad unidad) {
-     * Casilla casilla = buscarCasilla(unidad.getPosicion());
-     *
-     * if (casilla == null) {
-     * return false;
-     * }
-     *
-     * return casilla.ocupar(unidad);
-     * } // Tablero se encarga de encontrar dónde colocarla, y Casilla se encarga de
-     * determinar si puede recibirla
-     *
-     * // EL siguiente método ya involucra dos casillas
-     * public boolean desplazarUnidad(Unidad unidad, Posicion destino) {
-     * Casilla origen = buscarCasilla(unidad.getPosicion());
-     * Casilla llegada = buscarCasilla(destino);
-     *
-     * if (origen == null || llegada == null) {
-     * return false;
-     * }
-     *
-     * if (!origen.estaOcupadaPor(unidad)) {
-     * return false;
-     * }
-     *
-     * if (!llegada.puedeRecibirUnidad()) {
-     * return false;
-     * }
-     *
-     * origen.desocupar();
-     *
-     * if (!llegada.ocupar(unidad)) {
-     * origen.ocupar(unidad);
-     * return false;
-     * }
-     *
-     * unidad.setPosicion(destino);
-     *
-     * llegada.aplicarEfectoDelTerreno();
-     *
-     * return true;
-     * } // Revisar
-     *
-     * public boolean moverUnidad(Unidad unidad, Posicion destino) {
-     *
-     * if (!unidad.puedeMoverse()) {
-     * return false;
-     * }
-     *
-     * boolean seMovio = desplazarUnidad(unidad, destino);
-     *
-     * if (seMovio) {
-     * unidad.registrarMovimiento();
-     * }
-     *
-     * return seMovio;
-     * }
-     *
-     * // ==================================================
-     * // DAÑO, IMPACTOS Y EMPUJES
-     * // ==================================================
-     *
-     * public void resolverImpacto(Posicion posicion, Direccion direccion, int
-     * danio) {
-     * Casilla casilla = buscarCasilla(posicion);
-     *
-     * if (casilla == null) {
-     * return;
-     * }
-     *
-     * Unidad sobreviviente = casilla.aplicarDanio(danio);
-     *
-     * if (sobreviviente != null) {
-     * empujarUnidad(sobreviviente, direccion);
-     * }
-     * } // resolverImpacto encuentra la casilla alcanzada, aplica el daño,
-     * determina si una unidad sobrevivió y si corresponde la empuja hacia una
-     * dirección
-     *
-     * public void daniarEn(Posicion posicion, int danio) {
-     * Casilla casilla = buscarCasilla(posicion);
-     *
-     * if (casilla == null) {
-     * return;
-     * }
-     * casilla.aplicarDanio(danio);
-     * } // La diferencia con resolverImpacto() es que no intenta empujar a ninguna
-     * unidad.
-     *
-     * public void empujarUnidad(Unidad unidad, Direccion direccion) {
-     *
-     * if (!unidad.estaViva()) {
-     * return;
-     * }
-     *
-     * Casilla origen = buscarCasilla(unidad.getPosicion());
-     *
-     * if (origen == null || !origen.estaOcupadaPor(unidad)) {
-     * return;
-     * }
-     *
-     * // Calculo el destino
-     *
-     * Posicion posicionActual = unidad.getPosicion();
-     *
-     * int filaDestino = posicionActual.getFila()
-     * + direccion.getDesplazamientoEnFila();
-     *
-     * int columnaDestino = posicionActual.getColumna()
-     * + direccion.getDesplazamientoEnColumna();
-     *
-     * Posicion destino = new Posicion(filaDestino, columnaDestino);
-     *
-     * // Obtengo la casilla de destino
-     *
-     * Casilla llegada = buscarCasilla(destino);
-     *
-     * if (llegada == null) {
-     * return;
-     * }
-     *
-     * // Veo si el destino está ocupado por otra unidad, en tal caso el disparo
-     * llega a esta ella
-     * if (llegada.estaOcupada()) {
-     * origen.aplicarDanio(1);
-     * llegada.aplicarDanio(1);
-     * return;
-     * }
-     *
-     * // Si llego hasta acá es porque la casilla está dentro del tablero y no está
-     * ocupada, compruebo si el terreno permite el movimiento
-     * if (llegada.puedeRecibirUnidad()) {
-     * desplazarUnidad(unidad, destino);
-     * return;
-     * }
-     *
-     * origen.aplicarDanio(1);
-     * llegada.aplicarDanio(1);
-     * }
-     *
-     * public void empujarUnidadEn(Posicion posicion, Direccion direccion) {
-     * Casilla casilla = buscarCasilla(posicion);
-     *
-     * if (casilla == null || !casilla.estaOcupada()) {
-     * return;
-     * }
-     *
-     * empujarUnidad(casilla.getUnidad(), direccion);
-     * } // Este método busca qué unidad hay en esa posición y la empuja, pasandole
-     * como parámetro a empujarUnidad
-     *
-     */
+
+    public void empujarUnidad(Unidad unidad, Direccion direccion) {
+        if (unidad == null || !unidad.estaViva()) {
+            retirarUnidadSiMurio(unidad);
+            return;
+        }
+
+        Casilla origen = buscarCasillaOFuera(unidad.getPosicion());
+
+        if (origen == null || origen.getUnidad() != unidad) {
+            return;
+        }
+
+        Posicion destino = unidad.getPosicion().desplazar(direccion);
+
+        if (!estaDentroDelTablero(destino)) {
+            return;
+        }
+
+        Casilla llegada = buscarCasillaOFuera(destino);
+
+        if (llegada.estaOcupada()) {
+            Unidad otraUnidad = llegada.getUnidad();
+
+            aplicarDanioAUnidad(unidad, 1);
+            aplicarDanioAUnidad(otraUnidad, 1);
+            return;
+        }
+
+        if (llegada.getTerreno().esTransitable()) {
+            desplazarUnidad(unidad, destino);
+            return;
+        }
+
+        aplicarDanioAUnidad(unidad, 1);
+        llegada.getTerreno().recibirDanio(1);
+    }
+
+    public void empujarUnidadEn(Posicion posicion, Direccion direccion) {
+        Casilla casilla = buscarCasillaOFuera(posicion);
+
+        if (casilla == null || !casilla.estaOcupada()) {
+            return;
+        }
+
+        empujarUnidad(casilla.getUnidad(), direccion);
+    }
+
+    private void retirarUnidadSiMurio(Unidad unidad) {
+        if (unidad == null || unidad.estaViva()) {
+            return;
+        }
+
+        Casilla casilla = buscarCasillaOFuera(unidad.getPosicion());
+
+        if (casilla != null && casilla.getUnidad() == unidad) {
+            casilla.desocupar();
+        }
+    }
+
+    private void aplicarDanioAUnidad(Unidad unidad, int danio) {
+        unidad.recibirDanio(danio);
+        retirarUnidadSiMurio(unidad);
+    }
 }
