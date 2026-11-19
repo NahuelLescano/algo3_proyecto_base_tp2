@@ -54,8 +54,8 @@ public class Posicion {
 
         if (dFila == 0 && dColumna > 0) return Direccion.ESTE;
         if (dFila == 0 && dColumna < 0) return Direccion.OESTE;
-        if (dColumna == 0 && dFila > 0) return Direccion.NORTE;
-        if (dColumna == 0 && dFila < 0) return Direccion.SUR;
+        if (dColumna == 0 && dFila < 0) return Direccion.NORTE;
+        if (dColumna == 0 && dFila > 0) return Direccion.SUR;
 
         throw new IllegalArgumentException("Las posiciones no están alineadas");
     }

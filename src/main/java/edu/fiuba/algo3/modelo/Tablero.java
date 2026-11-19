@@ -154,6 +154,16 @@ public class Tablero {
         casilla.aplicarDanio(danio);
     }
 
+    public Unidad obtenerUnidadEn(Posicion posicion) {
+        Casilla casilla = buscarCasilla(posicion);
+
+        if (casilla == null) {
+            return null;
+        }
+
+        return casilla.getUnidad();
+    }
+
     public void empujarUnidad(Unidad unidad, Direccion direccion) {
 
         if (!unidad.estaViva()) {
