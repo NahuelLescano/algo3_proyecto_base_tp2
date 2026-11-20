@@ -6,11 +6,12 @@ import edu.fiuba.algo3.modelo.casilla.Casilla;
 
 public class Mech extends Unidad {
     private Arma arma;
-    private EstadoTurnoMech estadoTurno = new Disponible();
+    private EstadoTurnoMech estadoTurno;
 
     public Mech(int vida, Arma arma, Desplazamiento desplazamiento){
         super(vida);
         this.arma = arma;
+        this.estadoTurno = new Disponible();
         asignarDesplazamiento(desplazamiento);
     }
 

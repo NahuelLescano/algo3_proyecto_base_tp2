@@ -40,6 +40,7 @@ public class CanionTest {
         int vidaInicialSegunda = segundaUnidad.getVidaActual();
 
         mech.iniciarAtaque(tablero.buscarCasilla(new Posicion(2, 6)), tablero);
+        //  evitar estos parametros
 
         assertEquals(vidaInicialPrimera - 1, primeraUnidad.getVidaActual());
         assertEquals(new Posicion(2, 3), primeraUnidad.posicion());
