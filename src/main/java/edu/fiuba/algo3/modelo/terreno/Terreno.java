@@ -1,10 +1,14 @@
 package edu.fiuba.algo3.modelo.terreno;
 
+import edu.fiuba.algo3.modelo.casilla.Destino;
+import edu.fiuba.algo3.modelo.tablero.Direccion;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
 
-public abstract class Terreno {
-    public abstract boolean esTransitable();
-    public abstract boolean bloqueaDisparos();
-    public abstract void aplicarEfecto(Unidad unidad);
-    public abstract void recibirDanio(int danio);
+public interface Terreno {
+    void recibir(Unidad unidad, Destino casilla);
+    Terreno recibirImpacto(int danio);
+    void recibirEmpuje(Unidad empujada, Destino destino);
+    Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio);
 }

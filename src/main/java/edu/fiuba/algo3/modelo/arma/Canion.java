@@ -1,38 +1,27 @@
 package edu.fiuba.algo3.modelo.arma;
 
-import edu.fiuba.algo3.modelo.tablero.Tablero;
-import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.casilla.Casilla;
+import edu.fiuba.algo3.modelo.excepciones.AtaqueInvalidoException;
 import edu.fiuba.algo3.modelo.tablero.Direccion;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
 
-// La responsabilidad de Canion es encontrar el primer elemento alcanzado por el disparo
-public class Canion implements ArmaDireccional {
+public class Canion implements Arma {
 
     private static final int DANIO = 1;
 
-    // TODO: refactor
     @Override
-    public void atacar(Tablero tablero, Posicion origen, Direccion direccion) {
+    public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
+        if (origen.equals(objetivo)) {
+            throw new AtaqueInvalidoException("Ataque invalido");
+        }
 
-        int fila = origen.getFila() + direccion.getDesplazamientoEnFila();
-        int columna = origen.getColumna() + direccion.getDesplazamientoEnColumna();
+        Direccion direccion = origen.direccionHacia(objetivo);
+        Posicion actual = origen.desplazar(direccion);
 
-        while (tablero.estaDentroDelTablero(new Posicion(fila, columna))) {
-
-            Posicion posicionActual = new Posicion(fila, columna);
-
-            // Preguntamos si en la casilla actual encontramos algo que detenga el disparo;
-            // o hay una unidad o el terreno detiene el disparo. Delegamos a tablero la
-            // resolución del impacto
-            if (tablero.hayUnidad(posicionActual) ||
-                    tablero.bloqueaDisparos(posicionActual)) {
-
-                tablero.resolverImpacto(posicionActual, direccion, DANIO);
-                return;
-            }
-
-            // Si la casilla actual no tiene obstáculos se avanza hacia la siguiente
-            fila += direccion.getDesplazamientoEnFila();
-            columna += direccion.getDesplazamientoEnColumna();
+        while (actual != null) {
+            Casilla casilla = tablero.buscarCasilla(actual);
+            actual = casilla.avanzarDisparoEnLinea(actual, direccion, tablero, DANIO);
         }
     }
 }

@@ -1,4 +1,4 @@
-package edu.fiuba.algo3.modelo;
+package edu.fiuba.algo3.modelo.mensaje;
 
 import java.util.Objects;
 
@@ -16,7 +16,8 @@ public class Localize {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Localize localize = (Localize) o;
-        return Objects.equals(esContent, localize.esContent) && Objects.equals(usContent, localize.usContent);
+        return Objects.equals(esContent, localize.esContent)
+                && Objects.equals(usContent, localize.usContent);
     }
 
     @Override
@@ -31,5 +32,4 @@ public class Localize {
 
         return esContent;
     }
-
 }

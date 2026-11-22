@@ -1,7 +1,6 @@
 package edu.fiuba.algo3.modelo.unidad;
 
 import edu.fiuba.algo3.modelo.tablero.Tablero;
-import edu.fiuba.algo3.modelo.arma.ArmaDireccional;
 import edu.fiuba.algo3.modelo.arma.Punio;
 import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;

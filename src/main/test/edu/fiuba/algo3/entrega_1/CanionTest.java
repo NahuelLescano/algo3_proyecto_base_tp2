@@ -1,89 +1,84 @@
 package edu.fiuba.algo3.entrega_1;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import edu.fiuba.algo3.modelo.tablero.ParserTablero;
+import edu.fiuba.algo3.modelo.tablero.Posicion;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.Mech;
+import edu.fiuba.algo3.modelo.unidad.MechFactory;
+import edu.fiuba.algo3.modelo.unidad.Vek;
+import edu.fiuba.algo3.modelo.unidad.VekFactory;
 
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.arma.Canion;
-import edu.fiuba.algo3.modelo.tablero.Direccion;
-import edu.fiuba.algo3.modelo.tablero.Posicion;
-import edu.fiuba.algo3.modelo.tablero.Tablero;
-import edu.fiuba.algo3.modelo.unidad.Luciernaga;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CanionTest {
 
     @Test
     void canionImpactaPrimeraUnidadYNoAlcanzaALaSegunda() {
-
         String[] mapa = {
-                "-------",
-                "-------",
-                "-------",
-                "-------",
-                "-------"
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------"
         };
 
-        Tablero tablero = new Tablero(mapa);
-        Canion canon = new Canion();
+        Tablero tablero = new Tablero(mapa, new ParserTablero());
+        MechFactory mechFactory = new MechFactory();
+        VekFactory vekFactory = new VekFactory();
 
-        // Ubico dos unidades en la misma línea de disparo
-        Luciernaga primeraUnidad = new Luciernaga(new Posicion(2, 2));
-        Luciernaga segundaUnidad = new Luciernaga(new Posicion(2, 5));
+        Mech mech = mechFactory.crearMechCanon();
+        Vek primeraUnidad = vekFactory.crearLuciernaga();
+        Vek segundaUnidad = vekFactory.crearLuciernaga();
 
-        assertTrue(tablero.colocarUnidad(primeraUnidad));
-        assertTrue(tablero.colocarUnidad(segundaUnidad));
+        tablero.colocarUnidad(mech, new Posicion(2, 0));
+        tablero.colocarUnidad(primeraUnidad, new Posicion(2, 2));
+        tablero.colocarUnidad(segundaUnidad, new Posicion(2, 5));
 
         int vidaInicialPrimera = primeraUnidad.getVidaActual();
         int vidaInicialSegunda = segundaUnidad.getVidaActual();
 
-        // El Cañón dispara hacia el este
-        canon.atacar(tablero, new Posicion(2, 0), Direccion.ESTE);
+        mech.iniciarAtaque(tablero.buscarCasilla(new Posicion(2, 6)), tablero);
 
-        // La primera unidad recibe 1 de daño
         assertEquals(vidaInicialPrimera - 1, primeraUnidad.getVidaActual());
+        assertEquals(new Posicion(2, 3), primeraUnidad.posicion());
 
-        // La primera unidad es empujada una casilla hacia el este
-        assertEquals(new Posicion(2, 3), primeraUnidad.getPosicion());
-
-        // La segunda unidad no recibe daño
         assertEquals(vidaInicialSegunda, segundaUnidad.getVidaActual());
-
-        // La segunda unidad permanece en su posición
-        assertEquals(new Posicion(2, 5), segundaUnidad.getPosicion());
+        assertEquals(new Posicion(2, 5), segundaUnidad.posicion());
     }
 
     @Test
     void canionSeDetieneAlEncontrarUnaMontania() {
-
         String[] mapa = {
-                "-------",
-                "-------",
-                "--M----",
-                "-------",
-                "-------"
+            "--------",
+            "--------",
+            "--M-----",
+            "--------",
+            "--------",
+            "--------",
+            "--------",
+            "--------"
         };
 
-        Tablero tablero = new Tablero(mapa);
-        Canion canon = new Canion();
+        Tablero tablero = new Tablero(mapa, new ParserTablero());
+        MechFactory mechFactory = new MechFactory();
+        VekFactory vekFactory = new VekFactory();
 
-        // Ubico una unidad detrás de la montaña
-        Luciernaga unidad = new Luciernaga(new Posicion(2, 4));
+        Mech mech = mechFactory.crearMechCanon();
+        Vek unidad = vekFactory.crearLuciernaga();
 
-        assertTrue(tablero.colocarUnidad(unidad));
+        tablero.colocarUnidad(mech, new Posicion(2, 0));
+        tablero.colocarUnidad(unidad, new Posicion(2, 4));
 
         int vidaInicial = unidad.getVidaActual();
 
-        // El cañón dispara hacia el este
-        canon.atacar(tablero, new Posicion(2, 0), Direccion.ESTE);
+        mech.iniciarAtaque(tablero.buscarCasilla(new Posicion(2, 6)), tablero);
 
-        // La montaña bloquea los disparos
-        assertTrue(tablero.bloqueaDisparos(new Posicion(2, 2)));
-
-        // La unidad detrás de la montaña no recibe daño
         assertEquals(vidaInicial, unidad.getVidaActual());
-
-        // La unidad permanece en su posición
-        assertEquals(new Posicion(2, 4), unidad.getPosicion());
+        assertEquals(new Posicion(2, 4), unidad.posicion());
     }
 }

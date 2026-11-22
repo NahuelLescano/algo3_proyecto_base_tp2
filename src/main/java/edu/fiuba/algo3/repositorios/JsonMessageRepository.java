@@ -15,9 +15,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import edu.fiuba.algo3.modelo.Message;
-import edu.fiuba.algo3.modelo.MessageRepository;
-import edu.fiuba.algo3.modelo.MessagesFileInvalid;
+import edu.fiuba.algo3.modelo.mensaje.Message;
+import edu.fiuba.algo3.modelo.mensaje.MessageRepository;
+import edu.fiuba.algo3.modelo.mensaje.MessagesFileInvalid;
+
 
 public class JsonMessageRepository implements MessageRepository {
     public static final String MESSAGES_KEY = "messages";

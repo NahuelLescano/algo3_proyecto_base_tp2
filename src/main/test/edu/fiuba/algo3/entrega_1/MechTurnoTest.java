@@ -1,19 +1,28 @@
 package edu.fiuba.algo3.entrega_1;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.tablero.Tablero;
-import edu.fiuba.algo3.modelo.tablero.Direccion;
+import edu.fiuba.algo3.modelo.excepciones.AccionInvalidaException;
+import edu.fiuba.algo3.modelo.excepciones.AtaqueInvalidoException;
+import edu.fiuba.algo3.modelo.excepciones.MovimientoInvalidoException;
+import edu.fiuba.algo3.modelo.tablero.ParserTablero;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
-import edu.fiuba.algo3.modelo.unidad.MechDeCombate;
+import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.Mech;
+import edu.fiuba.algo3.modelo.unidad.MechFactory;
+import edu.fiuba.algo3.modelo.unidad.Vek;
+import edu.fiuba.algo3.modelo.unidad.VekFactory;
+import edu.fiuba.algo3.modelo.unidad.turno.ControladorDeshacer;
+
 
 public class MechTurnoTest {
 
-    private Tablero crearTableroPrueba() {
-        String[] mapaVacio = {
+    private static final Posicion INICIAL = new Posicion(2, 2);
+    private static final String[] MAPA = {
             "--------",
             "--------",
             "--------",
@@ -22,55 +31,88 @@ public class MechTurnoTest {
             "--------",
             "--------",
             "--------"
-        };
-        return new Tablero(mapaVacio);
+    };
+
+    private Tablero tablero;
+    private ControladorDeshacer controlador;
+    private Mech mech;
+
+    @BeforeEach
+    public void setUp() {
+        tablero = new Tablero(MAPA, new ParserTablero());
+        controlador = new ControladorDeshacer();
+        mech = new MechFactory().crearMechDeCombate();
+        tablero.colocarUnidad(mech, INICIAL);
     }
 
     @Test
-    public void test01MoverMechQueYaSeMovioEnElTurnoFalla() {
-        Tablero tablero = crearTableroPrueba();
-        Posicion origen = new Posicion(1, 1);
-        Posicion destino = new Posicion(1, 2);
+    public void test01MechNoPuedeMoverseDosVecesEnElMismoTurno() {
+        Posicion intermedio = new Posicion(2, 3);
+        Posicion destinoFinal = new Posicion(2, 4);
 
-        MechDeCombate mech = new MechDeCombate(origen);
-        tablero.colocarUnidad(mech);
+        mech.mover(intermedio, tablero, controlador);
+        assertThrows(MovimientoInvalidoException.class,
+                () -> mech.mover(destinoFinal, tablero, controlador));
 
-        // El movimiento se ejecuta a través del Tablero
-        boolean primerMovimiento = tablero.moverUnidad(mech, destino);
-        assertTrue(primerMovimiento, "El primer movimiento debería ser exitoso");
+        assertEquals(intermedio, mech.posicion());
     }
 
     @Test
-    public void test02AtacarMechQueYaAtacoEnElTurnoFalla() {
-        Tablero tablero = crearTableroPrueba();
-        Posicion origen = new Posicion(1, 1);
+    public void test02MechNoPuedeAtacarDosVecesEnElMismoTurno() {
+        Posicion objetivo = new Posicion(2, 3);
+        Vek vek = new VekFactory().crearLuciernaga();
+        tablero.colocarUnidad(vek, objetivo);
 
-        MechDeCombate mech = new MechDeCombate(origen);
-        tablero.colocarUnidad(mech);
-
-        // Primer ataque utilizando la firma real (tablero, direccion)
-        mech.iniciarAtaque(tablero, Direccion.ESTE);
-
-        // Si tu lógica de ataques múltiples en el turno retorna boolean, puedes validarlo así:
-        // boolean segundoAtaque = mech.iniciarAtaque(tablero, Direccion.ESTE);
-        // assertFalse(segundoAtaque, "No debería poder atacar dos veces en el mismo turno");
+        mech.atacar(objetivo, tablero, controlador);
+        assertThrows(AtaqueInvalidoException.class,
+                () -> mech.atacar(objetivo, tablero, controlador));
     }
 
     @Test
-    public void test03DeshacerMovimientoMechQueSoloSeMovioVuelveAPosicionAnterior() {
-        Tablero tablero = crearTableroPrueba();
-        Posicion inicial = new Posicion(2, 2);
+    public void test03SePuedeDeshacerElMovimientoSiElMechTodaviaNoAtaco() {
         Posicion destino = new Posicion(2, 4);
 
-        MechDeCombate mech = new MechDeCombate(inicial);
-        tablero.colocarUnidad(mech);
+        mech.mover(destino, tablero, controlador);
+        mech.deshacerMovimiento(tablero);
 
-        tablero.moverUnidad(mech, destino);
+        assertEquals(INICIAL, mech.posicion());
+    }
 
-        // Nota: Si 'deshacerMovimiento' va a estar en el Tablero o en la Unidad,
-        // asegúrate de llamarlo desde donde lo hayan implementado (ej: tablero.deshacerMovimiento(mech))
-        // mech.deshacerMovimiento(tablero);
+    @Test
+    public void test04NoSePuedeDeshacerElMovimientoDespuesDeAtacar() {
+        Posicion destino = new Posicion(2, 3);
 
-        // assertEquals(inicial, mech.getPosicion());
+        mech.mover(destino, tablero, controlador);
+        mech.atacar(new Posicion(2, 4), tablero, controlador);
+
+        assertThrows(AccionInvalidaException.class,
+                () -> mech.deshacerMovimiento(tablero));
+
+        assertEquals(destino, mech.posicion());
+    }
+
+    @Test
+    public void test05NoSePuedeDeshacerElMovimientoMasDeUnaVezEnElMismoTurno() {
+        Posicion destino = new Posicion(2, 4);
+
+        mech.mover(destino, tablero, controlador);
+        mech.deshacerMovimiento(tablero);
+
+        assertThrows(AccionInvalidaException.class,
+                () -> mech.deshacerMovimiento(tablero));
+
+        assertEquals(INICIAL, mech.posicion());
+    }
+
+    @Test
+    public void test06DespuesDeDeshacerElMovimientoElMechPuedeVolveAMoverse() {
+        Posicion destino = new Posicion(2, 4);
+        Posicion nuevoDestino = new Posicion(2, 3);
+
+        mech.mover(destino, tablero, controlador);
+        mech.deshacerMovimiento(tablero);
+
+        mech.mover(nuevoDestino, tablero, controlador);
+        assertEquals(nuevoDestino, mech.posicion());
     }
 }
