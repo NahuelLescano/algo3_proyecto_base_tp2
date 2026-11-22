@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import edu.fiuba.algo3.modelo.Message;
+import edu.fiuba.algo3.modelo.mensaje.Message;
 
 public class JsonTest {
 

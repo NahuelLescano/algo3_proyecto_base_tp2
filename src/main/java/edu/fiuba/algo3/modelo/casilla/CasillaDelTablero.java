@@ -18,6 +18,7 @@ public class CasillaDelTablero implements Casilla {
     public CasillaDelTablero(Terreno terreno, Posicion posicion) {
         this.terreno = terreno;
         this.posicion = posicion;
+        this.estado = new CasillaVacia();
     }
 
     public Terreno getTerreno() {
