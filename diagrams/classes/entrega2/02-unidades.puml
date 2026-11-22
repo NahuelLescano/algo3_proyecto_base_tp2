@@ -1,0 +1,120 @@
+@startuml
+!include style.iuml
+title Unidades, desplazamiento y armas
+
+left to right direction
+
+package "modelo.unidad" {
+  abstract class Unidad {
+    # vidaActual: int
+    # casilla: Casilla
+    + ubicarseEn(nueva: Casilla)
+    + morir()
+    + recibirDanio(danio: int)
+    + posicion(): Posicion
+    + getVidaActual(): int
+    + sufrir(efecto: Efecto)
+  }
+
+  class Mech {
+    - arma: Arma
+    - estadoTurno: EstadoTurnoMech
+    + mover(destino: Posicion, tablero: Tablero, controlador: ControladorDeshacer)
+    + atacar(objetivo: Posicion, tablero: Tablero, controlador: ControladorDeshacer)
+    + deshacerMovimiento(tablero: Tablero)
+    + reiniciarTurno()
+    + crearMemento(): MementoMech
+    + restaurarDesdeMemento(memento: MementoMech, tablero: Tablero)
+    + ejecutarDesplazamiento(casilla: Casilla, tablero: Tablero)
+    + iniciarAtaque(objetivo: Casilla, tablero: Tablero)
+  }
+
+  class Vek {
+    - movimiento: int
+    - ataque: AtaqueVek
+    + getMovimiento(): int
+  }
+
+  interface Desplazamiento {
+    + afectar(efecto: Efecto, unidad: Unidad)
+  }
+
+  class Terrestre
+  class Volador
+
+  class MechFactory {
+    + crearMechDeCombate(): Mech
+    + crearMechCanon(): Mech
+    + crearMechArtillero(): Mech
+  }
+
+  class VekFactory {
+    + crearSaltador(): Vek
+    + crearLuciernaga(): Vek
+    + crearAvispon(): Vek
+  }
+}
+
+package "modelo.unidad.estado" {
+  interface EstadoUnidad {
+    + modificar(danio: int)
+    + atacar(tablero: Tablero, origen: Posicion, destino: Casilla)
+  }
+
+  class Sano <<diseno>>
+  class Contaminada <<diseno>>
+  class Sumergido <<diseno>>
+}
+
+package "modelo.arma" {
+  interface Arma {
+    + atacar(tablero: Tablero, origen: Posicion, objetivo: Posicion)
+  }
+
+  class Punio
+  class Canion {
+    - danio: int
+  }
+  class Artilleria {
+    + esObjetivoValido(origen: Posicion, objetivo: Posicion): boolean
+  }
+
+  interface AtaqueVek {
+    + atacar(tablero: Tablero, origen: Posicion, objetivo: Posicion)
+  }
+
+  class Mordida
+  class Picadura
+  class EscupirAcido {
+    - danio: int
+  }
+}
+
+' ---- Relaciones ----
+Unidad <|-- Mech
+Unidad <|-- Vek
+Unidad --> Desplazamiento
+Unidad o-- "*" EstadoUnidad
+
+Desplazamiento <|.. Terrestre
+Desplazamiento <|.. Volador
+
+EstadoUnidad <|.. Sano
+EstadoUnidad <|.. Contaminada
+EstadoUnidad <|.. Sumergido
+
+Mech --> "1" Arma
+Vek --> "1" AtaqueVek
+
+Arma <|.. Punio
+Arma <|.. Canion
+Arma <|.. Artilleria
+
+AtaqueVek <|.. Mordida
+AtaqueVek <|.. Picadura
+AtaqueVek <|.. EscupirAcido
+
+Mech <.. MechFactory : crea
+Vek <.. VekFactory : crea
+
+@enduml

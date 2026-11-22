@@ -1,0 +1,86 @@
+@startuml
+!include style.iuml
+title Turno del Mech, memento y deshacer
+
+left to right direction
+
+package "modelo.unidad.turno" {
+  interface EstadoTurnoMech {
+    + mover(mech: Mech, destino: Casilla, tablero: Tablero, controlador: ControladorDeshacer)
+    + atacar(mech: Mech, objetivo: Casilla, tablero: Tablero, controlador: ControladorDeshacer)
+    + deshacerMovimiento(mech: Mech, tablero: Tablero)
+  }
+
+  class Disponible {
+  }
+
+  class Movido {
+    - memento: MementoMech
+    + Movido(memento: MementoMech)
+  }
+
+  class Agotado {
+  }
+
+  class MementoMech {
+    - casillaAnterior: Casilla
+    - estadosAnteriores: List<EstadoUnidad>
+    + getCasillaAnterior(): Casilla
+    + getEstadosAnteriores(): List<EstadoUnidad>
+  }
+
+  class ControladorDeshacer {
+    - historial: Stack<MementoMech>
+    - mechMovido: Mech
+    - yaSeDeshizoEnTurno: boolean
+    + registrarMovimiento(mech: Mech, memento: MementoMech)
+    + invalidarSiCorresponde(mech: Mech)
+    + deshacerUltimoMovimiento(tablero: Tablero)
+    + reiniciarTurno()
+  }
+}
+
+package "modelo.unidad" {
+  class Mech {
+    + mover(destino: Posicion, tablero: Tablero, controlador: ControladorDeshacer)
+    + atacar(objetivo: Posicion, tablero: Tablero, controlador: ControladorDeshacer)
+    + deshacerMovimiento(tablero: Tablero)
+    + reiniciarTurno()
+    + cambiarEstadoTurno(nuevoEstado: EstadoTurnoMech)
+    + crearMemento(): MementoMech
+    + restaurarDesdeMemento(memento: MementoMech, tablero: Tablero)
+  }
+}
+
+package "modelo.unidad.estado" {
+  interface EstadoUnidad
+}
+
+package "modelo.casilla" {
+  interface Casilla
+}
+
+' ---- Relaciones ----
+Mech --> "1" EstadoTurnoMech : estado actual
+
+EstadoTurnoMech <|.. Disponible
+EstadoTurnoMech <|.. Movido
+EstadoTurnoMech <|.. Agotado
+
+Movido o-- "1" MementoMech
+ControladorDeshacer o-- "0..1" MementoMech
+ControladorDeshacer --> "0..1" Mech
+MementoMech --> "1" Casilla
+MementoMech o-- "*" EstadoUnidad
+
+Disponible ..> MementoMech : crea
+Disponible ..> ControladorDeshacer : registra
+Movido ..> ControladorDeshacer : invalida
+Agotado ..> ControladorDeshacer
+
+Disponible -> Movido : mover()
+Disponible -> Agotado : atacar()
+Movido -> Agotado : atacar()
+Movido -> Disponible : deshacerMovimiento()
+
+@enduml

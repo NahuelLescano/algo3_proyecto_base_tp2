@@ -1,0 +1,28 @@
+' Estilo común para los diagramas de la entrega 2
+skinparam dpi 140
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam defaultFontName Helvetica
+skinparam classFontSize 12
+skinparam nodesep 40
+skinparam ranksep 55
+skinparam linetype polyline
+hide empty members
+hide circle
+
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #333333
+  ArrowColor #444444
+}
+
+skinparam class<<diseno>> {
+  BackgroundColor #FFF4D6
+  BorderColor #B8860B
+}
+
+skinparam package {
+  BackgroundColor #F7F7F7
+  BorderColor #BBBBBB
+  FontSize 13
+}
