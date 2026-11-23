@@ -1,6 +1,6 @@
 package edu.fiuba.algo3.entrega_2;
 
-import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.tablero.*;
 import edu.fiuba.algo3.modelo.terreno.Montania;
 import edu.fiuba.algo3.modelo.unidad.*;
 import org.junit.jupiter.api.Test;

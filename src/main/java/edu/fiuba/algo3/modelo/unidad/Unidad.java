@@ -7,14 +7,16 @@ import edu.fiuba.algo3.modelo.casilla.Casilla;
 import edu.fiuba.algo3.modelo.casilla.CasillaInexistente;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.terreno.efecto.Efecto;
-import edu.fiuba.algo3.modelo.unidad.estado.EstadoUnidad;
+import edu.fiuba.algo3.modelo.unidad.estado.*;
 
 public abstract class Unidad {
     private int vidaActual;
     private Posicion posicion;
-    private Desplazamiento desplazamiento;
+    protected Desplazamiento desplazamiento;
     private Casilla casilla = CasillaInexistente.INSTANCIA;
-    private List<EstadoUnidad> estados;
+    private List<EstadoUnidad> estados = new ArrayList<>();
+    private final EstadoUnidad sano = new Sano();
+    private final EstadoUnidad contaminada = new Contaminada();
 
     public Unidad(int vida) {
         this.vidaActual = vida;
@@ -23,6 +25,7 @@ public abstract class Unidad {
     public Unidad(int vida, Desplazamiento desplazamiento) {
         this.vidaActual = vida;
         this.desplazamiento = desplazamiento;
+        this.agregarEstado(new Sano());
     }
 
     public void asignarDesplazamiento(Desplazamiento desplazamiento) {
@@ -45,6 +48,7 @@ public abstract class Unidad {
     public void morir() {
         casilla.desocupar();
         casilla = CasillaInexistente.INSTANCIA;
+        vidaActual = 0;
     }
 
     public void recibirDanio(int danio) {
@@ -52,11 +56,10 @@ public abstract class Unidad {
             throw new IllegalArgumentException("El daño no puede ser negativo");
         }
 
-        vidaActual -= danio;
-
-        if (vidaActual < 0) {
-            vidaActual = 0;
+        for (EstadoUnidad estado : estados) {
+            danio = estado.modificar(danio);
         }
+        vidaActual = Math.max(0, vidaActual - danio);
     }
 
     public int getVidaActual() {
@@ -66,21 +69,44 @@ public abstract class Unidad {
     public void registrarMovimiento() {
     }
 
-    public void sufrir(Efecto efecto) {
+    public void sufrir(Efecto efecto){
+        desplazamiento.afectar(efecto, this);
     }
 
     public void noPudeMoverme() {
     }
 
     protected List<EstadoUnidad> obtenerEstadosActuales() {
-        if (this.estados == null) {
-            this.estados = new ArrayList<>();
-        }
         return this.estados;
     }
 
     protected void reemplazarEstados(List<EstadoUnidad> nuevosEstados) {
         this.estados.clear();
         this.estados.addAll(nuevosEstados);
+    }
+
+    public void agregarEstado(EstadoUnidad estado){
+        estados.add(estado);
+    }
+
+    public abstract void hundirse();
+
+    public void contaminar() {
+        if (estados.contains(contaminada)) return;
+        quitarEstado(sano);
+        agregarEstado(contaminada);
+    }
+
+    public void quitarEstado(EstadoUnidad estado) {
+        estados.remove(estado);
+    }
+
+    public boolean puedeAtacar() {
+        for (EstadoUnidad estado : estados) {
+            if (!estado.permiteAtacar()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -3,6 +3,7 @@ package edu.fiuba.algo3.modelo.unidad;
 import edu.fiuba.algo3.modelo.arma.vek.AtaqueVek;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.terreno.efecto.Efecto;
 
 public class Vek extends Unidad {
     private final int movimiento;
@@ -22,4 +23,8 @@ public class Vek extends Unidad {
     protected void ejecutarAtaque(Tablero tablero, Posicion origen, Posicion objetivo) {
         this.ataque.atacar(tablero, origen, objetivo);
     }
+
+    @Override
+    public void hundirse() { morir(); }
+
 }

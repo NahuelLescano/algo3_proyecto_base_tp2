@@ -17,10 +17,10 @@ public class Artilleria implements Arma {
 
         tablero.daniarEn(objetivo, danio);
 
-//        for (Direccion direccion : Direccion.values()) {
-//            Posicion vecina = objetivo.desplazar(direccion);
-//            tablero.empujar(vecina, direccion);
-//        } podria encapsularse en otro metodo
+      for (Direccion direccion : Direccion.values()) {
+          Posicion vecina = objetivo.desplazar(direccion);
+          tablero.empujar(vecina, direccion);
+        }
     }
 
     private boolean esObjetivoValido(Posicion origen, Posicion objetivo) {

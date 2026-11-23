@@ -4,6 +4,8 @@ import edu.fiuba.algo3.modelo.arma.Arma;
 import edu.fiuba.algo3.modelo.casilla.Casilla;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.terreno.efecto.Efecto;
+import edu.fiuba.algo3.modelo.unidad.estado.Sumergido;
 import edu.fiuba.algo3.modelo.unidad.turno.ControladorDeshacer;
 import edu.fiuba.algo3.modelo.unidad.turno.Disponible;
 import edu.fiuba.algo3.modelo.unidad.turno.EstadoTurnoMech;
@@ -59,6 +61,13 @@ public class Mech extends Unidad {
 
     public void iniciarAtaque(Casilla objetivo, Tablero tablero) {
         Posicion objetivoDeAtaque = objetivo.getPosicion();
-        this.arma.atacar(tablero, this.posicion(), objetivoDeAtaque);
+        if (puedeAtacar()) {
+            this.arma.atacar(tablero, this.posicion(), objetivoDeAtaque);
+        }
+    }
+
+    @Override
+    public void hundirse(){
+        agregarEstado(new Sumergido());
     }
 }
