@@ -5,6 +5,7 @@ import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.terreno.Terreno;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
+import edu.fiuba.algo3.modelo.arma.Disparo;
 
 public interface Casilla extends Destino {
     Terreno getTerreno();
@@ -14,5 +15,5 @@ public interface Casilla extends Destino {
     void empujarHacia(Casilla destino);
     void recibirImpacto(int danio);
     void desocupar();
-    Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio);
+    Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, Disparo disparo);
 }

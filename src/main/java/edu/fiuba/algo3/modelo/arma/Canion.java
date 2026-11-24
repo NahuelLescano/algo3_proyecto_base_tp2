@@ -5,10 +5,13 @@ import edu.fiuba.algo3.modelo.excepciones.AtaqueInvalidoException;
 import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.unidad.efecto.*;
+import edu.fiuba.algo3.modelo.*;
+import edu.fiuba.algo3.modelo.excepciones.*;
 
 public class Canion implements Arma {
 
-    private static final int DANIO = 1;
+    private final Disparo disparo = new Disparo(1, new EfectoEmpuje());
 
     @Override
     public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
@@ -20,8 +23,8 @@ public class Canion implements Arma {
         Posicion actual = origen.desplazar(direccion);
 
         while (actual != null) {
-            Casilla casilla = tablero.buscarCasilla(actual);
-            actual = casilla.avanzarDisparoEnLinea(actual, direccion, tablero, DANIO);
+            actual = tablero.buscarCasilla(actual)
+                            .avanzarDisparoEnLinea(actual, direccion, tablero, disparo);
         }
     }
 }

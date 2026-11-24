@@ -7,4 +7,5 @@ public class Contaminada implements EstadoUnidad{
     public boolean permiteAtacar(){
         return true;
     }
+    
 }

@@ -4,6 +4,8 @@ import edu.fiuba.algo3.modelo.tablero.*;
 import edu.fiuba.algo3.modelo.terreno.Montania;
 import edu.fiuba.algo3.modelo.unidad.*;
 import org.junit.jupiter.api.Test;
+import edu.fiuba.algo3.modelo.tablero.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 

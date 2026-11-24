@@ -5,6 +5,7 @@ import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
+import edu.fiuba.algo3.modelo.arma.Disparo;
 
 public class CasillaOcupada implements EstadoCasilla {
 
@@ -34,10 +35,9 @@ public class CasillaOcupada implements EstadoCasilla {
     }
 
     @Override
-    public Posicion avanzarDisparoEnLinea(CasillaDelTablero casilla, Posicion actual, Direccion direccion,
-            Tablero tablero, int danio) {
-        tablero.daniarEn(actual, danio);
-        tablero.empujar(actual, direccion);
+    public Posicion avanzarDisparoEnLinea(CasillaDelTablero casilla, Posicion actual, Direccion direccion, Tablero tablero, Disparo disparo) {
+        disparo.impactarA(this.unidad);
+        disparo.resolverPostImpacto(tablero, actual, direccion);
         return null;
     }
 }

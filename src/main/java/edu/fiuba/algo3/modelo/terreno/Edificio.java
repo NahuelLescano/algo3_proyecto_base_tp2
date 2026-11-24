@@ -10,7 +10,7 @@ import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
-
+import edu.fiuba.algo3.modelo.arma.Disparo;
 public class Edificio implements Terreno, Daniable {
     private int vida;
     private List<ObservadorEdificio> observadores = new ArrayList<>();
@@ -52,9 +52,9 @@ public class Edificio implements Terreno, Daniable {
         }
     }
 
-    @Override
-    public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, int danio) {
-        tablero.daniarEn(actual, danio);
+     @Override
+    public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, Disparo disparo) {
+        tablero.daniarEn(actual, disparo.danio());
         tablero.empujar(actual, direccion);
         return null;
     }
