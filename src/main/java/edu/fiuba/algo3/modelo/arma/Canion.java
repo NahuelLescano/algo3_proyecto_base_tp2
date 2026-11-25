@@ -11,7 +11,11 @@ import edu.fiuba.algo3.modelo.excepciones.*;
 
 public class Canion implements Arma {
 
-    private final Disparo disparo = new Disparo(1, new EfectoEmpuje());
+    private Disparo disparo; 
+
+    public Canion(Disparo disparo){
+        this.disparo = disparo;
+    }
 
     @Override
     public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {

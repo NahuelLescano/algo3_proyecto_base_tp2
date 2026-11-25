@@ -1,8 +1,10 @@
 package edu.fiuba.algo3.modelo.unidad;
 
+import edu.fiuba.algo3.modelo.arma.Disparo;
 import edu.fiuba.algo3.modelo.arma.vek.EscupirAcido;
 import edu.fiuba.algo3.modelo.arma.vek.Mordida;
 import edu.fiuba.algo3.modelo.arma.vek.Picadura;
+import edu.fiuba.algo3.modelo.unidad.efecto.*;
 
 public class VekFactory {
 
@@ -11,7 +13,8 @@ public class VekFactory {
     }
 
     public Vek crearLuciernaga() {
-        return new Vek(3, 2, new Terrestre(), new EscupirAcido());
+        EscupirAcido acido = new EscupirAcido(new Disparo(1, new EfectoAcido()));
+        return new Vek(3, 2, new Terrestre(), acido);
     }
 
     public Vek crearAvispon() {

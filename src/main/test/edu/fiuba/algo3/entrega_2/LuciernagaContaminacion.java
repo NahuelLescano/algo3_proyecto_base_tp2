@@ -2,8 +2,6 @@ package edu.fiuba.algo3.entrega_2;
 
 import edu.fiuba.algo3.modelo.arma.vek.EscupirAcido;
 import edu.fiuba.algo3.modelo.tablero.*;
-import edu.fiuba.algo3.modelo.tablero.Posicion;
-import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Mech;
 import edu.fiuba.algo3.modelo.unidad.MechFactory;
 import edu.fiuba.algo3.modelo.unidad.Vek;
@@ -45,7 +43,7 @@ public class LuciernagaContaminacion {
         tablero.colocarUnidad(luciernaga, posLuciernaga);
         tablero.colocarUnidad(objetivo, posObjetivo);
 
-        new EscupirAcido().atacar(tablero, posLuciernaga, posApuntar);
+        luciernaga.ejecutarAtaque(tablero, posLuciernaga, posApuntar);
 
         // Recibe 1 de daño del escupitajo y queda contaminada (sin empujarse)
         assertEquals(2, objetivo.getVidaActual());
@@ -77,14 +75,13 @@ public class LuciernagaContaminacion {
         tablero.colocarUnidad(luciernaga2, pos2);
         tablero.colocarUnidad(mechResistente, posObjetivo);
 
-        EscupirAcido escupirAcido = new EscupirAcido();
 
         // Primer impacto: 1 de daño -> vida pasa de 3 a 2 y queda contaminada
-        escupirAcido.atacar(tablero, pos1, new Posicion(2, 5));
+        luciernaga1.ejecutarAtaque(tablero, pos1, new Posicion(2, 5));
         assertEquals(2, mechResistente.getVidaActual());
 
         // Segundo impacto de ácido: no acumula multiplicador extra, aplica el doble de 1 (= 2) -> vida llega a 0
-        escupirAcido.atacar(tablero, pos2, new Posicion(2, 0));
+        luciernaga2.ejecutarAtaque(tablero, pos2, new Posicion(2, 0));
         assertEquals(0, mechResistente.getVidaActual());
     }
 }

@@ -9,7 +9,11 @@ import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.efecto.*;
 import edu.fiuba.algo3.modelo.arma.*;
 public class EscupirAcido implements AtaqueVek {
-    private final Disparo disparo = new Disparo(1, new EfectoAcido());
+    private final Disparo disparo; 
+
+    public EscupirAcido(Disparo disparo){
+        this.disparo = disparo;
+    }
 
     @Override
     public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {

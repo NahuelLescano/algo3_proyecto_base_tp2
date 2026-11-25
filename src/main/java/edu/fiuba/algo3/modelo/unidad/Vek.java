@@ -20,7 +20,7 @@ public class Vek extends Unidad {
         return movimiento;
     }
 
-    protected void ejecutarAtaque(Tablero tablero, Posicion origen, Posicion objetivo) {
+    public void ejecutarAtaque(Tablero tablero, Posicion origen, Posicion objetivo) {
         this.ataque.atacar(tablero, origen, objetivo);
     }
 

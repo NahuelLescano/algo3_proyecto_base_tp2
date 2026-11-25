@@ -11,6 +11,6 @@ public class Picadura implements AtaqueVek {
         if (!origen.esAdyacenteA(objetivo)) {
             throw new AtaqueInvalidoException("Ataque invalido");
         }
-        tablero.daniarEn(objetivo, 1);
+         tablero.daniarEn(objetivo, 1);
     }
 }
