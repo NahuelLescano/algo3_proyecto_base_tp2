@@ -6,6 +6,7 @@ import java.util.List;
 import edu.fiuba.algo3.modelo.casilla.Destino;
 import edu.fiuba.algo3.modelo.estructura.Daniable;
 import edu.fiuba.algo3.modelo.estructura.ObservadorEdificio;
+import edu.fiuba.algo3.modelo.excepciones.CasillaOcupadaException;
 import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
@@ -24,7 +25,7 @@ public class Edificio implements Terreno, Daniable {
     }
 
     public void recibir(Unidad unidad, Destino casilla) {
-        unidad.noPudeMoverme();
+        throw new CasillaOcupadaException("Casilla ocupada por terreno no transitable");
     }
 
     public void afectarMovimiento(Unidad unidad) {

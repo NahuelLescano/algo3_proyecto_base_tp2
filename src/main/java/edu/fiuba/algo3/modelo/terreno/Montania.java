@@ -1,6 +1,8 @@
 package edu.fiuba.algo3.modelo.terreno;
 
 import edu.fiuba.algo3.modelo.casilla.Destino;
+import edu.fiuba.algo3.modelo.excepciones.AccionInvalidaException;
+import edu.fiuba.algo3.modelo.excepciones.CasillaOcupadaException;
 import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
@@ -10,6 +12,7 @@ public class Montania implements Terreno {
 
     public void recibir(Unidad unidad, Destino casilla) {
         unidad.noPudeMoverme();
+        throw new CasillaOcupadaException("Casilla ocupada por terreno no transitable");
     }
 
     public void recibirEmpuje(Unidad empujada, Destino destino) {

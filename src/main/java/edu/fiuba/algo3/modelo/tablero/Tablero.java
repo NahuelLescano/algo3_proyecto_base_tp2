@@ -7,9 +7,12 @@ import edu.fiuba.algo3.modelo.casilla.Casilla;
 import edu.fiuba.algo3.modelo.casilla.CasillaDelTablero;
 import edu.fiuba.algo3.modelo.casilla.CasillaInexistente;
 import edu.fiuba.algo3.modelo.estructura.ObservadorEdificio;
+import edu.fiuba.algo3.modelo.excepciones.AccionInvalidaException;
+import edu.fiuba.algo3.modelo.excepciones.AtaqueInvalidoException;
 import edu.fiuba.algo3.modelo.terreno.Edificio;
 import edu.fiuba.algo3.modelo.terreno.Terreno;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
+import edu.fiuba.algo3.modelo.tablero.*;
 
 public class Tablero {
 
@@ -39,6 +42,9 @@ public class Tablero {
     }
 
     public void colocarUnidad(Unidad unidad, Posicion posicion) {
+        if (posicion.getFila() > 8 || posicion.getColumna() > 8)  {
+            throw new AccionInvalidaException("Casilla fuera del tablero");
+        }
         buscarCasilla(posicion).ocupar(unidad);
     }
 
@@ -47,6 +53,9 @@ public class Tablero {
     }
 
     public void moverUnidad(Unidad unidad, Posicion posicion) {
+        if (posicion.getFila() > 8 || posicion.getColumna() > 8)  {
+            throw new AccionInvalidaException("Casilla fuera del tablero");
+        }
         Casilla casilla = buscarCasilla(posicion);
         casilla.ocupar(unidad);
     }
