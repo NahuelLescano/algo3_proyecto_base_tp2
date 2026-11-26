@@ -15,8 +15,8 @@ public abstract class Unidad {
     protected Desplazamiento desplazamiento;
     private Casilla casilla = CasillaInexistente.INSTANCIA;
     private List<EstadoUnidad> estados = new ArrayList<>();
-    private final EstadoUnidad sano = new Sano();
-    private final EstadoUnidad contaminada = new Contaminada();
+    private EstadoUnidad sano = new Sano();
+    private EstadoUnidad contaminada = new Contaminada();
 
     public Unidad(int vida) {
         this.vidaActual = vida;
