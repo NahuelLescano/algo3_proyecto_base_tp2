@@ -10,6 +10,6 @@ public class EnCurso implements EstadoPartida {
     @Override
     public void finalizarFaseJugador(Juego juego) {
         juego.cambiarFase(new FaseResolucion());
+        juego.ejecutarFaseActual();
     }
-
 }
