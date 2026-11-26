@@ -7,7 +7,7 @@ import edu.fiuba.algo3.modelo.terreno.Terreno;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
 import edu.fiuba.algo3.modelo.arma.Disparo;
 public class CasillaInexistente implements Casilla {
-    public static final CasillaInexistente INSTANCIA = new CasillaInexistente();
+    public static CasillaInexistente INSTANCIA = new CasillaInexistente();
 
     public Posicion getPosicion() {
         return new Posicion(-1, -1);
