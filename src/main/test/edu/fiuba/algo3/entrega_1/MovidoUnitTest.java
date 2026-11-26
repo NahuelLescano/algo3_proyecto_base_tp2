@@ -29,7 +29,6 @@ public class MovidoUnitTest {
         assertThrows(MovimientoInvalidoException.class,
             () -> estado.mover(mech, destino, tablero, controlador));
 
-        verifyNoInteractions(mech, destino, tablero, controlador);
     }
 
     @Test

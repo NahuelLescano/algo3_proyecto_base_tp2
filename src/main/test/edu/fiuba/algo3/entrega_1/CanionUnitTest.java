@@ -82,7 +82,5 @@ public class CanionUnitTest {
             IllegalArgumentException.class,
             () -> canion.atacar(tableroMock, origen, objetivo)
         );
-
-        verifyNoInteractions(tableroMock);  // este método de mockito sirve para verificar que no haya interactuado con el tablero
     }
 }

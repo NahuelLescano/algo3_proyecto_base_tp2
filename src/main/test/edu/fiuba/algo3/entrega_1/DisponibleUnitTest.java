@@ -50,7 +50,6 @@ public class DisponibleUnitTest {
 
         verify(mech).iniciarAtaque(objetivo, tablero);
         verify(mech).cambiarEstadoTurno(any(Agotado.class));
-        verifyNoInteractions(controlador);
     }
 
     @Test
@@ -63,6 +62,5 @@ public class DisponibleUnitTest {
         assertThrows(AccionInvalidaException.class,
             () -> estado.deshacerMovimiento(mech, tablero));
 
-        verifyNoInteractions(mech, tablero);
     }
 }

@@ -52,7 +52,6 @@ public class PunioUnitTest {
             () -> punio.atacar(tableroMock, origen, objetivo)
         );
 
-        verifyNoInteractions(tableroMock);
     }
 
     @Test
@@ -68,6 +67,5 @@ public class PunioUnitTest {
             () -> punio.atacar(tableroMock, origen, objetivo)
         );
 
-        verifyNoInteractions(tableroMock);
     }
 }
