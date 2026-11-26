@@ -40,27 +40,33 @@ public class Tablero {
         return CasillaInexistente.INSTANCIA;
     }
 
-    public void colocarUnidad(Unidad unidad, Posicion posicion) {
-        if (posicion.getFila() > 8 || posicion.getColumna() > 8)  {
+    private Casilla buscarCasillaExistente(Posicion posicion) {
+        Casilla casilla = buscarCasilla(posicion);
+
+        if (casilla == CasillaInexistente.INSTANCIA) {
             throw new AccionInvalidaException("Casilla fuera del tablero");
         }
-        buscarCasilla(posicion).ocupar(unidad);
+
+        return casilla;
+    }
+
+    public void colocarUnidad(Unidad unidad, Posicion posicion) {
+        buscarCasillaExistente(posicion).ocupar(unidad);
     }
 
     public void daniarEn(Posicion posicion, int danio) {
-        buscarCasilla(posicion).recibirImpacto(danio);
+        buscarCasillaExistente(posicion).recibirImpacto(danio);
     }
 
     public void moverUnidad(Unidad unidad, Posicion posicion) {
-        if (posicion.getFila() > 8 || posicion.getColumna() > 8)  {
-            throw new AccionInvalidaException("Casilla fuera del tablero");
-        }
-        Casilla casilla = buscarCasilla(posicion);
-        casilla.ocupar(unidad);
+        buscarCasillaExistente(posicion).ocupar(unidad);
     }
 
     public void empujar(Posicion origen, Direccion direccion) {
-        buscarCasilla(origen).empujarHacia(buscarCasilla(origen.desplazar(direccion)));
+        Casilla casillaOrigen = buscarCasillaExistente(origen);
+        Casilla casillaDestino = buscarCasillaExistente(origen.desplazar(direccion));
+
+        casillaOrigen.empujarHacia(casillaDestino);
     }
 
     public void registrarObservadorEnEdificios(
