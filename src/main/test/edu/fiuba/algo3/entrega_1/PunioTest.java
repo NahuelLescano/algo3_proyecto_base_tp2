@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestPunio {
+public class PunioTest {
 
     @Test
     void punioCausaDosDanioYEmpujaUnaCasilla() {

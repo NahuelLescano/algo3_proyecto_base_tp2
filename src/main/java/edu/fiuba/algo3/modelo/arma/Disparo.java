@@ -23,6 +23,6 @@ public class Disparo {
     public int danio() { return danio; }
 
     public void resolverPostImpacto(Tablero tablero, Posicion posicion, Direccion direccion) {
-    efecto.postImpacto(tablero, posicion, direccion);
-}
+        efecto.postImpacto(tablero, posicion, direccion);
+    }
 }
