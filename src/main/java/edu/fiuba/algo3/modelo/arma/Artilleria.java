@@ -3,6 +3,7 @@ package edu.fiuba.algo3.modelo.arma;
 import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.excepciones.AtaqueInvalidoException;
 
 public class Artilleria implements Arma {
 
@@ -12,24 +13,19 @@ public class Artilleria implements Arma {
     @Override
     public void atacar(Tablero tablero, Posicion origen, Posicion objetivo) {
         if (!esObjetivoValido(origen, objetivo)) {
-            //throw;
+            throw new AtaqueInvalidoException("Objetivo invalido para artilleria");
         }
 
         tablero.daniarEn(objetivo, danio);
 
-      for (Direccion direccion : Direccion.values()) {
-          Posicion vecina = objetivo.desplazar(direccion);
-          tablero.empujar(vecina, direccion);
+        for (Direccion direccion : Direccion.values()) {
+            Posicion vecina = objetivo.desplazar(direccion);
+            tablero.empujar(vecina, direccion);
         }
     }
 
     private boolean esObjetivoValido(Posicion origen, Posicion objetivo) {
-        int dFila = Math.abs(objetivo.getFila() - origen.getFila());
-        int dColumna = Math.abs(objetivo.getColumna() - origen.getColumna());
-
-        boolean enLineaRecta = (dFila == 0) != (dColumna == 0); // ----> mejorable (aunq no tan mal)
-        int distancia = dFila + dColumna;
-
-        return enLineaRecta && distancia >= distanciaMinima;
-    } //metodo polemico
+        return origen.estaAlineadaCon(objetivo)
+                && origen.distanciaA(objetivo) >= distanciaMinima;
+    }
 }

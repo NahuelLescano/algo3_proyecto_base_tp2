@@ -3,16 +3,18 @@ package edu.fiuba.algo3.entrega_1;
 import edu.fiuba.algo3.modelo.tablero.ParserTablero;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
+import edu.fiuba.algo3.modelo.excepciones.AccionInvalidaException;
 import edu.fiuba.algo3.modelo.unidad.Mech;
 import edu.fiuba.algo3.modelo.unidad.MechFactory;
 import edu.fiuba.algo3.modelo.unidad.Vek;
 import edu.fiuba.algo3.modelo.unidad.VekFactory;
+import edu.fiuba.algo3.modelo.arma.Punio;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestPunio {
+public class PunioTest {
 
     @Test
     void punioCausaDosDanioYEmpujaUnaCasilla() {
@@ -39,5 +41,31 @@ public class TestPunio {
 
         assertEquals(vidaInicial - 2, luciernaga.getVidaActual());
         assertEquals(new Posicion(2, 4), luciernaga.posicion());
+    }
+    
+    @Test
+    void punioNoPuedeAtacarFueraDelTablero() {
+        String[] mapa = {
+                "--------",
+                "--------",
+                "--------",
+                "--------",
+                "--------",
+                "--------",
+                "--------",
+                "--------"
+        };
+
+        Tablero tablero = new Tablero(mapa, new ParserTablero());
+
+        Punio punio = new Punio();
+
+        Posicion origen = new Posicion(0, 7);
+        Posicion objetivo = new Posicion(0, 8);
+
+        assertThrows(
+                AccionInvalidaException.class,
+                () -> punio.atacar(tablero, origen, objetivo)
+        );
     }
 }
