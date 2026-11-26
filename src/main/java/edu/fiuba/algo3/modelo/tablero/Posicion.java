@@ -38,6 +38,17 @@ public class Posicion {
 
         return distancia == 1;
     }
+    
+    public int distanciaA(Posicion otra) {
+        int dFila = Math.abs(otra.fila - this.fila);
+        int dColumna = Math.abs(otra.columna - this.columna);
+
+        return dFila + dColumna;
+    }
+    
+    public boolean estaAlineadaCon(Posicion otra) {
+        return this.fila == otra.fila || this.columna == otra.columna;
+    }
 
     @Override
     public boolean equals(Object objeto) {
