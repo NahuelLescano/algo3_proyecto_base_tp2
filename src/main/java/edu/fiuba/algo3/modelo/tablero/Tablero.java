@@ -81,4 +81,8 @@ public class Tablero {
             }
         }
     }
+    
+    // public void emergerEn(Posicion posicion, Unidad vek) {
+    //    buscarCasillaExistente(posicion).recibirEmergencia(vek);
+    // }
 }
