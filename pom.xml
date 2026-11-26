@@ -20,7 +20,7 @@
     <javafx-version>17.0.2</javafx-version>
     <pitest-plugin-version>1.17.3</pitest-plugin-version>
     <pitest-junit5-plugin-version>1.0.0</pitest-junit5-plugin-version>
-    <main-class>edu.fiuba.algo3.Main</main-class>
+    <main-class>edu.fiuba.algo3.vistas.App</main-class>
   </properties>
   <dependencies>
     <dependency>
