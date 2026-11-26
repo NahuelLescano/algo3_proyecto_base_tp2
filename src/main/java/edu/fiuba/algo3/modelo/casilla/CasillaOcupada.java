@@ -6,7 +6,7 @@ import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
 import edu.fiuba.algo3.modelo.arma.Disparo;
-
+import edu.fiuba.algo3.modelo.unidad.Vek;
 public class CasillaOcupada implements EstadoCasilla {
 
     private Unidad unidad;
@@ -39,5 +39,9 @@ public class CasillaOcupada implements EstadoCasilla {
         disparo.impactarA(this.unidad);
         disparo.resolverPostImpacto(tablero, actual, direccion);
         return null;
+    }
+
+    public void recibirEmergencia(Vek vek, CasillaDelTablero casilla) {
+        unidad.recibirDanio(1);
     }
 }
