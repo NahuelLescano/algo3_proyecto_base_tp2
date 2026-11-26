@@ -59,5 +59,10 @@ public class Edificio implements Terreno, Daniable {
         tablero.empujar(actual, direccion);
         return null;
     }
+    
+    @Override
+    public char obtenerSimbolo() {
+        return 'E';
+    }
 
 }

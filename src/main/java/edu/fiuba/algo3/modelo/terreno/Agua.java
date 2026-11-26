@@ -25,4 +25,9 @@ public class Agua implements Terreno {
         public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, Disparo disparo) {
             return actual.desplazar(direccion);
         }
+        
+    @Override
+    public char obtenerSimbolo() {
+        return 'A';
+    }
 }

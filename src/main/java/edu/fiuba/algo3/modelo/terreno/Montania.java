@@ -29,5 +29,10 @@ public class Montania implements Terreno {
         tablero.empujar(actual, direccion);
         return null;
     }
+    
+    @Override
+    public char obtenerSimbolo() {
+        return 'M';
+    }
 
 }

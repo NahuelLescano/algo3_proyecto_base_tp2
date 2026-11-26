@@ -11,4 +11,5 @@ public interface Terreno {
     Terreno recibirImpacto(int danio);
     void recibirEmpuje(Unidad empujada, Destino destino);
     Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, Disparo disparo);
+    char obtenerSimbolo();
 }

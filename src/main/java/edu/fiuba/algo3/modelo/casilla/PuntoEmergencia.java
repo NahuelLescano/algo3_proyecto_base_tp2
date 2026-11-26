@@ -12,7 +12,7 @@ public class PuntoEmergencia {
         return posicion; 
     }
 
-    public void emerger(Tablero tablero) {
-        tablero.emergerEn(posicion, vek);
-    }
+    // public void emerger(Tablero tablero) {
+    //    tablero.emergerEn(posicion, vek);
+    // }
 }
