@@ -42,4 +42,6 @@ public class Juego {
     public void iniciarAtaque(Mech mech, Casilla objetivo) {
         mech.iniciarAtaque(objetivo, tablero);
     }
+
+    public int getRedElectrica() { return redElectrica.getEnergia(); }
 }
