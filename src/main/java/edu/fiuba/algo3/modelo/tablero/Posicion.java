@@ -1,5 +1,7 @@
 package edu.fiuba.algo3.modelo.tablero;
 
+import java.util.Objects;
+
 public class Posicion {
     private int columna;
     private int fila;
@@ -52,20 +54,16 @@ public class Posicion {
 
     @Override
     public boolean equals(Object objeto) {
-        if (this == objeto) {
-            return true;
-        }
-
-        if (!(objeto instanceof Posicion)) {
-            return false;
-        }
-
-        Posicion otraPosicion = (Posicion) objeto;
-
-        return this.fila == otraPosicion.fila &&
-                this.columna == otraPosicion.columna;
+        if (this == objeto) return true;
+        if (!(objeto instanceof Posicion)) return false;
+        Posicion otra = (Posicion) objeto;
+        return fila == otra.fila && columna == otra.columna;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(fila, columna);
+    }
     public int getFila() {
         return fila;
     }

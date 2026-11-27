@@ -1,7 +1,9 @@
 package edu.fiuba.algo3.modelo.tablero;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.fiuba.algo3.modelo.casilla.Casilla;
 import edu.fiuba.algo3.modelo.casilla.CasillaDelTablero;
@@ -15,30 +17,27 @@ import edu.fiuba.algo3.modelo.unidad.Unidad;
 
 public class Tablero {
 
-    private List<Casilla> casillas;
+    private Map<Posicion, Casilla> casillas;
 
     public Tablero(String[] mapa, ParserTablero parser) {
         if (mapa == null || mapa.length == 0) {
             throw new IllegalArgumentException("El mapa no puede ser nulo o vacío");
         }
-        this.casillas = new ArrayList<>();
+        this.casillas = new HashMap<>();
         for (int fila = 0; fila < mapa.length; fila++) {
             String linea = mapa[fila];
             for (int columna = 0; columna < linea.length(); columna++) {
+                Posicion posicion = new Posicion(fila, columna);
                 Terreno terreno = parser.convertirCaracterATerreno(linea.charAt(columna));
-                casillas.add(new CasillaDelTablero(terreno, new Posicion(fila, columna)));
+                casillas.put(posicion, new CasillaDelTablero(terreno, posicion));
             }
         }
     }
 
     public Casilla buscarCasilla(Posicion posicion) {
-        for (Casilla casilla : casillas) {
-            if (casilla.getPosicion().equals(posicion)) {
-                return casilla;
-            }
-        }
-        return CasillaInexistente.INSTANCIA;
+        return casillas.getOrDefault(posicion, CasillaInexistente.INSTANCIA);
     }
+
 
     private Casilla buscarCasillaExistente(Posicion posicion) {
         Casilla casilla = buscarCasilla(posicion);
@@ -72,7 +71,7 @@ public class Tablero {
     public void registrarObservadorEnEdificios(
             ObservadorEdificio observador) {
 
-        for (Casilla casilla : casillas) {
+        for (Casilla casilla : casillas.values()) {
             Terreno terreno = casilla.getTerreno();
 
             if (terreno instanceof Edificio) {
@@ -80,8 +79,7 @@ public class Tablero {
                 edificio.agregarObservador(observador);
             }
         }
-    }
-    
+    }    
     // public void emergerEn(Posicion posicion, Unidad vek) {
     //    buscarCasillaExistente(posicion).recibirEmergencia(vek);
     // }

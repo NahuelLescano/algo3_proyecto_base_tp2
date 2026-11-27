@@ -82,4 +82,5 @@ public class CanionTest {
         assertEquals(vidaInicial, unidad.getVidaActual());
         assertEquals(new Posicion(2, 4), unidad.posicion());
     }
+    
 }

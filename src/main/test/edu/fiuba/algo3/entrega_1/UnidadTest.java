@@ -1,9 +1,9 @@
-package edu.fiuba.algo3.modelo.unidad;
+package edu.fiuba.algo3.entrega_1;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import  edu.fiuba.algo3.modelo.unidad.*;
 class UnidadTest {
 
     class UnidadDePrueba extends Unidad {
