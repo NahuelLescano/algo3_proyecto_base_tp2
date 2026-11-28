@@ -5,6 +5,9 @@ import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.terreno.Terreno;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
+
+import java.util.List;
+
 import edu.fiuba.algo3.modelo.arma.Disparo;
 
 public class CasillaDelTablero implements Casilla {
@@ -71,5 +74,10 @@ public class CasillaDelTablero implements Casilla {
     @Override
     public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, Disparo disparo) {
         return estado.avanzarDisparoEnLinea(this, actual, direccion, tablero, disparo);
+    }
+
+    @Override
+    public void agregarSiEsSueloLibreA(List<Casilla> casillas) {
+        estado.agregarSiEsSueloLibreA(this, casillas);
     }
 }

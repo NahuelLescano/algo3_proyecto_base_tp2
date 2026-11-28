@@ -5,6 +5,9 @@ import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.terreno.Terreno;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
+
+import java.util.List;
+
 import edu.fiuba.algo3.modelo.arma.Disparo;
 public class CasillaInexistente implements Casilla {
     public static CasillaInexistente INSTANCIA = new CasillaInexistente();
@@ -45,4 +48,9 @@ public class CasillaInexistente implements Casilla {
     public Posicion avanzarDisparoEnLinea(Posicion actual, Direccion direccion, Tablero tablero, Disparo disparo) {
         return null;
     }
+
+    @Override
+    public void agregarSiEsSueloLibreA(List<Casilla> casillas) {
+    }
+
 }

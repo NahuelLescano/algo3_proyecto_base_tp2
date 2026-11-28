@@ -4,6 +4,9 @@ import edu.fiuba.algo3.modelo.tablero.Direccion;
 import edu.fiuba.algo3.modelo.tablero.Posicion;
 import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
+
+import java.util.List;
+
 import edu.fiuba.algo3.modelo.arma.Disparo;
 import edu.fiuba.algo3.modelo.unidad.Vek;
 
@@ -33,5 +36,10 @@ public class CasillaVacia implements EstadoCasilla {
 
     public void recibirEmergencia(Vek vek, CasillaDelTablero casilla) {
         casilla.ocupar(vek);
+    }
+
+    @Override
+    public void agregarSiEsSueloLibreA(CasillaDelTablero casilla, List<Casilla> casillas) {
+        casilla.getTerreno().agregarSiEsSueloLibre(casilla, casillas);
     }
 }

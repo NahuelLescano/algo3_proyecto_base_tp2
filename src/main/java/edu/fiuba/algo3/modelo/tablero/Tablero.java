@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import edu.fiuba.algo3.modelo.casilla.Casilla;
 import edu.fiuba.algo3.modelo.casilla.CasillaDelTablero;
@@ -79,7 +80,18 @@ public class Tablero {
                 edificio.agregarObservador(observador);
             }
         }
-    }    
+    }   
+    
+    public Posicion sueloLibreAlAzar(Random random) {
+    List<Casilla> candidatas = new ArrayList<>();
+    for (Casilla casilla : casillas.values()) {
+        casilla.agregarSiEsSueloLibreA(candidatas);
+    }
+    if (candidatas.isEmpty()) {
+        throw new AccionInvalidaException("No quedan casillas de suelo libres");
+    }
+    return candidatas.get(random.nextInt(candidatas.size())).getPosicion();
+    }
     // public void emergerEn(Posicion posicion, Unidad vek) {
     //    buscarCasillaExistente(posicion).recibirEmergencia(vek);
     // }

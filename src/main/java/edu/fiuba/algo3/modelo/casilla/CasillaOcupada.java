@@ -7,6 +7,7 @@ import edu.fiuba.algo3.modelo.tablero.Tablero;
 import edu.fiuba.algo3.modelo.unidad.Unidad;
 import edu.fiuba.algo3.modelo.arma.Disparo;
 import edu.fiuba.algo3.modelo.unidad.Vek;
+import java.util.List;
 public class CasillaOcupada implements EstadoCasilla {
 
     private Unidad unidad;
@@ -43,5 +44,9 @@ public class CasillaOcupada implements EstadoCasilla {
 
     public void recibirEmergencia(Vek vek, CasillaDelTablero casilla) {
         unidad.recibirDanio(1);
+    }
+
+    @Override
+    public void agregarSiEsSueloLibreA(CasillaDelTablero casilla, List<Casilla> casillas) {
     }
 }
