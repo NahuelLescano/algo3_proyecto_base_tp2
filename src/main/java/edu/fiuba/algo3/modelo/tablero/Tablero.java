@@ -83,14 +83,14 @@ public class Tablero {
     }   
     
     public Posicion sueloLibreAlAzar(Random random) {
-    List<Casilla> candidatas = new ArrayList<>();
-    for (Casilla casilla : casillas.values()) {
-        casilla.agregarSiEsSueloLibreA(candidatas);
-    }
-    if (candidatas.isEmpty()) {
-        throw new AccionInvalidaException("No quedan casillas de suelo libres");
-    }
-    return candidatas.get(random.nextInt(candidatas.size())).getPosicion();
+        List<Casilla> candidatas = new ArrayList<>();
+            for (Casilla casilla : casillas.values()) {
+                casilla.agregarSiEsSueloLibreA(candidatas);
+            }
+            if (candidatas.isEmpty()) {
+                throw new AccionInvalidaException("No quedan casillas de suelo libres");
+            }
+            return candidatas.get(random.nextInt(candidatas.size())).getPosicion();
     }
     // public void emergerEn(Posicion posicion, Unidad vek) {
     //    buscarCasillaExistente(posicion).recibirEmergencia(vek);
